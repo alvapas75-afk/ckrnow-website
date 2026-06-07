@@ -1,4 +1,4 @@
-// ===== CKR BOUTIQUE — Main JS + Carrito de Compras =====
+// ===== CKR BOUTIQUE â€” Main JS + Carrito de Compras =====
 
 // ---- NAVBAR & MENU ----
 function toggleMenu() {
@@ -42,6 +42,7 @@ function saveCart() {
 }
 
 function parsePrice(priceText) {
+  // "$380.000 COP" â†’ 380000
   return parseInt(priceText.replace(/\./g, '').replace(/\D/g, ''));
 }
 
@@ -107,8 +108,8 @@ function renderCartItems() {
   if (cart.length === 0) {
     container.innerHTML = `
       <div class="cart-empty">
-        <p>Tu carrito está vacío</p>
-        <p style="font-size:0.8rem;color:#999;margin-top:8px">¡Agrega tus prendas favoritas!</p>
+        <p>Tu carrito estÃ¡ vacÃ­o</p>
+        <p style="font-size:0.8rem;color:#999;margin-top:8px">Â¡Agrega tus prendas favoritas!</p>
       </div>`;
     totalEl.textContent = '$0 COP';
     return;
@@ -125,10 +126,10 @@ function renderCartItems() {
           <div class="cart-item-price">${formatPrice(item.price)}</div>
         </div>
         <div class="cart-item-controls">
-          <button onclick="changeQty(${i}, -1)">−</button>
+          <button onclick="changeQty(${i}, -1)">âˆ’</button>
           <span>${item.qty}</span>
           <button onclick="changeQty(${i}, 1)">+</button>
-          <button class="remove-btn" onclick="removeFromCart(${i})" title="Eliminar">🗑</button>
+          <button class="remove-btn" onclick="removeFromCart(${i})" title="Eliminar">ðŸ—‘</button>
         </div>
       </div>`;
   }).join('');
@@ -172,23 +173,23 @@ function closeSizeModal() {
 // ---- CHECKOUT POR WHATSAPP ----
 function checkoutWhatsApp() {
   if (cart.length === 0) {
-    alert('Tu carrito está vacío. Agrega productos primero.');
+    alert('Tu carrito estÃ¡ vacÃ­o. Agrega productos primero.');
     return;
   }
 
-  let msg = '¡Hola CKR Boutique! 🛍️ Quiero hacer el siguiente pedido:\n\n';
+  let msg = 'Â¡Hola CKR Boutique! ðŸ›ï¸ Quiero hacer el siguiente pedido:\n\n';
   let total = 0;
 
   cart.forEach((item, i) => {
     msg += `${i + 1}. *${item.name}*\n`;
-    msg += `   Talla: ${item.size} · Cant: ${item.qty}\n`;
+    msg += `   Talla: ${item.size} Â· Cant: ${item.qty}\n`;
     msg += `   ${formatPrice(item.price * item.qty)}\n\n`;
     total += item.price * item.qty;
   });
 
-  msg += `━━━━━━━━━━━━━━━\n`;
+  msg += `â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n`;
   msg += `*TOTAL: ${formatPrice(total)}*\n\n`;
-  msg += `¿Cómo procedo con el pago? (Nequi, PSE, transferencia)`;
+  msg += `Â¿CÃ³mo procedo con el pago? (Nequi, PSE, transferencia)`;
 
   const url = 'https://wa.me/573017604292?text=' + encodeURIComponent(msg);
   window.open(url, '_blank');
@@ -206,7 +207,7 @@ function initCartButtons() {
 
     const btn = document.createElement('button');
     btn.className = 'btn-add-cart';
-    btn.innerHTML = '🛒 Agregar al carrito';
+    btn.innerHTML = 'ðŸ›’ Agregar al carrito';
     btn.addEventListener('click', () => showSizeSelector(name, price));
 
     card.querySelector('.product-info').appendChild(btn);
@@ -228,7 +229,7 @@ async function generateIntegrityHash(reference, amountInCents) {
 
 async function checkoutWompi() {
   if (cart.length === 0) {
-    alert('Tu carrito está vacío. Agrega productos primero.');
+    alert('Tu carrito estÃ¡ vacÃ­o. Agrega productos primero.');
     return;
   }
 
@@ -237,27 +238,16 @@ async function checkoutWompi() {
   const reference = 'CKR-' + Date.now();
   const integrityHash = await generateIntegrityHash(reference, amountInCents);
 
+  // DescripciÃ³n del pedido
+  const description = cart.map(i => `${i.qty}x ${i.name} T.${i.size}`).join(', ');
+
   const checkout = new WidgetCheckout({
     currency: 'COP',
     amountInCents,
     reference,
     publicKey: WOMPI_PUBLIC_KEY,
     signature: { integrity: integrityHash },
-    redirectUrl: 'https://ckrnow.com/?pago=exitoso',
-    customerData: {
-      userLegalName: 'Cliente CKR Boutique',
-      userLegalId: '',
-      userLegalIdType: 'CC',
-      userPhoneNumber: '',
-      userPhoneNumberPrefix: '+57',
-      shippingAddress: {
-        addressLine1: '',
-        country: 'CO',
-        region: '',
-        city: '',
-        phoneNumber: ''
-      }
-    }
+    redirectUrl: 'https://ckrnow.com/?pago=exitoso'
   });
 
   checkout.open(function(result) {
