@@ -21,6 +21,10 @@
         <li><a href="#accesorios">Accesorios</a></li>
         <li><a href="#contacto">Contacto</a></li>
       </ul>
+      <button class="cart-icon-btn" onclick="openCart()" aria-label="Ver carrito">
+        🛍️
+        <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+      </button>
       <a href="https://wa.me/573017604292" target="_blank" class="nav-cta">📲 WhatsApp</a>
       <div class="hamburger" onclick="toggleMenu()">☰</div>
     </div>
@@ -428,6 +432,52 @@
 
   <!-- WhatsApp flotante -->
   <a href="https://wa.me/573017604292" target="_blank" class="whatsapp-float">💬</a>
+
+  <!-- SELECTOR DE TALLA -->
+  <div id="sizeModal" class="size-modal-overlay" onclick="closeSizeModal()" style="display:none">
+    <div class="size-modal" onclick="event.stopPropagation()">
+      <button class="size-modal-close" onclick="closeSizeModal()">✕</button>
+      <p class="size-modal-label">SELECCIONA TU TALLA</p>
+      <h3 id="sizeProductName" class="size-modal-product"></h3>
+      <div class="size-options">
+        <button onclick="selectSize('XS')">XS</button>
+        <button onclick="selectSize('S')">S</button>
+        <button onclick="selectSize('M')">M</button>
+        <button onclick="selectSize('L')">L</button>
+        <button onclick="selectSize('XL')">XL</button>
+        <button onclick="selectSize('Única')">Única</button>
+      </div>
+      <p class="size-hint">¿Dudas con tu talla? <a href="https://wa.me/573017604292" target="_blank">Consúltanos por WhatsApp</a></p>
+    </div>
+  </div>
+
+  <!-- CARRITO DRAWER -->
+  <div id="cartOverlay" class="cart-overlay" onclick="closeCart()"></div>
+  <div id="cartDrawer" class="cart-drawer">
+    <div class="cart-header">
+      <h2 class="cart-title">Tu Carrito <span>CKR</span></h2>
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div id="cartItems" class="cart-items">
+      <div class="cart-empty">
+        <p>Tu carrito está vacío</p>
+        <p style="font-size:0.8rem;color:#999;margin-top:8px">¡Agrega tus prendas favoritas!</p>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>TOTAL</span>
+        <span id="cartTotal" class="cart-total-price">$0 COP</span>
+      </div>
+      <button class="btn-checkout" onclick="checkoutWhatsApp()">
+        📲 Finalizar pedido por WhatsApp
+      </button>
+      <p class="cart-note">Pago por Nequi · PSE · Transferencia · Wompi</p>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICACIÓN -->
+  <div id="cartToast" class="cart-toast">✓ Producto agregado al carrito</div>
 
   <script src="js/main.js"></script>
 </body>
