@@ -233,33 +233,39 @@ async function checkoutWompi() {
     return;
   }
 
-  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-  const amountInCents = total * 100;
-  const reference = 'CKR-' + Date.now();
-  const integrityHash = await generateIntegrityHash(reference, amountInCents);
+  if (typeof WidgetCheckout === 'undefined') {
+    alert('El mÃ³dulo de pago no cargÃ³. Por favor recarga la pÃ¡gina e intenta de nuevo.');
+    return;
+  }
 
-  // DescripciÃ³n del pedido
-  const description = cart.map(i => `${i.qty}x ${i.name} T.${i.size}`).join(', ');
+  try {
+    const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+    const amountInCents = total * 100;
+    const reference = 'CKR-' + Date.now();
+    const integrityHash = await generateIntegrityHash(reference, amountInCents);
 
-  const checkout = new WidgetCheckout({
-    currency: 'COP',
-    amountInCents,
-    reference,
-    publicKey: WOMPI_PUBLIC_KEY,
-    signature: { integrity: integrityHash },
-    redirectUrl: 'https://ckrnow.com/?pago=exitoso'
-  });
+    const checkout = new WidgetCheckout({
+      currency: 'COP',
+      amountInCents,
+      reference,
+      publicKey: WOMPI_PUBLIC_KEY,
+      signature: { integrity: integrityHash },
+      redirectUrl: 'https://ckrnow.com/?pago=exitoso'
+    });
 
-  checkout.open(function(result) {
-    const tx = result.transaction;
-    if (tx && tx.status === 'APPROVED') {
-      cart = [];
-      saveCart();
-      updateCartBadge();
-      closeCart();
-      document.getElementById('wompiSuccessModal').style.display = 'flex';
-    }
-  });
+    checkout.open(function(result) {
+      const tx = result.transaction;
+      if (tx && tx.status === 'APPROVED') {
+        cart = [];
+        saveCart();
+        updateCartBadge();
+        closeCart();
+        document.getElementById('wompiSuccessModal').style.display = 'flex';
+      }
+    });
+  } catch(e) {
+    alert('Error al abrir el pago: ' + e.message);
+  }
 }
 
 function closeSuccessModal() {
