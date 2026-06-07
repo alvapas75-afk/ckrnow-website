@@ -504,16 +504,30 @@
         <span>TOTAL</span>
         <span id="cartTotal" class="cart-total-price">$0 COP</span>
       </div>
-      <button class="btn-checkout" onclick="checkoutWhatsApp()">
-        📲 Finalizar pedido por WhatsApp
+      <button class="btn-checkout-wompi" onclick="checkoutWompi()">
+        💳 Pagar en línea (PSE · Nequi · Tarjeta)
       </button>
-      <p class="cart-note">Pago por Nequi · PSE · Transferencia · Wompi</p>
+      <button class="btn-checkout" onclick="checkoutWhatsApp()">
+        📲 Pedir por WhatsApp
+      </button>
+      <p class="cart-note">Pago seguro con Wompi · Datos protegidos</p>
     </div>
   </div>
 
   <!-- TOAST NOTIFICACIÓN -->
   <div id="cartToast" class="cart-toast">✓ Producto agregado al carrito</div>
 
+  <!-- Modal pago exitoso -->
+  <div id="wompiSuccessModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:16px;padding:40px 32px;max-width:360px;width:90%;text-align:center;">
+      <div style="font-size:3rem;margin-bottom:12px">✅</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#1a1a1a;margin-bottom:8px">¡Pago recibido!</h2>
+      <p style="color:#555;font-size:0.95rem;margin-bottom:20px">Tu pedido está confirmado. Te escribiremos por WhatsApp con los detalles del envío.</p>
+      <button onclick="closeSuccessModal()" style="background:#1a1a1a;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:0.95rem;cursor:pointer">Cerrar</button>
+    </div>
+  </div>
+
+  <script src="https://checkout.wompi.co/widget.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
