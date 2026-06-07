@@ -42,7 +42,6 @@ function saveCart() {
 }
 
 function parsePrice(priceText) {
-  // "$380.000 COP" → 380000
   return parseInt(priceText.replace(/\./g, '').replace(/\D/g, ''));
 }
 
@@ -213,6 +212,80 @@ function initCartButtons() {
     card.querySelector('.product-info').appendChild(btn);
   });
 }
+
+// ---- WOMPI CHECKOUT ----
+const WOMPI_PUBLIC_KEY = 'pub_prod_q37sErxb7ePerWO5XBkg8EtkaEtNtedu';
+const WOMPI_INTEGRITY_SECRET = 'prod_integrity_MIosK6AhGAV4IQsL3Tv05VSEKhKW4fvW';
+
+async function generateIntegrityHash(reference, amountInCents) {
+  const data = `${reference}${amountInCents}COP${WOMPI_INTEGRITY_SECRET}`;
+  const encoded = new TextEncoder().encode(data);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+async function checkoutWompi() {
+  if (cart.length === 0) {
+    alert('Tu carrito está vacío. Agrega productos primero.');
+    return;
+  }
+
+  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const amountInCents = total * 100;
+  const reference = 'CKR-' + Date.now();
+  const integrityHash = await generateIntegrityHash(reference, amountInCents);
+
+  const checkout = new WidgetCheckout({
+    currency: 'COP',
+    amountInCents,
+    reference,
+    publicKey: WOMPI_PUBLIC_KEY,
+    signature: { integrity: integrityHash },
+    redirectUrl: 'https://ckrnow.com/?pago=exitoso',
+    customerData: {
+      userLegalName: 'Cliente CKR Boutique',
+      userLegalId: '',
+      userLegalIdType: 'CC',
+      userPhoneNumber: '',
+      userPhoneNumberPrefix: '+57',
+      shippingAddress: {
+        addressLine1: '',
+        country: 'CO',
+        region: '',
+        city: '',
+        phoneNumber: ''
+      }
+    }
+  });
+
+  checkout.open(function(result) {
+    const tx = result.transaction;
+    if (tx && tx.status === 'APPROVED') {
+      cart = [];
+      saveCart();
+      updateCartBadge();
+      closeCart();
+      document.getElementById('wompiSuccessModal').style.display = 'flex';
+    }
+  });
+}
+
+function closeSuccessModal() {
+  document.getElementById('wompiSuccessModal').style.display = 'none';
+}
+
+// Detectar retorno desde Wompi con ?pago=exitoso
+window.addEventListener('DOMContentLoaded', () => {
+  if (new URLSearchParams(window.location.search).get('pago') === 'exitoso') {
+    cart = [];
+    saveCart();
+    updateCartBadge();
+    document.getElementById('wompiSuccessModal').style.display = 'flex';
+    history.replaceState({}, '', '/');
+  }
+});
 
 // ---- INICIALIZAR ----
 document.addEventListener('DOMContentLoaded', () => {
