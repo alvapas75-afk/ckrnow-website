@@ -491,7 +491,14 @@ footer p { color: rgba(255,255,255,0.5); font-size: 0.78rem; line-height: 2; }
 }
 .cart-total-price {
   font-size: 1.1rem; font-weight: 600; color: var(--gold);
+}.btn-checkout-wompi {
+  display: block; width: 100%;
+  background: #1a1a1a; color: #C9A84C; border: 1px solid #C9A84C; cursor: pointer;
+  padding: 16px; font-size: 0.75rem; letter-spacing: 2px;
+  text-transform: uppercase; font-family: var(--font-sans);
+  transition: all 0.3s; margin-bottom: 10px;
 }
+.btn-checkout-wompi:hover { background: #C9A84C; color: #1a1a1a; }
 .btn-checkout {
   display: block; width: 100%;
   background: #25D366; color: white; border: none; cursor: pointer;
