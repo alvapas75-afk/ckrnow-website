@@ -1,4 +1,4 @@
-// ===== CKR BOUTIQUE â€” Main JS + Carrito de Compras =====
+// ===== CKR BOUTIQUE — Main JS + Carrito de Compras =====
 
 // ---- NAVBAR & MENU ----
 function toggleMenu() {
@@ -42,7 +42,7 @@ function saveCart() {
 }
 
 function parsePrice(priceText) {
-  // "$380.000 COP" â†’ 380000
+  // "$380.000 COP" → 380000
   return parseInt(priceText.replace(/\./g, '').replace(/\D/g, ''));
 }
 
@@ -108,8 +108,8 @@ function renderCartItems() {
   if (cart.length === 0) {
     container.innerHTML = `
       <div class="cart-empty">
-        <p>Tu carrito estÃ¡ vacÃ­o</p>
-        <p style="font-size:0.8rem;color:#999;margin-top:8px">Â¡Agrega tus prendas favoritas!</p>
+        <p>Tu carrito está vacío</p>
+        <p style="font-size:0.8rem;color:#999;margin-top:8px">¡Agrega tus prendas favoritas!</p>
       </div>`;
     totalEl.textContent = '$0 COP';
     return;
@@ -126,10 +126,10 @@ function renderCartItems() {
           <div class="cart-item-price">${formatPrice(item.price)}</div>
         </div>
         <div class="cart-item-controls">
-          <button onclick="changeQty(${i}, -1)">âˆ’</button>
+          <button onclick="changeQty(${i}, -1)">−</button>
           <span>${item.qty}</span>
           <button onclick="changeQty(${i}, 1)">+</button>
-          <button class="remove-btn" onclick="removeFromCart(${i})" title="Eliminar">ðŸ—‘</button>
+          <button class="remove-btn" onclick="removeFromCart(${i})" title="Eliminar">🗑</button>
         </div>
       </div>`;
   }).join('');
@@ -173,23 +173,23 @@ function closeSizeModal() {
 // ---- CHECKOUT POR WHATSAPP ----
 function checkoutWhatsApp() {
   if (cart.length === 0) {
-    alert('Tu carrito estÃ¡ vacÃ­o. Agrega productos primero.');
+    alert('Tu carrito está vacío. Agrega productos primero.');
     return;
   }
 
-  let msg = 'Â¡Hola CKR Boutique! ðŸ›ï¸ Quiero hacer el siguiente pedido:\n\n';
+  let msg = '¡Hola CKR Boutique! 🛍️ Quiero hacer el siguiente pedido:\n\n';
   let total = 0;
 
   cart.forEach((item, i) => {
     msg += `${i + 1}. *${item.name}*\n`;
-    msg += `   Talla: ${item.size} Â· Cant: ${item.qty}\n`;
+    msg += `   Talla: ${item.size} · Cant: ${item.qty}\n`;
     msg += `   ${formatPrice(item.price * item.qty)}\n\n`;
     total += item.price * item.qty;
   });
 
-  msg += `â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n`;
+  msg += `━━━━━━━━━━━━━━━\n`;
   msg += `*TOTAL: ${formatPrice(total)}*\n\n`;
-  msg += `Â¿CÃ³mo procedo con el pago? (Nequi, PSE, transferencia)`;
+  msg += `¿Cómo procedo con el pago? (Nequi, PSE, transferencia)`;
 
   const url = 'https://wa.me/573017604292?text=' + encodeURIComponent(msg);
   window.open(url, '_blank');
@@ -207,7 +207,7 @@ function initCartButtons() {
 
     const btn = document.createElement('button');
     btn.className = 'btn-add-cart';
-    btn.innerHTML = 'ðŸ›’ Agregar al carrito';
+    btn.innerHTML = '🛒 Agregar al carrito';
     btn.addEventListener('click', () => showSizeSelector(name, price));
 
     card.querySelector('.product-info').appendChild(btn);
@@ -229,43 +229,25 @@ async function generateIntegrityHash(reference, amountInCents) {
 
 async function checkoutWompi() {
   if (cart.length === 0) {
-    alert('Tu carrito estÃ¡ vacÃ­o. Agrega productos primero.');
+    alert('Tu carrito está vacío. Agrega productos primero.');
     return;
   }
 
-  if (typeof WidgetCheckout === 'undefined') {
-    alert('El mÃ³dulo de pago no cargÃ³. Por favor recarga la pÃ¡gina e intenta de nuevo.');
-    return;
-  }
+  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const amountInCents = total * 100;
+  const reference = 'CKR-' + Date.now();
+  const integrityHash = await generateIntegrityHash(reference, amountInCents);
 
-  try {
-    const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-    const amountInCents = total * 100;
-    const reference = 'CKR-' + Date.now();
-    const integrityHash = await generateIntegrityHash(reference, amountInCents);
+  const params = new URLSearchParams({
+    'public-key': WOMPI_PUBLIC_KEY,
+    'currency': 'COP',
+    'amount-in-cents': amountInCents,
+    'reference': reference,
+    'signature:integrity': integrityHash,
+    'redirect-url': 'https://ckrnow.com/?pago=exitoso'
+  });
 
-    const checkout = new WidgetCheckout({
-      currency: 'COP',
-      amountInCents,
-      reference,
-      publicKey: WOMPI_PUBLIC_KEY,
-      signature: { integrity: integrityHash },
-      redirectUrl: 'https://ckrnow.com/?pago=exitoso'
-    });
-
-    checkout.open(function(result) {
-      const tx = result.transaction;
-      if (tx && tx.status === 'APPROVED') {
-        cart = [];
-        saveCart();
-        updateCartBadge();
-        closeCart();
-        document.getElementById('wompiSuccessModal').style.display = 'flex';
-      }
-    });
-  } catch(e) {
-    alert('Error al abrir el pago: ' + e.message);
-  }
+  window.open('https://checkout.wompi.co/p/?' + params.toString(), '_blank');
 }
 
 function closeSuccessModal() {
