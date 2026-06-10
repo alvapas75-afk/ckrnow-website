@@ -296,12 +296,28 @@ function closeSuccessModal() {
 
 // Detectar retorno desde Wompi con ?pago=exitoso
 window.addEventListener('DOMContentLoaded', () => {
-  if (new URLSearchParams(window.location.search).get('pago') === 'exitoso') {
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get('pago') === 'exitoso') {
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'Purchase', { value: 0, currency: 'COP', content_type: 'product' });
+    }
     cart = [];
     saveCart();
     updateCartBadge();
     document.getElementById('wompiSuccessModal').style.display = 'flex';
     history.replaceState({}, '', '/');
+  }
+
+  // Link de Instagram/WhatsApp directo → dispara Lead y redirige a WhatsApp
+  if (params.get('wa') === '1') {
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'Lead', { content_name: 'WhatsApp Instagram' });
+    }
+    const msg = '¡Hola CKR Boutique! 👗 Vi sus productos en Instagram y quiero más información.';
+    setTimeout(() => {
+      window.location.href = 'https://wa.me/573017604292?text=' + encodeURIComponent(msg);
+    }, 400);
   }
 });
 
