@@ -315,9 +315,7 @@ window.addEventListener('DOMContentLoaded', () => {
       fbq('track', 'Lead', { content_name: 'WhatsApp Instagram' });
     }
     const msg = '¡Hola CKR Boutique! 👗 Vi sus productos en Instagram y quiero más información.';
-    setTimeout(() => {
-      window.location.href = 'https://wa.me/573017604292?text=' + encodeURIComponent(msg);
-    }, 400);
+    window.location.replace('https://wa.me/573017604292?text=' + encodeURIComponent(msg));
   }
 });
 
