@@ -206,6 +206,37 @@ function checkoutWhatsApp() {
   window.open(url, '_blank');
 }
 
+// ---- CHECKOUT CON ADDI ----
+function checkoutAddi() {
+  if (cart.length === 0) {
+    alert('Tu carrito está vacío. Agrega productos primero.');
+    return;
+  }
+
+  let msg = '¡Hola CKR Boutique! 🛍️ Quiero pagar con *Addi* (cuotas sin interés):\n\n';
+  let total = 0;
+
+  cart.forEach((item, i) => {
+    msg += `${i + 1}. *${item.name}*\n`;
+    msg += `   Talla: ${item.size} · Cant: ${item.qty}\n`;
+    msg += `   ${formatPrice(item.price * item.qty)}\n\n`;
+    total += item.price * item.qty;
+  });
+
+  msg += `━━━━━━━━━━━━━━━\n`;
+  msg += `*TOTAL: ${formatPrice(total)}*\n\n`;
+  msg += `Por favor envíame el link de pago de Addi 🙏`;
+
+  if (typeof fbq !== 'undefined') {
+    fbq('track', 'InitiateCheckout', {
+      value: total, currency: 'COP',
+      num_items: cart.reduce((sum, i) => sum + i.qty, 0),
+      content_type: 'product'
+    });
+  }
+  window.open('https://wa.me/573017604292?text=' + encodeURIComponent(msg), '_blank');
+}
+
 // ---- INYECTAR BOTONES EN TARJETAS ----
 function initCartButtons() {
   document.querySelectorAll('.product-card').forEach(card => {

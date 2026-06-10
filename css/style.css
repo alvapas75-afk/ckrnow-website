@@ -511,6 +511,14 @@ footer p { color: rgba(255,255,255,0.5); font-size: 0.78rem; line-height: 2; }
   transition: all 0.3s; margin-bottom: 10px;
 }
 .btn-checkout-wompi:hover { background: #C9A84C; color: #1a1a1a; }
+.btn-checkout-addi {
+  display: block; width: 100%;
+  background: #FF5A00; color: white; border: none; cursor: pointer;
+  padding: 16px; font-size: 0.75rem; letter-spacing: 2px;
+  text-transform: uppercase; font-family: var(--font-sans);
+  transition: background 0.3s; margin-bottom: 10px;
+}
+.btn-checkout-addi:hover { background: #e04e00; }
 .btn-checkout {
   display: block; width: 100%;
   background: #25D366; color: white; border: none; cursor: pointer;
