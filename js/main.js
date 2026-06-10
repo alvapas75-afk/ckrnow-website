@@ -80,6 +80,9 @@ function addToCart(name, price, size) {
   saveCart();
   updateCartBadge();
   showToast();
+  if (typeof fbq !== 'undefined') {
+    fbq('track', 'AddToCart', { value: price, currency: 'COP', content_name: name, content_type: 'product' });
+  }
 }
 
 // ---- QUITAR DEL CARRITO ----
@@ -191,6 +194,14 @@ function checkoutWhatsApp() {
   msg += `*TOTAL: ${formatPrice(total)}*\n\n`;
   msg += `¿Cómo procedo con el pago? (Nequi, PSE, transferencia)`;
 
+  if (typeof fbq !== 'undefined') {
+    fbq('track', 'InitiateCheckout', {
+      value: total,
+      currency: 'COP',
+      num_items: cart.reduce((sum, i) => sum + i.qty, 0),
+      content_type: 'product'
+    });
+  }
   const url = 'https://wa.me/573017604292?text=' + encodeURIComponent(msg);
   window.open(url, '_blank');
 }
@@ -267,6 +278,9 @@ async function checkoutWompi() {
   checkout.open(function(result) {
     const tx = result.transaction;
     if (tx && tx.status === 'APPROVED') {
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'Purchase', { value: amountInCents / 100, currency: 'COP', content_type: 'product' });
+      }
       cart = [];
       saveCart();
       updateCartBadge();
