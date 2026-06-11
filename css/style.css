@@ -348,19 +348,6 @@ footer p { color: rgba(255,255,255,0.5); font-size: 0.78rem; line-height: 2; }
   font-family: var(--font-sans);
 }
 
-/* ===== BOTÓN AGREGAR AL CARRITO ===== */
-.btn-add-cart {
-  display: block; width: 100%; margin-top: 8px;
-  background: transparent; color: var(--gold);
-  border: 1px solid var(--gold);
-  padding: 10px; cursor: pointer;
-  font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
-  font-family: var(--font-sans);
-  transition: all 0.3s;
-}
-.btn-add-cart:hover {
-  background: var(--gold); color: var(--black);
-}
 
 /* ===== SELECTOR DE TALLA ===== */
 .size-modal-overlay {

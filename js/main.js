@@ -237,24 +237,6 @@ function checkoutAddi() {
   window.open('https://wa.me/573017604292?text=' + encodeURIComponent(msg), '_blank');
 }
 
-// ---- INYECTAR BOTONES EN TARJETAS ----
-function initCartButtons() {
-  document.querySelectorAll('.product-card').forEach(card => {
-    const nameEl = card.querySelector('h3');
-    const priceEl = card.querySelector('.product-price');
-    if (!nameEl || !priceEl) return;
-
-    const name = nameEl.textContent.trim();
-    const price = parsePrice(priceEl.textContent.trim());
-
-    const btn = document.createElement('button');
-    btn.className = 'btn-add-cart';
-    btn.innerHTML = '🛒 Agregar al carrito';
-    btn.addEventListener('click', () => showSizeSelector(name, price));
-
-    card.querySelector('.product-info').appendChild(btn);
-  });
-}
 
 // ---- WOMPI CHECKOUT ----
 const WOMPI_PUBLIC_KEY = 'pub_prod_q37sErxb7ePerWO5XBkg8EtkaEtNtedu';
@@ -352,6 +334,5 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // ---- INICIALIZAR ----
 document.addEventListener('DOMContentLoaded', () => {
-  initCartButtons();
   updateCartBadge();
 });
