@@ -1,0 +1,393 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>CKR Boutique — Catálogo Verano 2026</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Helvetica Neue',Arial,sans-serif;background:#fafaf8;color:#222;}
+  .cover{background:#1a3a2a;min-height:100vh;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;padding:40px 30px;page-break-after:always;}
+  .cover h1{font-size:52px;color:#c9a050;letter-spacing:4px;margin-bottom:12px;}
+  .cover .sub{font-size:14px;color:#fff;letter-spacing:6px;text-transform:uppercase;margin-bottom:24px;}
+  .cover .div{width:60px;height:2px;background:#c9a050;margin:18px auto;}
+  .cover .season{font-size:20px;color:#c9a050;margin-bottom:16px;letter-spacing:2px;}
+  .cover .cats{font-size:11px;color:#aaa;letter-spacing:3px;text-transform:uppercase;margin-bottom:24px;}
+  .cover .contact{font-size:13px;color:#ddd;line-height:2.2;}
+  .cover .contact b{color:#c9a050;}
+  .cover .foot{margin-top:36px;font-size:10px;color:#555;letter-spacing:2px;}
+  .sec{text-align:center;padding:36px 20px 16px;border-bottom:2px solid #c9a050;margin:0 30px 28px;}
+  .sec h2{font-size:20px;color:#1a3a2a;letter-spacing:3px;text-transform:uppercase;}
+  .sec p{font-size:10px;color:#999;letter-spacing:2px;margin-top:5px;}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+    padding:0 30px 40px;max-width:920px;margin:0 auto;}
+  .card{background:#fff;border:1px solid #e8e8e8;border-radius:8px;overflow:hidden;page-break-inside:avoid;break-inside:avoid;}
+  .img-wrap{width:100%;height:230px;overflow:hidden;background:#f0f0f0;
+    display:flex;align-items:center;justify-content:center;}
+  .img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;}
+  .info{padding:11px 9px 13px;text-align:center;}
+  .info h3{font-size:9.5px;font-weight:700;color:#1a1a1a;line-height:1.4;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.3px;}
+  .info .price{font-size:13px;font-weight:700;color:#8b1a1a;margin-bottom:3px;}
+  .info .size{font-size:8.5px;color:#777;margin-bottom:2px;}
+  .info .wa{font-size:7.5px;color:#25D366;}
+  .backcover{background:#1a3a2a;min-height:100vh;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;padding:40px;page-break-before:always;}
+  .backcover h2{font-size:40px;color:#c9a050;margin-bottom:20px;}
+  .backcover p{color:#ccc;font-size:13px;line-height:2.2;}
+  .backcover .cta{font-size:18px;color:#fff;margin:18px 0;}
+  .backcover .div{width:60px;height:2px;background:#c9a050;margin:18px auto;}
+  .backcover .phone{font-size:22px;color:#c9a050;font-weight:700;margin:10px 0;}
+  .print-btn{position:fixed;bottom:28px;right:28px;background:#1a3a2a;color:#fff;
+    border:none;border-radius:50px;padding:14px 26px;font-size:13px;font-weight:700;
+    cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,0.3);z-index:999;letter-spacing:1px;}
+  .print-btn:hover{background:#c9a050;}
+  @media print{
+    @page{size:A4;margin:8mm;}
+    .print-btn{display:none!important;}
+    .cover,.backcover{min-height:277mm;}
+    .grid{grid-template-columns:repeat(3,1fr);gap:10px;padding:0 0 16px;max-width:100%;}
+    .img-wrap{height:165px;}
+    body{background:#fff;}
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">⬇ Guardar como PDF</button>
+
+<div class="cover">
+  <h1>CKR Boutique</h1>
+  <p class="sub">Moda Importada Premium</p>
+  <div class="div"></div>
+  <p class="season">Catálogo Verano 2026</p>
+  <p class="cats">Vestidos · Conjuntos · Blusas · Accesorios</p>
+  <div class="div"></div>
+  <div class="contact">
+    <p>Moda femenina 100% original desde USA y Europa</p>
+    <p>Envíos a todo Colombia</p>
+    <br/>
+    <p><b>WhatsApp:</b> +57 301 760 4292</p>
+    <p><b>Web:</b> www.ckrnow.com</p>
+    <p>@ckr_boutique · @ckrnow</p>
+  </div>
+  <p class="foot">PRENDAS SELECCIONADAS · CALIDAD INTERNACIONAL</p>
+</div>
+
+<div class="sec"><h2>Colección de Ropa</h2><p>Verano 2026 · Prendas 100% originales importadas desde USA y Europa</p></div>
+<div class="grid"><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1BYBBY-o-shG8Dqatr10Wh-Wc04rzKuvF" alt="Jumpsuit lino topo" loading="lazy"/></div>
+  <div class="info">
+    <h3>Jumpsuit lino topo</h3>
+    <p class="price">$380.000 COP</p>
+    
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1l4h-XN_5YczjKwjnLZXbE_VqVvskrl92" alt="Conjunto verde olivo" loading="lazy"/></div>
+  <div class="info">
+    <h3>Conjunto verde olivo</h3>
+    <p class="price">$320.000 COP</p>
+    <p class='size'>Talla: S</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1M1aDdinCPaZqqnap6556RQyZpyd89S1K" alt="Conjunto blanco en lino pintado" loading="lazy"/></div>
+  <div class="info">
+    <h3>Conjunto blanco en lino pintado</h3>
+    <p class="price">$380.000 COP</p>
+    <p class='size'>Talla: S</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1zTZbPx414sUAhbyYNP-3CYmXVukuoX5h" alt="Conjunto azul floral" loading="lazy"/></div>
+  <div class="info">
+    <h3>Conjunto azul floral</h3>
+    <p class="price">$320.000 COP</p>
+    <p class='size'>Talla: S</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1KYMmOqBRdk3cTzAjAVwqo1Yk4oMGchih" alt="Conjunto de pantalon y top en lino palo de rosa" loading="lazy"/></div>
+  <div class="info">
+    <h3>Conjunto de pantalon y top en lino palo de rosa</h3>
+    <p class="price">$260.000 COP</p>
+    <p class='size'>Talla: M</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1BaZEV0b1RMOKU1-0LV6ed8fQYkypj3e-" alt="Jumpsuit rojo elegante" loading="lazy"/></div>
+  <div class="info">
+    <h3>Jumpsuit rojo elegante</h3>
+    <p class="price">$280.000 COP</p>
+    <p class='size'>Talla: 8</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1ArVPwiileOO-wQeP5_TIg4WqgaLSDwp4" alt="Conjunto fucsia off-shoulder" loading="lazy"/></div>
+  <div class="info">
+    <h3>Conjunto fucsia off-shoulder</h3>
+    <p class="price">$320.000 COP</p>
+    <p class='size'>Talla: S</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1Db8qwrvKUj6tfjMZih2w7QRj5BfXybbp" alt="Vestido maxi floral beige" loading="lazy"/></div>
+  <div class="info">
+    <h3>Vestido maxi floral beige</h3>
+    <p class="price">$320.000 COP</p>
+    <p class='size'>Talla: S</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1_GjHSYnzBfbA00YTWODvQAWKsyDW5FHQ" alt="Vestido Corto en Encaje Azul" loading="lazy"/></div>
+  <div class="info">
+    <h3>Vestido Corto en Encaje Azul</h3>
+    <p class="price">$380.000 COP</p>
+    <p class='size'>Talla: L</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/15-TPPPibPaUImZgzJun0kXjJYTcgnExZ" alt="Vestido largo en Tafeta Rosa" loading="lazy"/></div>
+  <div class="info">
+    <h3>Vestido largo en Tafeta Rosa</h3>
+    <p class="price">$380.000 COP</p>
+    <p class='size'>Talla: S</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1TG5GPHOR_bQ8rcDfJtTYnNbaWPS8A4Iu" alt="Vestido en encaje corto Blanco" loading="lazy"/></div>
+  <div class="info">
+    <h3>Vestido en encaje corto Blanco</h3>
+    <p class="price">$320.000 COP</p>
+    <p class='size'>Talla: M</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/19FIZk4PcRoXaCnMwXIrJX_Ixxmd2iNZx" alt="Vestido Burdeo fluido" loading="lazy"/></div>
+  <div class="info">
+    <h3>Vestido Burdeo fluido</h3>
+    <p class="price">$380.000 COP</p>
+    
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1oHAe9Hw6srIH5BLwA16cCoGtlVxN9rPN" alt="Vestido Negro en Encaje Corto" loading="lazy"/></div>
+  <div class="info">
+    <h3>Vestido Negro en Encaje Corto</h3>
+    <p class="price">$320.000 COP</p>
+    <p class='size'>Talla: S</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1s8RxbfmGTecR40eoF1RJ5FszVdP4_8XB" alt="Vestido Negro Alto Relieve" loading="lazy"/></div>
+  <div class="info">
+    <h3>Vestido Negro Alto Relieve</h3>
+    <p class="price">$280.000 COP</p>
+    
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1iGlqZNuxFhkEx2PjaEPbobsAMwRvxu6L" alt="Vestido Largo Lencero Champagne en Seda" loading="lazy"/></div>
+  <div class="info">
+    <h3>Vestido Largo Lencero Champagne en Seda</h3>
+    <p class="price">$380.000 COP</p>
+    <p class='size'>Talla: M-L</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1zFbbsHm78lymANlAh4E0V73blDJgAnUD" alt="Blusa Estampada Floral Rosa" loading="lazy"/></div>
+  <div class="info">
+    <h3>Blusa Estampada Floral Rosa</h3>
+    <p class="price">$180.000 COP</p>
+    <p class='size'>Talla: S</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1GEkkXepyze6sKfhW6dlEbeQdDDsGZtWc" alt="Set de Pantalon y Blusa en lino europeo Palo de Rosa" loading="lazy"/></div>
+  <div class="info">
+    <h3>Set de Pantalon y Blusa en lino europeo Palo de Rosa</h3>
+    <p class="price">$480.000 COP</p>
+    
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1Qg8rWBGHOx-S00zrRhT5Gvv2J5MUfPj7" alt="Camisa Blanca en Ojalillo" loading="lazy"/></div>
+  <div class="info">
+    <h3>Camisa Blanca en Ojalillo</h3>
+    <p class="price">$150.000 COP</p>
+    <p class='size'>Talla: S</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1pKyhaKTdXdi-H1e-ih05Yw85BbVZLmAV" alt="Pantalon de Pinzas y correa Rosa Pink" loading="lazy"/></div>
+  <div class="info">
+    <h3>Pantalon de Pinzas y correa Rosa Pink</h3>
+    <p class="price">$180.000 COP</p>
+    <p class='size'>Talla: L</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1tOsBfpqpGjzFPtGEf9gu6XfBkqM1X7QS" alt="Set de Pantalon y Blusa en lino Blanco Estampado" loading="lazy"/></div>
+  <div class="info">
+    <h3>Set de Pantalon y Blusa en lino Blanco Estampado</h3>
+    <p class="price">$380.000 COP</p>
+    <p class='size'>Talla: M</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1LaTybcBKtHEd44NVocAApTPEHpde557G" alt="Conjunto Verde off-shoulder" loading="lazy"/></div>
+  <div class="info">
+    <h3>Conjunto Verde off-shoulder</h3>
+    <p class="price">$320.000 COP</p>
+    <p class='size'>Talla: M</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1wIHwhb0-KXo-kW6uyfotPhDwROynZxj0" alt="Set de Pantalon y Chaqueta Blanco en encaje Presly" loading="lazy"/></div>
+  <div class="info">
+    <h3>Set de Pantalon y Chaqueta Blanco en encaje Presly</h3>
+    <p class="price">$420.000 COP</p>
+    
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1Vk_2PLPQ1N7Sp5B3PT-d9B6qdmFlqGx9" alt="Set en Lino de Pantalon y Top Crudo lazo en ojalillo" loading="lazy"/></div>
+  <div class="info">
+    <h3>Set en Lino de Pantalon y Top Crudo lazo en ojalillo</h3>
+    <p class="price">$280.000 COP</p>
+    <p class='size'>Talla: L</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1gonWQVBdImrM2PBUIBSoTs_ytKFXcBL_" alt="Set en Lino de Short y Top Azul estampado Venao" loading="lazy"/></div>
+  <div class="info">
+    <h3>Set en Lino de Short y Top Azul estampado Venao</h3>
+    <p class="price">$280.000 COP</p>
+    <p class='size'>Talla: L</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1HaNh5jBf67rOCo8i9Zzh7ViHk20lFEZx" alt="Blusón Troquelado Geométrico Rosa Pink" loading="lazy"/></div>
+  <div class="info">
+    <h3>Blusón Troquelado Geométrico Rosa Pink</h3>
+    <p class="price">$180.000 COP</p>
+    <p class='size'>Talla: L-XL</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1DYk6QDT9gactOTr_nKtTPYPl4b4U4481" alt="Blusón en Encaje Palo de Rosa" loading="lazy"/></div>
+  <div class="info">
+    <h3>Blusón en Encaje Palo de Rosa</h3>
+    <p class="price">$180.000 COP</p>
+    <p class='size'>Talla: L-XL</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1U2UPtZtC6AcHBiUZ2bndkRAETQsPatZr" alt="Blusón Fucsia Troquelado Geométrico" loading="lazy"/></div>
+  <div class="info">
+    <h3>Blusón Fucsia Troquelado Geométrico</h3>
+    <p class="price">$180.000 COP</p>
+    <p class='size'>Talla: L-XL</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1J7ldp9X4bhg3n10R-zRq3mVRoYZpAWiH" alt="Set de Pantalón y Blusa en Lino Verde" loading="lazy"/></div>
+  <div class="info">
+    <h3>Set de Pantalón y Blusa en Lino Verde</h3>
+    <p class="price">$320.000 COP</p>
+    <p class='size'>Talla: L</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1wStw_SLuqB0UCgizwSoK9KnZcewwn-op" alt="Vestido Largo Caffé Moca" loading="lazy"/></div>
+  <div class="info">
+    <h3>Vestido Largo Caffé Moca</h3>
+    <p class="price">$380.000 COP</p>
+    <p class='size'>Talla: L-XL</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1RRkecx4p2fBJExZDAiGHAEBlEys-rMkl" alt="Vestido Midi Blanco en Encaje" loading="lazy"/></div>
+  <div class="info">
+    <h3>Vestido Midi Blanco en Encaje</h3>
+    <p class="price">$320.000 COP</p>
+    <p class='size'>Talla: S</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div></div>
+
+<div class="sec" style="margin-top:20px;"><h2>Accesorios de Lujo</h2><p>Kate Spade · Tommy Hilfiger · Armani Exchange · Michael Kors · Nike</p></div>
+<div class="grid"><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1Qg8rWBGHOx-S00zrRhT5Gvv2J5MUfPj7" alt="Jeans Azul oscuro tiro alto" loading="lazy"/></div>
+  <div class="info">
+    <h3>Jeans Azul oscuro tiro alto</h3>
+    <p class="price">$220.000 COP</p>
+    <p class='size'>Talla: 3-5</p>
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1-7Li_bySkyIPq-PvKT4V2fu1W4U1_ByX" alt="Bolso tote nude Kate Spade" loading="lazy"/></div>
+  <div class="info">
+    <h3>Bolso tote nude Kate Spade</h3>
+    <p class="price">$700.000 COP</p>
+    
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/14GEdD0Z7c1Yu5ob5xq-icVdRMva5YTI6" alt="Bolso Tommy Hilfiger" loading="lazy"/></div>
+  <div class="info">
+    <h3>Bolso Tommy Hilfiger</h3>
+    <p class="price">$380.000 COP</p>
+    
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1HVzQMbL_-njotGqLAFYlrYNesv1Bws1Z" alt="Reloj Armani Exchange" loading="lazy"/></div>
+  <div class="info">
+    <h3>Reloj Armani Exchange</h3>
+    <p class="price">$1.000.000 COP</p>
+    
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1thuNXUfXpGEtCvf7_si5UgqNxEwuJprm" alt="Reloj Michael Kors negro" loading="lazy"/></div>
+  <div class="info">
+    <h3>Reloj Michael Kors negro</h3>
+    <p class="price">$1.500.000 COP</p>
+    
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1yGkJLbkKaRzaqoh2bfUGnbQNtwjY2Pkz" alt="Reloj Michael Kors dorado talko Rojo" loading="lazy"/></div>
+  <div class="info">
+    <h3>Reloj Michael Kors dorado talko Rojo</h3>
+    <p class="price">$1.800.000 COP</p>
+    
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div><div class="card">
+  <div class="img-wrap"><img src="https://lh3.googleusercontent.com/d/1MOd8lA53LPX6mE7Ve5tp6njUzDStqSFg" alt="Interior Victoria Secret Gris" loading="lazy"/></div>
+  <div class="info">
+    <h3>Interior Victoria Secret Gris</h3>
+    <p class="price">$90.000 COP</p>
+    
+    <p class="wa">WhatsApp: +57 301 760 4292</p>
+  </div>
+</div></div>
+
+<div class="backcover">
+  <h2>CKR Boutique</h2>
+  <div class="div"></div>
+  <p class="cta">¿Lista para lucir increíble?</p>
+  <p>Escríbenos y pide tu prenda favorita</p>
+  <p class="phone">+57 301 760 4292</p>
+  <div class="div"></div>
+  <p>www.ckrnow.com</p>
+  <p>@ckr_boutique · @ckrnow</p>
+  <br/>
+  <p style="font-size:10px;color:#444;">Envíos a todo Colombia · Pago seguro en línea · Wompi · PSE · Nequi</p>
+</div>
+
+</body>
+</html>
