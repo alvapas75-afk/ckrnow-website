@@ -91,6 +91,24 @@
       pointer-events: none;
     }
     .product-img-wrap img { cursor: zoom-in; }
+    /* ===== NAV EXTRA ITEMS ===== */
+    @media (min-width: 900px) {
+      .nav-links li a { font-size: 0.65rem !important; letter-spacing: 0.8px; }
+    }
+    /* ===== ACCESORIO SUB-SECCIONES ===== */
+    .acc-subsection { margin-bottom: 8px; }
+    .acc-sub-title {
+      text-align: center;
+      font-size: 0.78rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #999;
+      font-family: var(--font-sans, 'Montserrat', sans-serif);
+      font-weight: 400;
+      margin: 28px 0 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e8dcc8;
+    }
   </style>
 </head>
 <body>
@@ -106,7 +124,11 @@
       <div class="nav-logo">CKR <span>Boutique</span></div>
       <ul class="nav-links">
         <li><a href="#inicio">Inicio</a></li>
-        <li><a href="#coleccion">Colección</a></li>
+        <li><a href="#vestidos">Vestidos</a></li>
+        <li><a href="#blusas">Blusas</a></li>
+        <li><a href="#jeans">Jeans</a></li>
+        <li><a href="#pantalones">Pantalones</a></li>
+        <li><a href="#conjuntos">Sets</a></li>
         <li><a href="#accesorios">Accesorios</a></li>
         <li><a href="#contacto">Contacto</a></li>
       </ul>
@@ -119,7 +141,11 @@
     </div>
     <div class="mobile-menu" id="mobileMenu">
       <a href="#inicio" onclick="toggleMenu()">Inicio</a>
-      <a href="#coleccion" onclick="toggleMenu()">Colección</a>
+      <a href="#vestidos" onclick="toggleMenu()">Vestidos</a>
+      <a href="#blusas" onclick="toggleMenu()">Blusas</a>
+      <a href="#jeans" onclick="toggleMenu()">Jeans</a>
+      <a href="#pantalones" onclick="toggleMenu()">Pantalones</a>
+      <a href="#conjuntos" onclick="toggleMenu()">Sets &amp; Conjuntos</a>
       <a href="#accesorios" onclick="toggleMenu()">Accesorios</a>
       <a href="#contacto" onclick="toggleMenu()">Contacto</a>
       <a href="https://wa.me/573017604292" target="_blank">📲 WhatsApp</a>
@@ -134,7 +160,7 @@
       <p class="hero-sub">Colección Verano 2026</p>
       <h1>La Elegancia<br/><em>que te define</em></h1>
       <p class="hero-desc">Moda importada 100% original desde USA y Europa.<br/>Prendas exclusivas con envíos a todo Colombia.</p>
-      <a href="#coleccion" class="btn-primary">Ver Colección</a>
+      <a href="#vestidos" class="btn-primary">Ver Colección</a>
     </div>
   </section>
 
@@ -146,29 +172,14 @@
     <div class="value-item">💳 <span>Cuotas sin interés con Addi</span></div>
   </section>
 
-  <!-- COLECCIÓN -->
-  <section id="coleccion" class="collection">
+  <!-- ===== VESTIDOS ===== -->
+  <section id="vestidos" class="collection">
     <div class="section-header">
       <p class="section-sub">Verano 2026</p>
-      <h2>Nuestra Colección</h2>
-      <p class="section-desc">Prendas seleccionadas con el más alto estándar de calidad y estilo.</p>
+      <h2>Vestidos</h2>
+      <p class="section-desc">Estilos únicos para cada ocasión — desde el día hasta la noche.</p>
     </div>
     <div class="products-grid">
-
-      <!-- NUEVOS INGRESOS -->
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="images/set_blanco_encaje.jpg" alt="Set Blanco en Encaje Preslye" style="object-position: center 10%;" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Set Blanco en Encaje Preslye</h3>
-          <p class="product-price">$420.000 COP</p>
-          <p class="product-sizes">Talla: ÚNICA</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set Blanco en Encaje Preslye', 420000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Blanco%20en%20Encaje%20Preslye%20%24420.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
 
       <div class="product-card">
         <div class="product-img-wrap">
@@ -184,105 +195,9 @@
         </div>
       </div>
 
-      <!-- CONJUNTOS & JUMPSUITS -->
       <div class="product-card">
         <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1BYBBY-o-shG8Dqatr10Wh-Wc04rzKuvF" alt="Jumpsuit lino topo" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Jumpsuit Lino Topo</h3>
-          <p class="product-price">$380.000 COP</p>
-          <p class="product-sizes">Talla: ÚNICA</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Jumpsuit Lino Topo', 380000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumpsuit%20lino%20topo%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1l4h-XN_5YczjKwjnLZXbE_VqVvskrl92" alt="Conjunto verde olivo" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Conjunto Verde Olivo</h3>
-          <p class="product-price">$320.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Conjunto Verde Olivo', 320000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Conjunto%20verde%20olivo%20%24320.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1M1aDdinCPaZqqnap6556RQyZpyd89S1K" alt="Conjunto blanco bordado" onclick="openLightbox(this.src, this.alt)"/>
-        </div>
-        <div class="product-info">
-          <h3>Conjunto Blanco en Lino Pintado</h3>
-          <p class="product-price">$380.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Conjunto Blanco en Lino Pintado', 380000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Conjunto%20blanco%20en%20lino%20pintado%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1zTZbPx414sUAhbyYNP-3CYmXVukuoX5h" alt="Conjunto azul floral" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-        </div>
-        <div class="product-info">
-          <h3>Conjunto Azul Floral</h3>
-          <p class="product-price">$320.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Conjunto Azul Floral', 320000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Conjunto%20azul%20floral%20%24320.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1KYMmOqBRdk3cTzAjAVwqo1Yk4oMGchih" alt="Conjunto palo de rosa" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-        </div>
-        <div class="product-info">
-          <h3>Conjunto Pantalón y Top en Lino Palo de Rosa</h3>
-          <p class="product-price">$260.000 COP</p>
-          <p class="product-sizes">Talla: M</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Conjunto Pantalón y Top en Lino Palo de Rosa', 260000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Conjunto%20palo%20de%20rosa%20%24260.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1BaZEV0b1RMOKU1-0LV6ed8fQYkypj3e-" alt="Jumpsuit rojo elegante" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Favorito</div>
-        </div>
-        <div class="product-info">
-          <h3>Jumpsuit Rojo Elegante</h3>
-          <p class="product-price">$280.000 COP</p>
-          <p class="product-sizes">Talla: 8</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Jumpsuit Rojo Elegante', 280000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumpsuit%20rojo%20elegante%20%24280.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1ArVPwiileOO-wQeP5_TIg4WqgaLSDwp4" alt="Conjunto fucsia off-shoulder" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-        </div>
-        <div class="product-info">
-          <h3>Conjunto Fucsia Off-Shoulder</h3>
-          <p class="product-price">$320.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Conjunto Fucsia Off-Shoulder', 320000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Conjunto%20fucsia%20off-shoulder%20%24320.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <!-- VESTIDOS -->
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1Db8qwrvKUj6tfjMZih2w7QRj5BfXybbp" alt="Vestido maxi floral beige" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <img src="https://lh3.googleusercontent.com/d/1Db8qwrvKUj6tfjMZih2w7QRj5BfXybbp" alt="Vestido Maxi Floral Beige" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Nuevo</div>
         </div>
         <div class="product-info">
@@ -361,7 +276,6 @@
         </div>
       </div>
 
-      <!-- NUEVO: Vestido Lencero Champagne -->
       <div class="product-card">
         <div class="product-img-wrap">
           <img src="https://lh3.googleusercontent.com/d/1iGlqZNuxFhkEx2PjaEPbobsAMwRvxu6L" alt="Vestido largo lencero champagne" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
@@ -376,143 +290,6 @@
         </div>
       </div>
 
-      <!-- TOPS & BLUSAS -->
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1zFbbsHm78lymANlAh4E0V73blDJgAnUD" alt="Blusa estampada floral rosa" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-        </div>
-        <div class="product-info">
-          <h3>Blusa Estampada Floral Rosa</h3>
-          <p class="product-price">$180.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Blusa Estampada Floral Rosa', 180000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20estampada%20floral%20rosa%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1GEkkXepyze6sKfhW6dlEbeQdDDsGZtWc" alt="Set pantalón y blusa lino palo de rosa" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-        </div>
-        <div class="product-info">
-          <h3>Set Pantalón y Blusa en Lino Palo de Rosa</h3>
-          <p class="product-price">$480.000 COP</p>
-          <p class="product-sizes">Talla: ÚNICA</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set Pantalón y Blusa en Lino Palo de Rosa', 480000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20lino%20palo%20de%20rosa%20%24480.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1IZUuzU_-orkSZmmNMRlMWdIUirse17nX" alt="Camisa blanca ojalillo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-        </div>
-        <div class="product-info">
-          <h3>Camisa Blanca en Ojalillo</h3>
-          <p class="product-price">$150.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Camisa Blanca en Ojalillo', 150000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Camisa%20blanca%20ojalillo%20%24150.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1pKyhaKTdXdi-H1e-ih05Yw85BbVZLmAV" alt="Pantalón de pinzas rosa pink" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-        </div>
-        <div class="product-info">
-          <h3>Pantalón de Pinzas y Correa Rosa Pink</h3>
-          <p class="product-price">$180.000 COP</p>
-          <p class="product-sizes">Talla: L</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Pantalón de Pinzas y Correa Rosa Pink', 180000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantal%C3%B3n%20rosa%20pink%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1NFoTV6fd_hrsmLv_Rlew3pNmEn663wn3" alt="Set pantalón y blusa lino blanco" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-        </div>
-        <div class="product-info">
-          <h3>Set Pantalón y Blusa Lino Blanco Estampado</h3>
-          <p class="product-price">$380.000 COP</p>
-          <p class="product-sizes">Talla: M</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set Pantalón y Blusa Lino Blanco Estampado', 380000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20lino%20blanco%20estampado%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1LaTybcBKtHEd44NVocAApTPEHpde557G" alt="Conjunto verde off-shoulder" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-        </div>
-        <div class="product-info">
-          <h3>Conjunto Verde Off-Shoulder</h3>
-          <p class="product-price">$320.000 COP</p>
-          <p class="product-sizes">Talla: M</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Conjunto Verde Off-Shoulder', 320000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Conjunto%20verde%20off-shoulder%20%24320.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <!-- JEANS -->
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1Qg8rWBGHOx-S00zrRhT5Gvv2J5MUfPj7" alt="Jeans azul oscuro tiro alto" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-        </div>
-        <div class="product-info">
-          <h3>Jeans Azul Oscuro Tiro Alto</h3>
-          <p class="product-price">$220.000 COP</p>
-          <p class="product-sizes">Talla: 3-5</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Jeans Azul Oscuro Tiro Alto', 220000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jeans%20azul%20oscuro%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1MOd8lA53LPX6mE7Ve5tp6njUzDStqSFg" alt="Interior Victoria's Secret" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Victoria's Secret</div>
-        </div>
-        <div class="product-info">
-          <h3>Interior Victoria's Secret</h3>
-          <p class="product-price">$90.000 COP</p>
-          <p class="product-sizes">Talla: ÚNICA</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Interior Victoria\'s Secret', 90000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Interior%20Victoria%27s%20Secret%20%2490.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="images/set-lino-crudo-ojalillo.jpg" alt="Set en Lino Crudo con Lazo en Ojalillo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Set en Lino Crudo con Lazo en Ojalillo</h3>
-          <p class="product-price">$280.000 COP</p>
-          <p class="product-sizes">Talla: L</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set en Lino Crudo con Lazo en Ojalillo', 280000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20en%20Lino%20Crudo%20con%20Lazo%20en%20Ojalillo%20%24280.000%20Talla%20L" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <!-- NUEVO: Set Azul Venao -->
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1gonWQVBdImrM2PBUIBSoTs_ytKFXcBL_" alt="Set en lino de short y top azul venao" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Set en Lino de Short y Top Azul Venao</h3>
-          <p class="product-price">$280.000 COP</p>
-          <p class="product-sizes">Talla: L</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set en Lino de Short y Top Azul Venao', 280000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Lino%20Short%20Top%20Azul%20Venao%20%24280.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <!-- NUEVO: Vestido Floral Rosado -->
       <div class="product-card">
         <div class="product-img-wrap">
           <img src="https://lh3.googleusercontent.com/d/1pRv9N5-guR8vtBU8EHXyaI5JHUaMglYh" alt="Vestido corto floral rosado con volantes" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
@@ -527,10 +304,9 @@
         </div>
       </div>
 
-      <!-- NUEVO: Vestido Verde Corto -->
       <div class="product-card">
         <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1BXBSqYx4mmI0um-MvAJfSLBfY6AVIo2C" alt="Vestido verde corto con recortes en cintura" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <img src="https://lh3.googleusercontent.com/d/1BXBSqYx4mmI0um-MvAJfSBsFlhNJydwWVI5C" alt="Vestido verde corto con recortes en cintura" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Nuevo</div>
         </div>
         <div class="product-info">
@@ -542,7 +318,6 @@
         </div>
       </div>
 
-      <!-- NUEVO: Vestido Amarillo Largo -->
       <div class="product-card">
         <div class="product-img-wrap">
           <img src="https://lh3.googleusercontent.com/d/1L12expLNeziqrYu3fLSFotUmJFHCqSuj" alt="Vestido amarillo largo bodycon" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
@@ -557,21 +332,6 @@
         </div>
       </div>
 
-      <!-- NUEVOS INGRESOS JUN 16 b -->
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1CCi5l1rdtqfU-sanEPRblPvjOeLZZ-XT" alt="Set de Falda y Top en Listas Verde Manzana" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Set de Falda y Top en Listas Verde Manzana</h3>
-          <p class="product-price">$320.000 COP</p>
-          <p class="product-sizes">Talla: M</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set de Falda y Top en Listas Verde Manzana', 320000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20de%20Falda%20y%20Top%20en%20Listas%20Verde%20Manzana%20%24320.000%20Talla%20M" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
       <div class="product-card">
         <div class="product-img-wrap">
           <img src="https://lh3.googleusercontent.com/d/1VSgM7a5a6LGResI-YCGIPdrBaMbT6iPQ" alt="Vestido Largo en Seda Azul Estampado Floral" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
@@ -583,62 +343,6 @@
           <p class="product-sizes">Talla: L</p>
           <button class="btn-agregar" onclick="showSizeSelector('Vestido Largo en Seda Azul Estampado Floral', 320000)">🛍️ Agregar al Carrito</button>
           <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Largo%20en%20Seda%20Azul%20Estampado%20Floral%20%24320.000%20Talla%20L" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1fiUkowMOBA6DKceFM75QXJwTWa1VsDSN" alt="Pantalón de Pinzas y Cinturón Verde Menta" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Pantalón de Pinzas y Cinturón Verde Menta</h3>
-          <p class="product-price">$220.000 COP</p>
-          <p class="product-sizes">Talla: M</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Pantalón de Pinzas y Cinturón Verde Menta', 220000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20de%20Pinzas%20Verde%20Menta%20%24220.000%20Talla%20M" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1UC3-aEcfmKh4R6FlGeEU5kj-MZfrRBMW" alt="Blusa Estampado Preslye" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Blusa Estampado Preslye</h3>
-          <p class="product-price">$160.000 COP</p>
-          <p class="product-sizes">Talla: L</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Blusa Estampado Preslye', 160000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20Estampado%20Preslye%20%24160.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1iVTaMOjyPF0P-iwEzr0ojcBvhR0gMWt1" alt="Blusón en Seda Animal Print Dorado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Blusón en Seda Animal Print Dorado</h3>
-          <p class="product-price">$180.000 COP</p>
-          <p class="product-sizes">Talla: Única</p>
-          <button class="btn-agregar" onclick="addToCart('Blusón en Seda Animal Print Dorado', 180000, 'Única'); openCart();">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20en%20Seda%20Animal%20Print%20Dorado%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1v3BATyJdCcIY-RKfhJ78t5GivyZ_-ETf" alt="Blusa en Seda Cloud Dancer" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Blusa en Seda Cloud Dancer</h3>
-          <p class="product-price">$220.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Blusa en Seda Cloud Dancer', 220000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20en%20Seda%20Cloud%20Dancer%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
@@ -672,35 +376,6 @@
 
       <div class="product-card">
         <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1ydfQnEQT8E_MgEsoVeaZ0GnPMRRUgfEG" alt="Set de Pantalón y Top en Listas" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Set de Pantalón y Top en Listas</h3>
-          <p class="product-price">$380.000 COP</p>
-          <p class="product-sizes">Talla: L</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set de Pantalón y Top en Listas', 380000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20de%20Pantalón%20y%20Top%20en%20Listas%20%24380.000%20Talla%20L" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <!-- NUEVOS INGRESOS JUN 16 -->
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1J7ldp9X4bhg3n10R-zRq3mVRoYZpAWiH" alt="Set de Pantalón y Blusa en Lino Verde" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Set de Pantalón y Blusa en Lino Verde</h3>
-          <p class="product-price">$320.000 COP</p>
-          <p class="product-sizes">Talla: L</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set de Pantalón y Blusa en Lino Verde', 320000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20de%20Pantalón%20y%20Blusa%20en%20Lino%20Verde%20%24320.000%20Talla%20L" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
           <img src="https://lh3.googleusercontent.com/d/1wStw_SLuqB0UCgizwSoK9KnZcewwn-op" alt="Vestido Largo Caffé Moca" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Nuevo</div>
         </div>
@@ -727,88 +402,111 @@
         </div>
       </div>
 
-      <!-- NUEVOS INGRESOS JUN 16 c -->
       <div class="product-card">
         <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1ae_7IyA25Gr38VBpxExuKX3aaiLfBsRQ" alt="Jeans Alto Azul Medio con Roto" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <img src="https://lh3.googleusercontent.com/d/1BYBBY-o-shG8Dqatr10Wh-Wc04rzKuvF" alt="Jumpsuit lino topo" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Nuevo</div>
         </div>
         <div class="product-info">
-          <h3>Jeans Alto Azul Medio con Roto</h3>
+          <h3>Jumpsuit Lino Topo</h3>
+          <p class="product-price">$380.000 COP</p>
+          <p class="product-sizes">Talla: ÚNICA</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Jumpsuit Lino Topo', 380000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumpsuit%20lino%20topo%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1BaZEV0b1RMOKU1-0LV6ed8fQYkypj3e-" alt="Jumpsuit rojo elegante" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Favorito</div>
+        </div>
+        <div class="product-info">
+          <h3>Jumpsuit Rojo Elegante</h3>
           <p class="product-price">$280.000 COP</p>
-          <p class="product-sizes">Talla: 5</p>
-          <button class="btn-agregar" onclick="addToCart('Jeans Alto Azul Medio con Roto', 280000, '5'); openCart();">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20los%20Jeans%20Alto%20Azul%20Medio%20con%20Roto%20%24280.000%20Talla%205" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="product-sizes">Talla: 8</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Jumpsuit Rojo Elegante', 280000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumpsuit%20rojo%20elegante%20%24280.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
       <div class="product-card">
         <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1WK07krvs8TFqYqu7Qf0qZ8PQfytJKZGD" alt="Jeans Alto Roto Azul Medio y Lila" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <img src="https://lh3.googleusercontent.com/d/1-dhuIcoh3bvk78zgik5UNlxMn-G8PPyz" alt="Jumper en Seda Animal Print con Correa" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Nuevo</div>
         </div>
         <div class="product-info">
-          <h3>Jeans Alto Roto Azul Medio y Lila</h3>
+          <h3>Jumper en Seda Animal Print con Correa</h3>
           <p class="product-price">$280.000 COP</p>
-          <p class="product-sizes">Talla: 3</p>
-          <button class="btn-agregar" onclick="addToCart('Jeans Alto Roto Azul Medio y Lila', 280000, '3'); openCart();">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20los%20Jeans%20Alto%20Roto%20Azul%20Medio%20y%20Lila%20%24280.000%20Talla%203" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1Qrj4Rlaglj8mhmdENfTzTo5iHcLnk5dX" alt="Pantalón en Lino Chocolate" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Pantalón en Lino Chocolate</h3>
-          <p class="product-price">$220.000 COP</p>
-          <p class="product-sizes">Talla: Única</p>
-          <button class="btn-agregar" onclick="addToCart('Pantalón en Lino Chocolate', 220000, 'Única'); openCart();">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20en%20Lino%20Chocolate%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1Nyzxt6_RR9sxvxfyY5TSA3EuufyvPsto" alt="Set en Lino de Pantalón y Blusa Verde Pistacho" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Set en Lino de Pantalón y Blusa Verde Pistacho</h3>
-          <p class="product-price">$320.000 COP</p>
           <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set en Lino de Pantalón y Blusa Verde Pistacho', 320000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Lino%20Verde%20Pistacho%20%24320.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <button class="btn-agregar" onclick="showSizeSelector('Jumper en Seda Animal Print con Correa', 280000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumper%20en%20Seda%20Animal%20Print%20con%20Correa%20%24280.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== BLUSAS ===== -->
+  <section id="blusas" class="collection">
+    <div class="section-header">
+      <p class="section-sub">Colección</p>
+      <h2>Blusas y Blusones</h2>
+      <p class="section-desc">Prendas versátiles para cualquier look del día a día.</p>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1zFbbsHm78lymANlAh4E0V73blDJgAnUD" alt="Blusa estampada floral rosa" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+        </div>
+        <div class="product-info">
+          <h3>Blusa Estampada Floral Rosa</h3>
+          <p class="product-price">$180.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Blusa Estampada Floral Rosa', 180000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20estampada%20floral%20rosa%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
       <div class="product-card">
         <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1gwSL24HGryCeyM6DNQWri-Wz12vB2tHM" alt="Blusón en Seda Estampado Tide Day" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
+          <img src="https://lh3.googleusercontent.com/d/1IZUuzU_-orkSZmmNMRlMWdIUirse17nX" alt="Camisa blanca ojalillo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
         </div>
         <div class="product-info">
-          <h3>Blusón en Seda Estampado Tide Day</h3>
-          <p class="product-price">$220.000 COP</p>
-          <p class="product-sizes">Talla: Única</p>
-          <button class="btn-agregar" onclick="addToCart('Blusón en Seda Estampado Tide Day', 220000, 'Única'); openCart();">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Seda%20Estampado%20Tide%20Day%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <h3>Camisa Blanca en Ojalillo</h3>
+          <p class="product-price">$150.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Camisa Blanca en Ojalillo', 150000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Camisa%20blanca%20ojalillo%20%24150.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
       <div class="product-card">
         <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1BJ7xbGHMcvprMcYqnhkeUzpCIEy_dvaz" alt="Pantalón Metalizado Plata" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <img src="https://lh3.googleusercontent.com/d/1UC3-aEcfmKh4R6FlGeEU5kj-MZfrRBMW" alt="Blusa Estampado Preslye" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Nuevo</div>
         </div>
         <div class="product-info">
-          <h3>Pantalón Metalizado Plata</h3>
+          <h3>Blusa Estampado Preslye</h3>
+          <p class="product-price">$160.000 COP</p>
+          <p class="product-sizes">Talla: L</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Blusa Estampado Preslye', 160000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20Estampado%20Preslye%20%24160.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1v3BATyJdCcIY-RKfhJ78t5GivyZ_-ETf" alt="Blusa en Seda Cloud Dancer" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Blusa en Seda Cloud Dancer</h3>
           <p class="product-price">$220.000 COP</p>
           <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Pantalón Metalizado Plata', 220000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20Metalizado%20Plata%20%24220.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <button class="btn-agregar" onclick="showSizeSelector('Blusa en Seda Cloud Dancer', 220000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20en%20Seda%20Cloud%20Dancer%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
@@ -828,43 +526,29 @@
 
       <div class="product-card">
         <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1zMj6ZsTGl27f8jho6sqmcZF8d9HF_z9R" alt="Set de Pantalón y Blusa Estampado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <img src="https://lh3.googleusercontent.com/d/1iVTaMOjyPF0P-iwEzr0ojcBvhR0gMWt1" alt="Blusón en Seda Animal Print Dorado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Nuevo</div>
         </div>
         <div class="product-info">
-          <h3>Set de Pantalón y Blusa Estampado</h3>
-          <p class="product-price">$320.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set de Pantalón y Blusa Estampado', 320000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20de%20Pantalón%20y%20Blusa%20Estampado%20%24320.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <h3>Blusón en Seda Animal Print Dorado</h3>
+          <p class="product-price">$180.000 COP</p>
+          <p class="product-sizes">Talla: Única</p>
+          <button class="btn-agregar" onclick="addToCart('Blusón en Seda Animal Print Dorado', 180000, 'Única'); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20en%20Seda%20Animal%20Print%20Dorado%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
       <div class="product-card">
         <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1y5Vg7k6nMqxvu4Aj5tG_-E4xxwegw-rb" alt="Set en Seda de Pantalón y Top Champagne" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <img src="https://lh3.googleusercontent.com/d/1gwSL24HGryCeyM6DNQWri-Wz12vB2tHM" alt="Blusón en Seda Estampado Tide Day" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Nuevo</div>
         </div>
         <div class="product-info">
-          <h3>Set en Seda de Pantalón y Top Champagne</h3>
-          <p class="product-price">$250.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set en Seda de Pantalón y Top Champagne', 250000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Seda%20Pantalón%20y%20Top%20Champagne%20%24250.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1H3pbcjzJ5209LM5g97Zdp51kid4khs9c" alt="Set en Seda de Pantalón y Blusa Azul Turquí" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Set en Seda de Pantalón y Blusa Azul Turquí</h3>
-          <p class="product-price">$380.000 COP</p>
-          <p class="product-sizes">Talla: L</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set en Seda de Pantalón y Blusa Azul Turquí', 380000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Seda%20Pantalón%20Blusa%20Azul%20Turquí%20%24380.000%20Talla%20L" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <h3>Blusón en Seda Estampado Tide Day</h3>
+          <p class="product-price">$220.000 COP</p>
+          <p class="product-sizes">Talla: Única</p>
+          <button class="btn-agregar" onclick="addToCart('Blusón en Seda Estampado Tide Day', 220000, 'Única'); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Seda%20Estampado%20Tide%20Day%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
@@ -882,21 +566,6 @@
         </div>
       </div>
 
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1-dhuIcoh3bvk78zgik5UNlxMn-G8PPyz" alt="Jumper en Seda Animal Print con Correa" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nuevo</div>
-        </div>
-        <div class="product-info">
-          <h3>Jumper en Seda Animal Print con Correa</h3>
-          <p class="product-price">$280.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Jumper en Seda Animal Print con Correa', 280000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumper%20en%20Seda%20Animal%20Print%20con%20Correa%20%24280.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <!-- BLUSONES -->
       <div class="product-card">
         <div class="product-img-wrap">
           <img src="https://lh3.googleusercontent.com/d/1HaNh5jBf67rOCo8i9Zzh7ViHk20lFEZx" alt="Blusón Troquelado Geométrico Rosa Pink" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
@@ -942,95 +611,512 @@
     </div>
   </section>
 
-  <!-- ACCESORIOS -->
-  <section id="accesorios" class="collection accessories">
+  <!-- ===== JEANS ===== -->
+  <section id="jeans" class="collection">
     <div class="section-header">
-      <p class="section-sub">Marcas Internacionales</p>
-      <h2>Accesorios de Lujo</h2>
-      <p class="section-desc">Kate Spade · Tommy Hilfiger · Armani Exchange · Michael Kors</p>
+      <p class="section-sub">Denim</p>
+      <h2>Jeans</h2>
+      <p class="section-desc">Estilo casual con toque premium.</p>
     </div>
     <div class="products-grid">
 
       <div class="product-card">
         <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1-7Li_bySkyIPq-PvKT4V2fu1W4U1_ByX" alt="Bolso tote nude Kate Spade" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge luxury">Kate Spade</div>
+          <img src="https://lh3.googleusercontent.com/d/1Qg8rWBGHOx-S00zrRhT5Gvv2J5MUfPj7" alt="Jeans azul oscuro tiro alto" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
         </div>
         <div class="product-info">
-          <h3>Bolso Tote Nude Kate Spade</h3>
-          <p class="product-price">$700.000 COP</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Bolso Tote Nude Kate Spade', 700000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Bolso%20Kate%20Spade%20%24700.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <h3>Jeans Azul Oscuro Tiro Alto</h3>
+          <p class="product-price">$220.000 COP</p>
+          <p class="product-sizes">Talla: 3-5</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Jeans Azul Oscuro Tiro Alto', 220000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jeans%20azul%20oscuro%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
       <div class="product-card">
         <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/14GEdD0Z7c1Yu5ob5xq-icVdRMva5YTI6" alt="Bolso Tommy Hilfiger" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge luxury">Tommy Hilfiger</div>
+          <img src="https://lh3.googleusercontent.com/d/1ae_7IyA25Gr38VBpxExuKX3aaiLfBsRQ" alt="Jeans Alto Azul Medio con Roto" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
         </div>
         <div class="product-info">
-          <h3>Bolso Tommy Hilfiger</h3>
-          <p class="product-price">$380.000 COP</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Bolso Tommy Hilfiger', 380000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Bolso%20Tommy%20Hilfiger%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <h3>Jeans Alto Azul Medio con Roto</h3>
+          <p class="product-price">$280.000 COP</p>
+          <p class="product-sizes">Talla: 5</p>
+          <button class="btn-agregar" onclick="addToCart('Jeans Alto Azul Medio con Roto', 280000, '5'); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20los%20Jeans%20Alto%20Azul%20Medio%20con%20Roto%20%24280.000%20Talla%205" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
       <div class="product-card">
         <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1HVzQMbL_-njotGqLAFYlrYNesv1Bws1Z" alt="Reloj Armani Exchange" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge luxury">Armani Exchange</div>
+          <img src="https://lh3.googleusercontent.com/d/1WK07krvs8TFqYqu7Qf0qZ8PQfytJKZGD" alt="Jeans Alto Roto Azul Medio y Lila" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
         </div>
         <div class="product-info">
-          <h3>Reloj Armani Exchange</h3>
-          <p class="product-price">$1.000.000 COP</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Reloj Armani Exchange', 1000000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Reloj%20Armani%20Exchange%20%241.000.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1thuNXUfXpGEtCvf7_si5UgqNxEwuJprm" alt="Reloj Michael Kors negro" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge luxury">Michael Kors</div>
-        </div>
-        <div class="product-info">
-          <h3>Reloj Michael Kors Negro</h3>
-          <p class="product-price">$1.500.000 COP</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Reloj Michael Kors Negro', 1500000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Reloj%20Michael%20Kors%20negro%20%241.500.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="https://lh3.googleusercontent.com/d/1yGkJLbkKaRzaqoh2bfUGnbQNtwjY2Pkz" alt="Reloj Michael Kors dorado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge luxury">Michael Kors</div>
-        </div>
-        <div class="product-info">
-          <h3>Reloj Michael Kors Dorado</h3>
-          <p class="product-price">$1.800.000 COP</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Reloj Michael Kors Dorado', 1800000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Reloj%20Michael%20Kors%20dorado%20%241.800.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-img-wrap">
-          <img src="images/zapatos-nike-blancos.jpg" alt="Zapatos Nike Air Force 1 Blancos" loading="lazy" style="object-position: center center;" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Nike</div>
-        </div>
-        <div class="product-info">
-          <h3>Zapatos Nike Air Force 1 Blancos</h3>
-          <p class="product-price">$350.000 COP</p>
-          <p class="product-sizes">Talla: 33</p>
-          <button class="btn-agregar" onclick="addToCart('Zapatos Nike Air Force 1 Blancos', 350000, '33'); openCart();">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20los%20Zapatos%20Nike%20Air%20Force%201%20Blancos%20%24350.000%20Talla%2033" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <h3>Jeans Alto Roto Azul Medio y Lila</h3>
+          <p class="product-price">$280.000 COP</p>
+          <p class="product-sizes">Talla: 3</p>
+          <button class="btn-agregar" onclick="addToCart('Jeans Alto Roto Azul Medio y Lila', 280000, '3'); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20los%20Jeans%20Alto%20Roto%20Azul%20Medio%20y%20Lila%20%24280.000%20Talla%203" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
     </div>
+  </section>
+
+  <!-- ===== PANTALONES ===== -->
+  <section id="pantalones" class="collection">
+    <div class="section-header">
+      <p class="section-sub">Colección</p>
+      <h2>Pantalones</h2>
+      <p class="section-desc">Comodidad y elegancia en cada paso.</p>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1pKyhaKTdXdi-H1e-ih05Yw85BbVZLmAV" alt="Pantalón de pinzas y correa rosa pink" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+        </div>
+        <div class="product-info">
+          <h3>Pantalón de Pinzas y Correa Rosa Pink</h3>
+          <p class="product-price">$180.000 COP</p>
+          <p class="product-sizes">Talla: L</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Pantalón de Pinzas y Correa Rosa Pink', 180000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantal%C3%B3n%20rosa%20pink%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1fiUkowMOBA6DKceFM75QXJwTWa1VsDSN" alt="Pantalón de Pinzas y Cinturón Verde Menta" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Pantalón de Pinzas y Cinturón Verde Menta</h3>
+          <p class="product-price">$220.000 COP</p>
+          <p class="product-sizes">Talla: M</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Pantalón de Pinzas y Cinturón Verde Menta', 220000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20de%20Pinzas%20Verde%20Menta%20%24220.000%20Talla%20M" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1Qrj4Rlaglj8mhmdENfTzTo5iHcLnk5dX" alt="Pantalón en Lino Chocolate" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Pantalón en Lino Chocolate</h3>
+          <p class="product-price">$220.000 COP</p>
+          <p class="product-sizes">Talla: Única</p>
+          <button class="btn-agregar" onclick="addToCart('Pantalón en Lino Chocolate', 220000, 'Única'); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20en%20Lino%20Chocolate%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1BJ7xbGHMcvprMcYqnhkeUzpCIEy_dvaz" alt="Pantalón Metalizado Plata" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Pantalón Metalizado Plata</h3>
+          <p class="product-price">$220.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Pantalón Metalizado Plata', 220000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20Metalizado%20Plata%20%24220.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== SETS & CONJUNTOS ===== -->
+  <section id="conjuntos" class="collection">
+    <div class="section-header">
+      <p class="section-sub">Looks Completos</p>
+      <h2>Sets y Conjuntos</h2>
+      <p class="section-desc">Outfits coordinados listos para usar — solo ponte y luce increíble.</p>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="images/set_blanco_encaje.jpg" alt="Set Blanco en Encaje Preslye" style="object-position: center 10%;" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Set Blanco en Encaje Preslye</h3>
+          <p class="product-price">$420.000 COP</p>
+          <p class="product-sizes">Talla: ÚNICA</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set Blanco en Encaje Preslye', 420000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Blanco%20en%20Encaje%20Preslye%20%24420.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1l4h-XN_5YczjKwjnLZXbE_VqVvskrl92" alt="Conjunto verde olivo" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Conjunto Verde Olivo</h3>
+          <p class="product-price">$320.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Conjunto Verde Olivo', 320000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Conjunto%20verde%20olivo%20%24320.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1M1aDdinCPaZqqnap6556RQyZpyd89S1K" alt="Conjunto blanco bordado" onclick="openLightbox(this.src, this.alt)"/>
+        </div>
+        <div class="product-info">
+          <h3>Conjunto Blanco en Lino Pintado</h3>
+          <p class="product-price">$380.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Conjunto Blanco en Lino Pintado', 380000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Conjunto%20blanco%20en%20lino%20pintado%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1zTZbPx414sUAhbyYNP-3CYmXVukuoX5h" alt="Conjunto azul floral" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+        </div>
+        <div class="product-info">
+          <h3>Conjunto Azul Floral</h3>
+          <p class="product-price">$320.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Conjunto Azul Floral', 320000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Conjunto%20azul%20floral%20%24320.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1KYMmOqBRdk3cTzAjAVwqo1Yk4oMGchih" alt="Conjunto palo de rosa" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+        </div>
+        <div class="product-info">
+          <h3>Conjunto Pantalón y Top en Lino Palo de Rosa</h3>
+          <p class="product-price">$260.000 COP</p>
+          <p class="product-sizes">Talla: M</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Conjunto Pantalón y Top en Lino Palo de Rosa', 260000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Conjunto%20palo%20de%20rosa%20%24260.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1ArVPwiileOO-wQeP5_TIg4WqgaLSDwp4" alt="Conjunto fucsia off-shoulder" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+        </div>
+        <div class="product-info">
+          <h3>Conjunto Fucsia Off-Shoulder</h3>
+          <p class="product-price">$320.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Conjunto Fucsia Off-Shoulder', 320000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Conjunto%20fucsia%20off-shoulder%20%24320.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1GEkkXepyze6sKfhW6dlEbeQdDDsGZtWc" alt="Set pantalón y blusa lino palo de rosa" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+        </div>
+        <div class="product-info">
+          <h3>Set Pantalón y Blusa en Lino Palo de Rosa</h3>
+          <p class="product-price">$480.000 COP</p>
+          <p class="product-sizes">Talla: ÚNICA</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set Pantalón y Blusa en Lino Palo de Rosa', 480000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20lino%20palo%20de%20rosa%20%24480.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1NFoTV6fd_hrsmLv_Rlew3pNmEn663wn3" alt="Set pantalón y blusa lino blanco" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+        </div>
+        <div class="product-info">
+          <h3>Set Pantalón y Blusa Lino Blanco Estampado</h3>
+          <p class="product-price">$380.000 COP</p>
+          <p class="product-sizes">Talla: M</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set Pantalón y Blusa Lino Blanco Estampado', 380000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20lino%20blanco%20estampado%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1LaTybcBKtHEd44NVocAApTPEHpde557G" alt="Conjunto verde off-shoulder" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+        </div>
+        <div class="product-info">
+          <h3>Conjunto Verde Off-Shoulder</h3>
+          <p class="product-price">$320.000 COP</p>
+          <p class="product-sizes">Talla: M</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Conjunto Verde Off-Shoulder', 320000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Conjunto%20verde%20off-shoulder%20%24320.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="images/set-lino-crudo-ojalillo.jpg" alt="Set en Lino Crudo con Lazo en Ojalillo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Set en Lino Crudo con Lazo en Ojalillo</h3>
+          <p class="product-price">$280.000 COP</p>
+          <p class="product-sizes">Talla: L</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set en Lino Crudo con Lazo en Ojalillo', 280000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20en%20Lino%20Crudo%20con%20Lazo%20en%20Ojalillo%20%24280.000%20Talla%20L" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1gonWQVBdImrM2PBUIBSoTs_ytKFXcBL_" alt="Set en lino de short y top azul venao" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Set en Lino de Short y Top Azul Venao</h3>
+          <p class="product-price">$280.000 COP</p>
+          <p class="product-sizes">Talla: L</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set en Lino de Short y Top Azul Venao', 280000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Lino%20Short%20Top%20Azul%20Venao%20%24280.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1CCi5l1rdtqfU-sanEPRblPvjOeLZZ-XT" alt="Set de Falda y Top en Listas Verde Manzana" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Set de Falda y Top en Listas Verde Manzana</h3>
+          <p class="product-price">$320.000 COP</p>
+          <p class="product-sizes">Talla: M</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set de Falda y Top en Listas Verde Manzana', 320000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20de%20Falda%20y%20Top%20en%20Listas%20Verde%20Manzana%20%24320.000%20Talla%20M" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1ydfQnEQT8E_MgEsoVeaZ0GnPMRRUgfEG" alt="Set de Pantalón y Top en Listas" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Set de Pantalón y Top en Listas</h3>
+          <p class="product-price">$380.000 COP</p>
+          <p class="product-sizes">Talla: L</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set de Pantalón y Top en Listas', 380000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20de%20Pantalón%20y%20Top%20en%20Listas%20%24380.000%20Talla%20L" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1J7ldp9X4bhg3n10R-zRq3mVRoYZpAWiH" alt="Set de Pantalón y Blusa en Lino Verde" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Set de Pantalón y Blusa en Lino Verde</h3>
+          <p class="product-price">$320.000 COP</p>
+          <p class="product-sizes">Talla: L</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set de Pantalón y Blusa en Lino Verde', 320000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20de%20Pantalón%20y%20Blusa%20en%20Lino%20Verde%20%24320.000%20Talla%20L" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1Nyzxt6_RR9sxvxfyY5TSA3EuufyvPsto" alt="Set en Lino de Pantalón y Blusa Verde Pistacho" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Set en Lino de Pantalón y Blusa Verde Pistacho</h3>
+          <p class="product-price">$320.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set en Lino de Pantalón y Blusa Verde Pistacho', 320000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Lino%20Verde%20Pistacho%20%24320.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1zMj6ZsTGl27f8jho6sqmcZF8d9HF_z9R" alt="Set de Pantalón y Blusa Estampado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Set de Pantalón y Blusa Estampado</h3>
+          <p class="product-price">$320.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set de Pantalón y Blusa Estampado', 320000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20de%20Pantalón%20y%20Blusa%20Estampado%20%24320.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1y5Vg7k6nMqxvu4Aj5tG_-E4xxwegw-rb" alt="Set en Seda de Pantalón y Top Champagne" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Set en Seda de Pantalón y Top Champagne</h3>
+          <p class="product-price">$250.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set en Seda de Pantalón y Top Champagne', 250000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Seda%20Pantalón%20y%20Top%20Champagne%20%24250.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1H3pbcjzJ5209LM5g97Zdp51kid4khs9c" alt="Set en Seda de Pantalón y Blusa Azul Turquí" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Set en Seda de Pantalón y Blusa Azul Turquí</h3>
+          <p class="product-price">$380.000 COP</p>
+          <p class="product-sizes">Talla: L</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set en Seda de Pantalón y Blusa Azul Turquí', 380000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Seda%20Pantalón%20Blusa%20Azul%20Turquí%20%24380.000%20Talla%20L" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== ACCESORIOS ===== -->
+  <section id="accesorios" class="collection accessories">
+    <div class="section-header">
+      <p class="section-sub">Marcas Internacionales</p>
+      <h2>Accesorios</h2>
+      <p class="section-desc">Kate Spade · Tommy Hilfiger · Armani Exchange · Michael Kors</p>
+    </div>
+
+    <div class="acc-subsection">
+      <p class="acc-sub-title">Bolsos y Carteras</p>
+      <div class="products-grid">
+
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <img src="https://lh3.googleusercontent.com/d/1-7Li_bySkyIPq-PvKT4V2fu1W4U1_ByX" alt="Bolso tote nude Kate Spade" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+            <div class="product-badge luxury">Kate Spade</div>
+          </div>
+          <div class="product-info">
+            <h3>Bolso Tote Nude Kate Spade</h3>
+            <p class="product-price">$700.000 COP</p>
+            <button class="btn-agregar" onclick="showSizeSelector('Bolso Tote Nude Kate Spade', 700000)">🛍️ Agregar al Carrito</button>
+            <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Bolso%20Kate%20Spade%20%24700.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <img src="https://lh3.googleusercontent.com/d/14GEdD0Z7c1Yu5ob5xq-icVdRMva5YTI6" alt="Bolso Tommy Hilfiger" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+            <div class="product-badge luxury">Tommy Hilfiger</div>
+          </div>
+          <div class="product-info">
+            <h3>Bolso Tommy Hilfiger</h3>
+            <p class="product-price">$380.000 COP</p>
+            <button class="btn-agregar" onclick="showSizeSelector('Bolso Tommy Hilfiger', 380000)">🛍️ Agregar al Carrito</button>
+            <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Bolso%20Tommy%20Hilfiger%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="acc-subsection">
+      <p class="acc-sub-title">Relojes</p>
+      <div class="products-grid">
+
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <img src="https://lh3.googleusercontent.com/d/1HVzQMbL_-njotGqLAFYlrYNesv1Bws1Z" alt="Reloj Armani Exchange" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+            <div class="product-badge luxury">Armani Exchange</div>
+          </div>
+          <div class="product-info">
+            <h3>Reloj Armani Exchange</h3>
+            <p class="product-price">$1.000.000 COP</p>
+            <button class="btn-agregar" onclick="showSizeSelector('Reloj Armani Exchange', 1000000)">🛍️ Agregar al Carrito</button>
+            <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Reloj%20Armani%20Exchange%20%241.000.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <img src="https://lh3.googleusercontent.com/d/1thuNXUfXpGEtCvf7_si5UgqNxEwuJprm" alt="Reloj Michael Kors negro" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+            <div class="product-badge luxury">Michael Kors</div>
+          </div>
+          <div class="product-info">
+            <h3>Reloj Michael Kors Negro</h3>
+            <p class="product-price">$1.500.000 COP</p>
+            <button class="btn-agregar" onclick="showSizeSelector('Reloj Michael Kors Negro', 1500000)">🛍️ Agregar al Carrito</button>
+            <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Reloj%20Michael%20Kors%20negro%20%241.500.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <img src="https://lh3.googleusercontent.com/d/1yGkJLbkKaRzaqoh2bfUGnkNtwjY2Pkz" alt="Reloj Michael Kors dorado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+            <div class="product-badge luxury">Michael Kors</div>
+          </div>
+          <div class="product-info">
+            <h3>Reloj Michael Kors Dorado</h3>
+            <p class="product-price">$1.800.000 COP</p>
+            <button class="btn-agregar" onclick="showSizeSelector('Reloj Michael Kors Dorado', 1800000)">🛍️ Agregar al Carrito</button>
+            <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Reloj%20Michael%20Kors%20dorado%20%241.800.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="acc-subsection">
+      <p class="acc-sub-title">Interiores</p>
+      <div class="products-grid">
+
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <img src="https://lh3.googleusercontent.com/d/1MOd8lA53LPX6mE7Ve5tp6njUzDStqSFg" alt="Interior Victoria's Secret" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+            <div class="product-badge">Victoria's Secret</div>
+          </div>
+          <div class="product-info">
+            <h3>Interior Victoria's Secret</h3>
+            <p class="product-price">$90.000 COP</p>
+            <p class="product-sizes">Talla: ÚNICA</p>
+            <button class="btn-agregar" onclick="showSizeSelector('Interior Victoria\'s Secret', 90000)">🛍️ Agregar al Carrito</button>
+            <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Interior%20Victoria%27s%20Secret%20%2490.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="acc-subsection">
+      <p class="acc-sub-title">Zapatos</p>
+      <div class="products-grid">
+
+        <div class="product-card">
+          <div class="product-img-wrap">
+            <img src="images/zapatos-nike-blancos.jpg" alt="Zapatos Nike Air Force 1 Blancos" loading="lazy" style="object-position: center center;" onclick="openLightbox(this.src, this.alt)"/>
+            <div class="product-badge">Nike</div>
+          </div>
+          <div class="product-info">
+            <h3>Zapatos Nike Air Force 1 Blancos</h3>
+            <p class="product-price">$350.000 COP</p>
+            <p class="product-sizes">Talla: 33</p>
+            <button class="btn-agregar" onclick="addToCart('Zapatos Nike Air Force 1 Blancos', 350000, '33'); openCart();">🛍️ Agregar al Carrito</button>
+            <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20los%20Zapatos%20Nike%20Air%20Force%201%20Blancos%20%24350.000%20Talla%2033" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </section>
 
   <!-- SOBRE NOSOTROS -->
