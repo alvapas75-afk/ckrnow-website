@@ -231,7 +231,7 @@ function checkoutAddi() {
   }
 
   const addiUrl = `https://checkout.addi.com.co/applications?allySlug=${ADDI_ALLY_SLUG}&totalPrice=${total}&orderReference=${reference}&redirectUrl=${redirectUrl}`;
-  window.open(addiUrl, '_blank');
+  window.location.href = addiUrl;
 }
 
 // ---- WIDGET DE CUOTAS ADDI EN PRODUCTOS ----
