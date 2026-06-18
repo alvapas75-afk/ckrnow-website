@@ -277,52 +277,30 @@ async function checkoutWompi() {
     return;
   }
 
-  closeCart();
-
   const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
   const amountInCents = total * 100;
   const reference = 'CKR-' + Date.now();
   const integrityHash = await generateIntegrityHash(reference, amountInCents);
 
-  // Descripción del pedido
-  const description = cart.map(i => `${i.qty}x ${i.name} T.${i.size}`).join(', ');
+  if (typeof fbq !== 'undefined') {
+    fbq('track', 'InitiateCheckout', {
+      value: total, currency: 'COP',
+      num_items: cart.reduce((sum, i) => sum + i.qty, 0),
+      content_type: 'product'
+    });
+  }
 
-  const checkout = new WidgetCheckout({
-    currency: 'COP',
-    amountInCents,
-    reference,
-    publicKey: WOMPI_PUBLIC_KEY,
-    signature: { integrity: integrityHash },
-    redirectUrl: 'https://ckrnow.com/?pago=exitoso',
-    customerData: {
-      userLegalName: 'Cliente CKR Boutique',
-      userLegalId: '',
-      userLegalIdType: 'CC',
-      userPhoneNumber: '',
-      userPhoneNumberPrefix: '+57',
-      shippingAddress: {
-        addressLine1: '',
-        country: 'CO',
-        region: '',
-        city: '',
-        phoneNumber: ''
-      }
-    }
+  const params = new URLSearchParams({
+    'public-key': WOMPI_PUBLIC_KEY,
+    'currency': 'COP',
+    'amount-in-cents': amountInCents,
+    'reference': reference,
+    'signature:integrity': integrityHash,
+    'redirect-url': 'https://ckrnow.com/?pago=exitoso'
   });
 
-  checkout.open(function(result) {
-    const tx = result.transaction;
-    if (tx && tx.status === 'APPROVED') {
-      if (typeof fbq !== 'undefined') {
-        fbq('track', 'Purchase', { value: amountInCents / 100, currency: 'COP', content_type: 'product' });
-      }
-      cart = [];
-      saveCart();
-      updateCartBadge();
-      closeCart();
-      document.getElementById('wompiSuccessModal').style.display = 'flex';
-    }
-  });
+  closeCart();
+  window.location.href = 'https://checkout.wompi.co/p/?' + params.toString();
 }
 
 function closeSuccessModal() {
