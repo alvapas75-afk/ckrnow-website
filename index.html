@@ -31,7 +31,7 @@
   <script src="https://s3.amazonaws.com/widgets.addi.com/bundle.min.js" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/style.css?v=shop1"/>
   <style>
     /* ===== BARRA PROMO ===== */
     .promo-bar {
@@ -1406,6 +1406,32 @@
   <!-- TOAST NOTIFICACIÓN -->
   <div id="cartToast" class="cart-toast">✓ Producto agregado al carrito</div>
 
+  <!-- FORMULARIO DATOS CLIENTE -->
+  <div id="customerFormModal" class="cf-overlay" onclick="if(event.target===this)closeCustomerForm()" style="display:none">
+    <div class="cf-modal">
+      <button class="cf-close" onclick="closeCustomerForm()">✕</button>
+      <h3 class="cf-title">📦 Datos de envío</h3>
+      <p class="cf-subtitle">Necesitamos tus datos para coordinar el envío</p>
+      <div class="cf-field">
+        <label>Nombre completo *</label>
+        <input id="cf-nombre" type="text" placeholder="Ej: María Gómez">
+      </div>
+      <div class="cf-field">
+        <label>Correo electrónico *</label>
+        <input id="cf-email" type="email" placeholder="tucorreo@email.com">
+      </div>
+      <div class="cf-field">
+        <label>Teléfono / WhatsApp *</label>
+        <input id="cf-tel" type="tel" placeholder="3XX XXX XXXX">
+      </div>
+      <div class="cf-field">
+        <label>Dirección de envío *</label>
+        <input id="cf-dir" type="text" placeholder="Calle, ciudad, departamento">
+      </div>
+      <button class="cf-submit" onclick="submitCustomerForm()">Continuar →</button>
+    </div>
+  </div>
+
   <!-- Modal pago exitoso -->
   <div id="wompiSuccessModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;">
     <div style="background:#fff;border-radius:16px;padding:40px 32px;max-width:360px;width:90%;text-align:center;">
@@ -1424,7 +1450,7 @@
   </div>
 
   <script src="https://checkout.wompi.co/widget.js"></script>
-  <script src="js/main.js?v=addi5"></script>
+  <script src="js/main.js?v=shop1"></script>
   <script>
     function openLightbox(src, alt) {
       var overlay = document.getElementById('lightboxOverlay');

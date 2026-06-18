@@ -160,9 +160,30 @@ function closeCart() {
 // ---- SELECTOR DE TALLA ----
 let pendingProduct = null;
 
-function showSizeSelector(name, price) {
+function parseTallas(text) {
+  const clean = (text || '').replace(/tallas?\s*:\s*/i, '').trim();
+  if (!clean) return [];
+  return clean.split(/[\s\/\-,]+/).map(s => s.trim()).filter(Boolean).map(s =>
+    /^u[ní]ica$/i.test(s) ? 'Única' : s.toUpperCase()
+  );
+}
+
+function showSizeSelector(name, price, sizes) {
   pendingProduct = { name, price };
+  const sizeOptions = document.querySelector('#sizeModal .size-options');
+
+  const available = sizes && sizes.length > 0 ? sizes : ['XS','S','M','L','XL','Única'];
+
+  if (available.length === 1) {
+    addToCart(name, price, available[0]);
+    openCart();
+    return;
+  }
+
   document.getElementById('sizeProductName').textContent = name;
+  sizeOptions.innerHTML = available.map(s =>
+    `<button onclick="selectSize('${s}')">${s}</button>`
+  ).join('');
   document.getElementById('sizeModal').style.display = 'flex';
 }
 
@@ -178,37 +199,69 @@ function closeSizeModal() {
   pendingProduct = null;
 }
 
+// ---- INICIALIZAR BOTONES CON TALLA DINÁMICA ----
+function initSizeButtons() {
+  document.querySelectorAll('.btn-agregar').forEach(btn => {
+    const m = (btn.getAttribute('onclick') || '').match(/showSizeSelector\('(.+?)',\s*(\d+)\)/);
+    if (!m) return;
+    const name = m[1], price = parseInt(m[2]);
+    const sizesText = btn.closest('.product-info')?.querySelector('.product-sizes')?.textContent || '';
+    const sizes = parseTallas(sizesText);
+    btn.removeAttribute('onclick');
+    btn.addEventListener('click', () => showSizeSelector(name, price, sizes));
+  });
+}
+
+// ---- FORMULARIO DE DATOS DEL CLIENTE ----
+let _checkoutCallback = null;
+
+function showCustomerForm(callback) {
+  _checkoutCallback = callback;
+  document.getElementById('customerFormModal').style.display = 'flex';
+}
+
+function closeCustomerForm() {
+  document.getElementById('customerFormModal').style.display = 'none';
+  _checkoutCallback = null;
+}
+
+function submitCustomerForm() {
+  const nombre = document.getElementById('cf-nombre').value.trim();
+  const email  = document.getElementById('cf-email').value.trim();
+  const tel    = document.getElementById('cf-tel').value.trim();
+  const dir    = document.getElementById('cf-dir').value.trim();
+  if (!nombre || !email || !tel || !dir) {
+    alert('Por favor completa todos los campos para continuar.');
+    return;
+  }
+  closeCustomerForm();
+  if (_checkoutCallback) _checkoutCallback({ nombre, email, tel, dir });
+}
+
 // ---- CHECKOUT POR WHATSAPP ----
 function checkoutWhatsApp() {
   if (cart.length === 0) {
     alert('Tu carrito está vacío. Agrega productos primero.');
     return;
   }
-
-  let msg = '¡Hola CKR Boutique! 🛍️ Quiero hacer el siguiente pedido:\n\n';
-  let total = 0;
-
-  cart.forEach((item, i) => {
-    msg += `${i + 1}. *${item.name}*\n`;
-    msg += `   Talla: ${item.size} · Cant: ${item.qty}\n`;
-    msg += `   ${formatPrice(item.price * item.qty)}\n\n`;
-    total += item.price * item.qty;
-  });
-
-  msg += `━━━━━━━━━━━━━━━\n`;
-  msg += `*TOTAL: ${formatPrice(total)}*\n\n`;
-  msg += `¿Cómo procedo con el pago? (Nequi, PSE, transferencia)`;
-
-  if (typeof fbq !== 'undefined') {
-    fbq('track', 'InitiateCheckout', {
-      value: total,
-      currency: 'COP',
-      num_items: cart.reduce((sum, i) => sum + i.qty, 0),
-      content_type: 'product'
+  closeCart();
+  showCustomerForm(({ nombre, email, tel, dir }) => {
+    let msg = '¡Hola CKR Boutique! 🛍️ Quiero hacer el siguiente pedido:\n\n';
+    let total = 0;
+    cart.forEach((item, i) => {
+      msg += `${i + 1}. *${item.name}*\n`;
+      msg += `   Talla: ${item.size} · Cant: ${item.qty}\n`;
+      msg += `   ${formatPrice(item.price * item.qty)}\n\n`;
+      total += item.price * item.qty;
     });
-  }
-  const url = 'https://wa.me/573017604292?text=' + encodeURIComponent(msg);
-  window.open(url, '_blank');
+    msg += `━━━━━━━━━━━━━━━\n*TOTAL: ${formatPrice(total)}*\n\n`;
+    msg += `📋 *Datos de envío:*\n`;
+    msg += `👤 ${nombre}\n📧 ${email}\n📞 ${tel}\n📍 ${dir}`;
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'InitiateCheckout', { value: total, currency: 'COP', num_items: cart.reduce((s,i)=>s+i.qty,0), content_type: 'product' });
+    }
+    window.open('https://wa.me/573017604292?text=' + encodeURIComponent(msg), '_blank');
+  });
 }
 
 // ---- CHECKOUT CON ADDI (vía WhatsApp — el link Addi lo genera la vendedora desde su portal) ----
@@ -217,29 +270,24 @@ function checkoutAddi() {
     alert('Tu carrito está vacío. Agrega productos primero.');
     return;
   }
-
-  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-
-  if (typeof fbq !== 'undefined') {
-    fbq('track', 'InitiateCheckout', {
-      value: total, currency: 'COP',
-      num_items: cart.reduce((sum, i) => sum + i.qty, 0),
-      content_type: 'product'
-    });
-  }
-
-  let msg = '¡Hola CKR Boutique! 🛍️ Quiero pagar en cuotas con *Addi*. Mi pedido:\n\n';
-  let t = 0;
-  cart.forEach((item, i) => {
-    msg += `${i + 1}. *${item.name}*\n`;
-    msg += `   Talla: ${item.size} · Cant: ${item.qty}\n`;
-    msg += `   ${formatPrice(item.price * item.qty)}\n\n`;
-    t += item.price * item.qty;
-  });
-  msg += `━━━━━━━━━━━━━━━\n*TOTAL: ${formatPrice(t)}*\n\n¿Me puedes enviar el link de pago Addi?`;
-
   closeCart();
-  window.open('https://wa.me/573017604292?text=' + encodeURIComponent(msg), '_blank');
+  showCustomerForm(({ nombre, email, tel, dir }) => {
+    const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'InitiateCheckout', { value: total, currency: 'COP', num_items: cart.reduce((s,i)=>s+i.qty,0), content_type: 'product' });
+    }
+    let msg = '¡Hola CKR Boutique! 🛍️ Quiero pagar en cuotas con *Addi*. Mi pedido:\n\n';
+    cart.forEach((item, i) => {
+      msg += `${i + 1}. *${item.name}*\n`;
+      msg += `   Talla: ${item.size} · Cant: ${item.qty}\n`;
+      msg += `   ${formatPrice(item.price * item.qty)}\n\n`;
+    });
+    msg += `━━━━━━━━━━━━━━━\n*TOTAL: ${formatPrice(total)}*\n\n`;
+    msg += `📋 *Datos de envío:*\n`;
+    msg += `👤 ${nombre}\n📧 ${email}\n📞 ${tel}\n📍 ${dir}\n\n`;
+    msg += `¿Me puedes enviar el link de pago Addi?`;
+    window.open('https://wa.me/573017604292?text=' + encodeURIComponent(msg), '_blank');
+  });
 }
 
 // ---- WIDGET DE CUOTAS ADDI EN PRODUCTOS ----
@@ -338,8 +386,60 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// ---- ACORDEONES DE PRODUCTO ----
+function injectProductAccordions() {
+  document.querySelectorAll('.product-info').forEach(info => {
+    if (info.querySelector('.product-accordions')) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'product-accordions';
+    wrap.innerHTML = `
+      <details class="prod-accordion">
+        <summary>♻️ Cuidado de la prenda</summary>
+        <div class="prod-accordion-content">
+          <ul>
+            <li>Primer lavado en seco o lavandería profesional</li>
+            <li>Lavar a mano o ciclo delicado en agua fría</li>
+            <li>No dejar en remojo ni retorcer</li>
+            <li>Sin blanqueadores ni productos agresivos</li>
+            <li>Secar a la sombra · No usar secadora</li>
+          </ul>
+        </div>
+      </details>
+      <details class="prod-accordion">
+        <summary>📏 Guía de tallas</summary>
+        <div class="prod-accordion-content">
+          <table class="talla-table">
+            <tr><th>Talla</th><th>Busto</th><th>Cintura</th><th>Cadera</th></tr>
+            <tr><td>XS</td><td>80–84 cm</td><td>60–64 cm</td><td>86–90 cm</td></tr>
+            <tr><td>S</td><td>84–88 cm</td><td>64–68 cm</td><td>90–94 cm</td></tr>
+            <tr><td>M</td><td>88–92 cm</td><td>68–72 cm</td><td>94–98 cm</td></tr>
+            <tr><td>L</td><td>92–96 cm</td><td>72–76 cm</td><td>98–102 cm</td></tr>
+            <tr><td>XL</td><td>96–100 cm</td><td>76–80 cm</td><td>102–106 cm</td></tr>
+          </table>
+          <p class="talla-hint">¿Dudas? <a href="https://wa.me/573017604292" target="_blank">Consúltanos por WhatsApp</a></p>
+        </div>
+      </details>
+      <details class="prod-accordion">
+        <summary>🔄 Cambios y devoluciones</summary>
+        <div class="prod-accordion-content">
+          <p>Tienes <strong>5 días hábiles</strong> desde que recibes tu pedido para solicitar un cambio o devolución.</p>
+          <p><strong>Condición:</strong> prenda sin usar, con etiqueta original y en su empaque.</p>
+          <p>📧 <a href="mailto:alvapas75@gmail.com">alvapas75@gmail.com</a></p>
+          <p>📞 <a href="tel:3017604292">301 760 4292</a></p>
+        </div>
+      </details>`;
+    const btn = info.querySelector('.btn-agregar');
+    if (btn) info.insertBefore(wrap, btn);
+    else info.appendChild(wrap);
+  });
+}
+
 // ---- INICIALIZAR ----
 document.addEventListener('DOMContentLoaded', () => {
   updateCartBadge();
-  setTimeout(injectAddiWidgets, 800);
+  setTimeout(() => {
+    initSizeButtons();
+    injectProductAccordions();
+    injectAddiWidgets();
+  }, 600);
 });
