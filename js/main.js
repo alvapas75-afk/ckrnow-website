@@ -3,33 +3,24 @@
 // ===== ADDI — CONFIGURACIÓN =====
 const ADDI_ALLY_SLUG = 'cloakroomstore-ecommerce';
 
-// ===== BREVO — EMAIL MARKETING =====
-// ⚠️ PENDIENTE: reemplaza estos valores con los de tu cuenta Brevo
-// API Key: Brevo → Configuración → API Keys
-// List ID: Brevo → Contactos → Listas → número de la lista "Clientes CKR Boutique"
-const BREVO_API_KEY  = 'TU_BREVO_API_KEY';
-const BREVO_LIST_ID  = 0; // Ej: 3
+// ===== BREVO — EMAIL MARKETING (sin API key, via formulario público) =====
+const BREVO_FORM_URL = 'https://47b1f749.sibforms.com/serve/MUIFAA-IsvjPheutjKfFn3MDr4wtyygWknBQ-3LRZ6zcMVkrL6cHkZUv9rg-3WcO_L3rvvedlcz07gCsbgNEIZfiRfBcWFkbmuqbZuikLBoW2WAopiFAL18t3RbbOJZcEJCCeFpzqYb4upPWBGgrSNnyALLw00jVDHfJl7gNje6rJvaVeIJLU6LmQQHvf1L9tdBIRzRDBPLVK_tkgQ==';
 
 async function saveContactBrevo({ nombre, email, tel, dir }) {
-  if (!BREVO_API_KEY || BREVO_API_KEY === 'TU_BREVO_API_KEY') return;
   try {
-    await fetch('https://api.brevo.com/v3/contacts', {
+    const body = new URLSearchParams({
+      EMAIL: email,
+      FIRSTNAME: nombre,
+      SMS: tel,
+      ADDRESS: dir,
+      email_address_check: '',
+      locale: 'es'
+    });
+    await fetch(BREVO_FORM_URL, {
       method: 'POST',
-      headers: {
-        'api-key': BREVO_API_KEY,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email,
-        attributes: {
-          FIRSTNAME: nombre,
-          SMS: tel,
-          ADDRESS: dir,
-          WHATSAPP: tel
-        },
-        listIds: [BREVO_LIST_ID],
-        updateEnabled: true
-      })
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString()
     });
   } catch(e) { /* silencioso — no bloquea el checkout */ }
 }
