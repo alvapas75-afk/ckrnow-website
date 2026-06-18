@@ -211,7 +211,7 @@ function checkoutWhatsApp() {
   window.open(url, '_blank');
 }
 
-// ---- CHECKOUT CON ADDI ----
+// ---- CHECKOUT CON ADDI (vía WhatsApp — el link Addi lo genera la vendedora desde su portal) ----
 function checkoutAddi() {
   if (cart.length === 0) {
     alert('Tu carrito está vacío. Agrega productos primero.');
@@ -219,8 +219,6 @@ function checkoutAddi() {
   }
 
   const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-  const reference = 'CKR-' + Date.now();
-  const redirectUrl = encodeURIComponent('https://ckrnow.com/?pago=exitoso&metodo=addi');
 
   if (typeof fbq !== 'undefined') {
     fbq('track', 'InitiateCheckout', {
@@ -230,8 +228,18 @@ function checkoutAddi() {
     });
   }
 
-  const addiUrl = `https://checkout.addi.com.co/applications?allySlug=${ADDI_ALLY_SLUG}&totalPrice=${total}&orderReference=${reference}&redirectUrl=${redirectUrl}`;
-  window.location.href = addiUrl;
+  let msg = '¡Hola CKR Boutique! 🛍️ Quiero pagar en cuotas con *Addi*. Mi pedido:\n\n';
+  let t = 0;
+  cart.forEach((item, i) => {
+    msg += `${i + 1}. *${item.name}*\n`;
+    msg += `   Talla: ${item.size} · Cant: ${item.qty}\n`;
+    msg += `   ${formatPrice(item.price * item.qty)}\n\n`;
+    t += item.price * item.qty;
+  });
+  msg += `━━━━━━━━━━━━━━━\n*TOTAL: ${formatPrice(t)}*\n\n¿Me puedes enviar el link de pago Addi?`;
+
+  closeCart();
+  window.open('https://wa.me/573017604292?text=' + encodeURIComponent(msg), '_blank');
 }
 
 // ---- WIDGET DE CUOTAS ADDI EN PRODUCTOS ----
@@ -268,6 +276,8 @@ async function checkoutWompi() {
     alert('Tu carrito está vacío. Agrega productos primero.');
     return;
   }
+
+  closeCart();
 
   const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
   const amountInCents = total * 100;
