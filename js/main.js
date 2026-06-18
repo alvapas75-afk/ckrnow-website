@@ -1,9 +1,38 @@
 // ===== CKR BOUTIQUE — Main JS + Carrito de Compras =====
 
 // ===== ADDI — CONFIGURACIÓN =====
-// ⚠️ Reemplaza este valor con tu ally_slug del portal de Addi
-// Lo encuentras en: portal.addi.com → Configuración → Integración
 const ADDI_ALLY_SLUG = 'cloakroomstore-ecommerce';
+
+// ===== BREVO — EMAIL MARKETING =====
+// ⚠️ PENDIENTE: reemplaza estos valores con los de tu cuenta Brevo
+// API Key: Brevo → Configuración → API Keys
+// List ID: Brevo → Contactos → Listas → número de la lista "Clientes CKR Boutique"
+const BREVO_API_KEY  = 'TU_BREVO_API_KEY';
+const BREVO_LIST_ID  = 0; // Ej: 3
+
+async function saveContactBrevo({ nombre, email, tel, dir }) {
+  if (!BREVO_API_KEY || BREVO_API_KEY === 'TU_BREVO_API_KEY') return;
+  try {
+    await fetch('https://api.brevo.com/v3/contacts', {
+      method: 'POST',
+      headers: {
+        'api-key': BREVO_API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email,
+        attributes: {
+          FIRSTNAME: nombre,
+          SMS: tel,
+          ADDRESS: dir,
+          WHATSAPP: tel
+        },
+        listIds: [BREVO_LIST_ID],
+        updateEnabled: true
+      })
+    });
+  } catch(e) { /* silencioso — no bloquea el checkout */ }
+}
 
 // ---- NAVBAR & MENU ----
 function toggleMenu() {
@@ -235,6 +264,7 @@ function submitCustomerForm() {
     return;
   }
   closeCustomerForm();
+  saveContactBrevo({ nombre, email, tel, dir }); // guarda en Brevo en paralelo
   if (_checkoutCallback) _checkoutCallback({ nombre, email, tel, dir });
 }
 
