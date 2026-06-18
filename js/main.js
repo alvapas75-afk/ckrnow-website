@@ -1,5 +1,10 @@
 // ===== CKR BOUTIQUE — Main JS + Carrito de Compras =====
 
+// ===== ADDI — CONFIGURACIÓN =====
+// ⚠️ Reemplaza este valor con tu ally_slug del portal de Addi
+// Lo encuentras en: portal.addi.com → Configuración → Integración
+const ADDI_ALLY_SLUG = 'TU_ALLY_SLUG';
+
 // ---- NAVBAR & MENU ----
 function toggleMenu() {
   const menu = document.getElementById('mobileMenu');
@@ -213,19 +218,9 @@ function checkoutAddi() {
     return;
   }
 
-  let msg = '¡Hola CKR Boutique! 🛍️ Quiero pagar con *Addi* (cuotas sin interés):\n\n';
-  let total = 0;
-
-  cart.forEach((item, i) => {
-    msg += `${i + 1}. *${item.name}*\n`;
-    msg += `   Talla: ${item.size} · Cant: ${item.qty}\n`;
-    msg += `   ${formatPrice(item.price * item.qty)}\n\n`;
-    total += item.price * item.qty;
-  });
-
-  msg += `━━━━━━━━━━━━━━━\n`;
-  msg += `*TOTAL: ${formatPrice(total)}*\n\n`;
-  msg += `Por favor envíame el link de pago de Addi 🙏`;
+  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const reference = 'CKR-' + Date.now();
+  const redirectUrl = encodeURIComponent('https://ckrnow.com/?pago=exitoso&metodo=addi');
 
   if (typeof fbq !== 'undefined') {
     fbq('track', 'InitiateCheckout', {
@@ -234,7 +229,24 @@ function checkoutAddi() {
       content_type: 'product'
     });
   }
-  window.open('https://wa.me/573017604292?text=' + encodeURIComponent(msg), '_blank');
+
+  const addiUrl = `https://checkout.addi.com.co/applications?allySlug=${ADDI_ALLY_SLUG}&totalPrice=${total}&orderReference=${reference}&redirectUrl=${redirectUrl}`;
+  window.open(addiUrl, '_blank');
+}
+
+// ---- WIDGET DE CUOTAS ADDI EN PRODUCTOS ----
+function injectAddiWidgets() {
+  document.querySelectorAll('.product-info').forEach(info => {
+    const priceEl = info.querySelector('.product-price');
+    if (!priceEl || info.querySelector('addi-widget')) return;
+    const price = parsePrice(priceEl.textContent);
+    if (price < 100000) return;
+    const widget = document.createElement('addi-widget');
+    widget.setAttribute('price', String(price));
+    widget.setAttribute('ally-slug', ADDI_ALLY_SLUG);
+    widget.className = 'addi-cuotas';
+    priceEl.after(widget);
+  });
 }
 
 
@@ -312,13 +324,19 @@ window.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
 
   if (params.get('pago') === 'exitoso') {
+    const metodo = params.get('metodo') || 'wompi';
     if (typeof fbq !== 'undefined') {
-      fbq('track', 'Purchase', { value: 0, currency: 'COP', content_type: 'product' });
+      fbq('track', 'Purchase', { value: 0, currency: 'COP', content_type: 'product', content_category: metodo });
     }
     cart = [];
     saveCart();
     updateCartBadge();
-    document.getElementById('wompiSuccessModal').style.display = 'flex';
+    const modal = document.getElementById('wompiSuccessModal');
+    if (metodo === 'addi') {
+      modal.querySelector('h2').textContent = '¡Pago con Addi aprobado!';
+      modal.querySelector('p').textContent = 'Tu pedido está confirmado. Te escribiremos por WhatsApp con los detalles del envío.';
+    }
+    modal.style.display = 'flex';
     history.replaceState({}, '', '/');
   }
 
@@ -335,4 +353,5 @@ window.addEventListener('DOMContentLoaded', () => {
 // ---- INICIALIZAR ----
 document.addEventListener('DOMContentLoaded', () => {
   updateCartBadge();
+  setTimeout(injectAddiWidgets, 800);
 });
