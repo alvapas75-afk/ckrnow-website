@@ -3,7 +3,7 @@
 // ===== ADDI — CONFIGURACIÓN =====
 // ⚠️ Reemplaza este valor con tu ally_slug del portal de Addi
 // Lo encuentras en: portal.addi.com → Configuración → Integración
-const ADDI_ALLY_SLUG = 'TU_ALLY_SLUG';
+const ADDI_ALLY_SLUG = 'cloakroomstore-ecommerce';
 
 // ---- NAVBAR & MENU ----
 function toggleMenu() {
