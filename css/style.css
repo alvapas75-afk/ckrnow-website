@@ -650,13 +650,20 @@ addi-widget.addi-cuotas {
   color: #555;
   line-height: 1.6;
 }
-.prod-accordion-content ul {
+.prod-accordion-content ul,
+.prod-accordion-content ol {
   padding-left: 16px;
-  margin: 0;
+  margin: 4px 0 8px;
 }
-.prod-accordion-content li { margin-bottom: 3px; }
-.prod-accordion-content p { margin: 4px 0; }
+.prod-accordion-content li { margin-bottom: 4px; }
+.prod-accordion-content p { margin: 6px 0; }
 .prod-accordion-content a { color: #b08d57; }
+.policy-intro {
+  background: #f5f0e8; padding: 6px 10px;
+  font-size: 0.72rem; color: #555;
+  border-left: 3px solid #b08d57;
+  margin-bottom: 10px !important;
+}
 
 .talla-table {
   width: 100%;
