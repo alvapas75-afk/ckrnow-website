@@ -31,7 +31,7 @@
   <script src="https://s3.amazonaws.com/widgets.addi.com/bundle.min.js" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=shop2"/>
+  <link rel="stylesheet" href="css/style.css?v=shop3"/>
   <style>
     /* ===== BARRA PROMO ===== */
     .promo-bar {
@@ -1354,57 +1354,70 @@
   <!-- WhatsApp flotante -->
   <a href="https://wa.me/573017604292" target="_blank" class="whatsapp-float">💬</a>
 
-  <!-- SELECTOR DE TALLA -->
-  <div id="sizeModal" class="size-modal-overlay" onclick="closeSizeModal()" style="display:none">
-    <div class="size-modal" onclick="event.stopPropagation()">
-      <button class="size-modal-close" onclick="closeSizeModal()">✕</button>
-      <p class="size-modal-label">SELECCIONA TU TALLA</p>
-      <h3 id="sizeProductName" class="size-modal-product"></h3>
-      <div class="size-options">
-        <button onclick="selectSize('XS')">XS</button>
-        <button onclick="selectSize('S')">S</button>
-        <button onclick="selectSize('M')">M</button>
-        <button onclick="selectSize('L')">L</button>
-        <button onclick="selectSize('XL')">XL</button>
-        <button onclick="selectSize('Única')">Única</button>
-      </div>
-      <p class="size-hint">¿Dudas con tu talla? <a href="https://wa.me/573017604292" target="_blank">Consúltanos por WhatsApp</a></p>
+  <!-- MODAL DETALLE DE PRODUCTO -->
+  <div id="sizeModal" class="pm-overlay" onclick="closeSizeModal()" style="display:none">
+    <div class="pm-modal" onclick="event.stopPropagation()">
+      <button class="pm-close" onclick="closeSizeModal()">✕</button>
+      <div class="pm-layout">
 
-      <div class="size-modal-accordions">
-        <details class="prod-accordion">
-          <summary>📏 Guía de tallas</summary>
-          <div class="prod-accordion-content">
-            <table class="talla-table">
-              <tr><th>Talla</th><th>Busto</th><th>Cintura</th><th>Cadera</th></tr>
-              <tr><td>XS</td><td>80–84 cm</td><td>60–64 cm</td><td>86–90 cm</td></tr>
-              <tr><td>S</td><td>84–88 cm</td><td>64–68 cm</td><td>90–94 cm</td></tr>
-              <tr><td>M</td><td>88–92 cm</td><td>68–72 cm</td><td>94–98 cm</td></tr>
-              <tr><td>L</td><td>92–96 cm</td><td>72–76 cm</td><td>98–102 cm</td></tr>
-              <tr><td>XL</td><td>96–100 cm</td><td>76–80 cm</td><td>102–106 cm</td></tr>
-            </table>
+        <!-- Imagen -->
+        <div class="pm-img-col">
+          <img id="pmImg" src="" alt="" class="pm-img">
+        </div>
+
+        <!-- Info -->
+        <div class="pm-info-col">
+          <h3 id="sizeProductName" class="pm-name"></h3>
+          <p id="pmPrice" class="pm-price"></p>
+
+          <p class="pm-talla-label">SELECCIONA TU TALLA</p>
+          <div class="size-options" id="pmSizes"></div>
+
+          <a id="pmWa" href="#" target="_blank" class="pm-wa-btn">💬 Comprar por WhatsApp</a>
+
+          <div class="pm-pagos">
+            <span>💳 Paga en línea</span>
+            <span>📦 Cuotas con Addi</span>
+            <span>🚚 Envío a todo Colombia</span>
           </div>
-        </details>
-        <details class="prod-accordion">
-          <summary>♻️ Cuidado de la prenda</summary>
-          <div class="prod-accordion-content">
-            <ul>
-              <li>Primer lavado en seco o lavandería profesional</li>
-              <li>Lavar a mano o ciclo delicado en agua fría</li>
-              <li>No dejar en remojo ni retorcer</li>
-              <li>Sin blanqueadores ni productos agresivos</li>
-              <li>Secar a la sombra · No usar secadora</li>
-            </ul>
+
+          <div class="size-modal-accordions">
+            <details class="prod-accordion">
+              <summary>📏 Guía de tallas</summary>
+              <div class="prod-accordion-content">
+                <table class="talla-table">
+                  <tr><th>Talla</th><th>Busto</th><th>Cintura</th><th>Cadera</th></tr>
+                  <tr><td>XS</td><td>80–84 cm</td><td>60–64 cm</td><td>86–90 cm</td></tr>
+                  <tr><td>S</td><td>84–88 cm</td><td>64–68 cm</td><td>90–94 cm</td></tr>
+                  <tr><td>M</td><td>88–92 cm</td><td>68–72 cm</td><td>94–98 cm</td></tr>
+                  <tr><td>L</td><td>92–96 cm</td><td>72–76 cm</td><td>98–102 cm</td></tr>
+                  <tr><td>XL</td><td>96–100 cm</td><td>76–80 cm</td><td>102–106 cm</td></tr>
+                </table>
+              </div>
+            </details>
+            <details class="prod-accordion">
+              <summary>♻️ Cuidado de la prenda</summary>
+              <div class="prod-accordion-content">
+                <ul>
+                  <li>Primer lavado en seco o lavandería profesional</li>
+                  <li>Lavar a mano o ciclo delicado en agua fría</li>
+                  <li>No dejar en remojo ni retorcer</li>
+                  <li>Sin blanqueadores ni productos agresivos</li>
+                  <li>Secar a la sombra · No usar secadora</li>
+                </ul>
+              </div>
+            </details>
+            <details class="prod-accordion">
+              <summary>🔄 Cambios y devoluciones</summary>
+              <div class="prod-accordion-content">
+                <p>Tienes <strong>5 días hábiles</strong> desde que recibes tu pedido para solicitar un cambio o devolución.</p>
+                <p><strong>Condición:</strong> prenda sin usar, con etiqueta original y en su empaque.</p>
+                <p>📧 <a href="mailto:alvapas75@gmail.com">alvapas75@gmail.com</a></p>
+                <p>📞 <a href="tel:3017604292">301 760 4292</a></p>
+              </div>
+            </details>
           </div>
-        </details>
-        <details class="prod-accordion">
-          <summary>🔄 Cambios y devoluciones</summary>
-          <div class="prod-accordion-content">
-            <p>Tienes <strong>5 días hábiles</strong> desde que recibes tu pedido para solicitar un cambio o devolución.</p>
-            <p><strong>Condición:</strong> prenda sin usar, con etiqueta original y en su empaque.</p>
-            <p>📧 <a href="mailto:alvapas75@gmail.com">alvapas75@gmail.com</a></p>
-            <p>📞 <a href="tel:3017604292">301 760 4292</a></p>
-          </div>
-        </details>
+        </div>
       </div>
     </div>
   </div>
@@ -1487,7 +1500,7 @@
   </div>
 
   <script src="https://checkout.wompi.co/widget.js"></script>
-  <script src="js/main.js?v=shop5"></script>
+  <script src="js/main.js?v=shop6"></script>
   <script>
     function openLightbox(src, alt) {
       var overlay = document.getElementById('lightboxOverlay');

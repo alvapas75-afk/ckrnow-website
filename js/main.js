@@ -188,17 +188,20 @@ function parseTallas(text) {
   );
 }
 
-function showSizeSelector(name, price, sizes) {
+function showSizeSelector(name, price, sizes, imgSrc, waUrl) {
   pendingProduct = { name, price };
-  const sizeOptions = document.querySelector('#sizeModal .size-options');
-
   const available = sizes && sizes.length > 0 ? sizes : ['XS','S','M','L','XL','Única'];
 
   document.getElementById('sizeProductName').textContent = name;
-  sizeOptions.innerHTML = available.map(s =>
+  document.getElementById('pmPrice').textContent = formatPrice(price);
+  document.getElementById('pmImg').src = imgSrc || '';
+  document.getElementById('pmImg').alt = name;
+  document.getElementById('pmWa').href = waUrl || 'https://wa.me/573017604292';
+  document.getElementById('pmSizes').innerHTML = available.map(s =>
     `<button onclick="selectSize('${s}')">${s}</button>`
   ).join('');
   document.getElementById('sizeModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
 }
 
 function selectSize(size) {
@@ -210,6 +213,7 @@ function selectSize(size) {
 
 function closeSizeModal() {
   document.getElementById('sizeModal').style.display = 'none';
+  document.body.style.overflow = '';
   pendingProduct = null;
 }
 
@@ -219,10 +223,21 @@ function initSizeButtons() {
     const m = (btn.getAttribute('onclick') || '').match(/showSizeSelector\('(.+?)',\s*(\d+)\)/);
     if (!m) return;
     const name = m[1], price = parseInt(m[2]);
-    const sizesText = btn.closest('.product-info')?.querySelector('.product-sizes')?.textContent || '';
+    const card = btn.closest('.product-card');
+    const sizesText = card?.querySelector('.product-sizes')?.textContent || '';
     const sizes = parseTallas(sizesText);
+    const imgSrc = card?.querySelector('img')?.src || '';
+    const waHref = card?.querySelector('.btn-whatsapp')?.getAttribute('href') || '';
+    const open = () => showSizeSelector(name, price, sizes, imgSrc, waHref);
     btn.removeAttribute('onclick');
-    btn.addEventListener('click', () => showSizeSelector(name, price, sizes));
+    btn.addEventListener('click', open);
+    // imagen también abre el modal
+    const img = card?.querySelector('img');
+    if (img) {
+      img.style.cursor = 'pointer';
+      img.removeAttribute('onclick');
+      img.addEventListener('click', open);
+    }
   });
 }
 
