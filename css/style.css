@@ -358,8 +358,9 @@ footer p { color: rgba(255,255,255,0.5); font-size: 0.78rem; line-height: 2; }
 }
 .size-modal {
   background: var(--white); padding: 40px 32px;
-  max-width: 380px; width: 90%; position: relative;
+  max-width: 420px; width: 90%; position: relative;
   text-align: center;
+  max-height: 90vh; overflow-y: auto;
 }
 .size-modal-close {
   position: absolute; top: 16px; right: 16px;
@@ -564,10 +565,11 @@ addi-widget.addi-cuotas {
   font-size: 0.78rem;
 }
 
-/* ===== ACORDEONES DE PRODUCTO ===== */
-.product-accordions {
-  margin: 8px 0 12px;
+/* ===== ACORDEONES (dentro del modal de talla) ===== */
+.size-modal-accordions {
+  margin-top: 20px;
   border-top: 1px solid #e8e0d5;
+  text-align: left;
 }
 .prod-accordion {
   border-bottom: 1px solid #e8e0d5;
