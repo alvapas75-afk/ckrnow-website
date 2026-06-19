@@ -194,12 +194,6 @@ function showSizeSelector(name, price, sizes) {
 
   const available = sizes && sizes.length > 0 ? sizes : ['XS','S','M','L','XL','Única'];
 
-  if (available.length === 1) {
-    addToCart(name, price, available[0]);
-    openCart();
-    return;
-  }
-
   document.getElementById('sizeProductName').textContent = name;
   sizeOptions.innerHTML = available.map(s =>
     `<button onclick="selectSize('${s}')">${s}</button>`
