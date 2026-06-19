@@ -31,7 +31,7 @@
   <script src="https://s3.amazonaws.com/widgets.addi.com/bundle.min.js" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=shop6"/>
+  <link rel="stylesheet" href="css/style.css?v=shop7"/>
   <style>
     /* ===== BARRA PROMO ===== */
     .promo-bar {
@@ -1372,13 +1372,15 @@
 
           <p class="pm-talla-label">SELECCIONA TU TALLA</p>
           <div class="size-options" id="pmSizes"></div>
+          <p id="pmNoTalla" class="pm-no-talla" style="display:none">⚠️ Selecciona una talla para continuar</p>
 
+          <button onclick="addToCartFromModal()" class="pm-cart-btn">🛒 Agregar al carrito · Pagar en línea</button>
           <a id="pmWa" href="#" target="_blank" class="pm-wa-btn">💬 Comprar por WhatsApp</a>
 
           <div class="pm-pagos">
-            <span>💳 Paga en línea</span>
-            <span>📦 Cuotas con Addi</span>
-            <span>🚚 Envío a todo Colombia</span>
+            <span>💳 Wompi · PSE · Nequi · Tarjeta</span>
+            <span>🟠 Cuotas con Addi</span>
+            <span>🚚 Envío gratis Colombia</span>
           </div>
 
           <div class="size-modal-accordions">
@@ -1564,7 +1566,7 @@
   </div>
 
   <script src="https://checkout.wompi.co/widget.js"></script>
-  <script src="js/main.js?v=shop6"></script>
+  <script src="js/main.js?v=shop7"></script>
   <script>
     function openLightbox(src, alt) {
       var overlay = document.getElementById('lightboxOverlay');

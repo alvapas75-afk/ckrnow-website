@@ -418,6 +418,17 @@ footer p { color: rgba(255,255,255,0.5); font-size: 0.78rem; line-height: 2; }
 .size-options button:hover {
   border-color: var(--gold); background: var(--gold); color: var(--black);
 }
+.pm-cart-btn {
+  display: block; width: 100%; text-align: center;
+  background: var(--black); color: #fff;
+  border: none; cursor: pointer;
+  padding: 13px 16px; font-size: 0.82rem;
+  font-weight: 700; letter-spacing: 0.8px;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  margin-bottom: 10px; transition: background 0.2s;
+}
+.pm-cart-btn:hover { background: #333; }
 .pm-wa-btn {
   display: block; text-align: center;
   background: #25d366; color: #fff;
@@ -427,6 +438,16 @@ footer p { color: rgba(255,255,255,0.5); font-size: 0.78rem; line-height: 2; }
   transition: opacity 0.2s;
 }
 .pm-wa-btn:hover { opacity: 0.88; }
+.pm-talla-btn.selected {
+  border-color: var(--gold) !important;
+  background: var(--gold) !important;
+  color: var(--black) !important;
+  font-weight: 700;
+}
+.pm-no-talla {
+  font-size: 0.72rem; color: #c0392b;
+  margin: -6px 0 8px; letter-spacing: 0.3px;
+}
 .pm-pagos {
   display: flex; flex-wrap: wrap; gap: 8px;
   margin-bottom: 18px;

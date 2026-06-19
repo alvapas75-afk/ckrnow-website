@@ -189,7 +189,7 @@ function parseTallas(text) {
 }
 
 function showSizeSelector(name, price, sizes, imgSrc, waUrl) {
-  pendingProduct = { name, price };
+  pendingProduct = { name, price, talla: null };
   const available = sizes && sizes.length > 0 ? sizes : ['XS','S','M','L','XL','Única'];
 
   document.getElementById('sizeProductName').textContent = name;
@@ -198,17 +198,39 @@ function showSizeSelector(name, price, sizes, imgSrc, waUrl) {
   document.getElementById('pmImg').alt = name;
   document.getElementById('pmWa').href = waUrl || 'https://wa.me/573017604292';
   document.getElementById('pmSizes').innerHTML = available.map(s =>
-    `<button onclick="selectSize('${s}')">${s}</button>`
+    `<button class="pm-talla-btn" onclick="highlightTalla('${s}')">${s}</button>`
   ).join('');
+  const hint = document.getElementById('pmNoTalla');
+  if (hint) hint.style.display = 'none';
   document.getElementById('sizeModal').style.display = 'flex';
   document.body.style.overflow = 'hidden';
 }
 
-function selectSize(size) {
+function highlightTalla(size) {
   if (!pendingProduct) return;
-  addToCart(pendingProduct.name, pendingProduct.price, size);
+  pendingProduct.talla = size;
+  document.querySelectorAll('#pmSizes .pm-talla-btn').forEach(b => b.classList.remove('selected'));
+  const btn = [...document.querySelectorAll('#pmSizes .pm-talla-btn')].find(b => b.textContent === size);
+  if (btn) btn.classList.add('selected');
+  const hint = document.getElementById('pmNoTalla');
+  if (hint) hint.style.display = 'none';
+}
+
+function addToCartFromModal() {
+  if (!pendingProduct) return;
+  if (!pendingProduct.talla) {
+    const hint = document.getElementById('pmNoTalla');
+    if (hint) hint.style.display = 'block';
+    return;
+  }
+  addToCart(pendingProduct.name, pendingProduct.price, pendingProduct.talla);
   closeSizeModal();
   openCart();
+}
+
+function selectSize(size) {
+  highlightTalla(size);
+  addToCartFromModal();
 }
 
 function closeSizeModal() {
