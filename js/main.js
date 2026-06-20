@@ -253,13 +253,6 @@ function initSizeButtons() {
     const open = () => showSizeSelector(name, price, sizes, imgSrc, waHref);
     btn.removeAttribute('onclick');
     btn.addEventListener('click', open);
-    // imagen también abre el modal
-    const img = card?.querySelector('img');
-    if (img) {
-      img.style.cursor = 'pointer';
-      img.removeAttribute('onclick');
-      img.addEventListener('click', open);
-    }
   });
 }
 
