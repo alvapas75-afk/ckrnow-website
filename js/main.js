@@ -396,6 +396,7 @@ async function checkoutWompi() {
   });
 
   localStorage.setItem('ckr_pending_payment', JSON.stringify(cart.map(i => i.name)));
+  localStorage.setItem('ckr_pending_total', total.toString());
   closeCart();
   window.location.href = 'https://checkout.wompi.co/p/?' + params.toString();
 }
@@ -410,8 +411,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
   if (params.get('pago') === 'exitoso') {
     const metodo = params.get('metodo') || 'wompi';
+    const _purchaseTotal = parseFloat(localStorage.getItem('ckr_pending_total') || '0');
+    localStorage.removeItem('ckr_pending_total');
     if (typeof fbq !== 'undefined') {
-      fbq('track', 'Purchase', { value: 0, currency: 'COP', content_type: 'product', content_category: metodo });
+      fbq('track', 'Purchase', { value: _purchaseTotal, currency: 'COP', content_type: 'product', content_category: metodo });
     }
     const _pending = JSON.parse(localStorage.getItem('ckr_pending_payment') || '[]');
     if (_pending.length && CKR_STOCK_WEBHOOK) {
