@@ -1899,5 +1899,22 @@
     });
   })();
   </script>
+  <script>
+    fetch('/stock.json?v=' + Date.now())
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        var agotados = data.agotados || [];
+        if (!agotados.length) return;
+        document.querySelectorAll('.product-img-wrap img').forEach(function(img){
+          var match = img.src.match(/\/d\/([^?&/]+)/);
+          if (!match) return;
+          var id = match[1];
+          if (agotados.indexOf(id) !== -1) {
+            img.closest('.product-card').classList.add('agotado');
+          }
+        });
+      })
+      .catch(function(){});
+  </script>
 </body>
 </html>

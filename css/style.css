@@ -196,6 +196,22 @@ body {
   background: var(--gold); color: var(--black);
 }
 
+/* ===== AGOTADO ===== */
+.product-card.agotado { opacity: 0.65; }
+.product-card.agotado .product-img-wrap::after {
+  content: 'AGOTADO';
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.52);
+  color: #fff; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; letter-spacing: 3px;
+  pointer-events: none;
+}
+.product-card.agotado .btn-agregar,
+.product-card.agotado .btn-whatsapp {
+  pointer-events: none; opacity: 0.35;
+}
+
 .product-info {
   padding: 20px;
   border: 1px solid var(--light-gray);
