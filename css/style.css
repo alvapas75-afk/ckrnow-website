@@ -625,6 +625,8 @@ footer p { color: rgba(255,255,255,0.5); font-size: 0.78rem; line-height: 2; }
   .products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
   .value-item { padding: 14px 16px; }
   .hero-content h1 { font-size: 2.8rem; }
+  .collection { padding: 48px 16px; }
+  .section-header { margin-bottom: 32px; }
 }
 
 /* ===== ADDI WIDGET — Cuotas en producto ===== */
