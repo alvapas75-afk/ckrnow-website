@@ -248,6 +248,7 @@ function pp(v) {
       document.getElementById('appMain').style.display='flex';
       document.getElementById('appMain').style.flexDirection='column';
       actualizarFecha();
+      if(db().inventario.length===0) importarSitio();
       ir('venta');
     } else {
       document.getElementById('pinErr').textContent='PIN incorrecto';
