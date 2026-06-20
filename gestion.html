@@ -151,6 +151,11 @@ body{background:var(--bg);color:var(--texto);font-family:'Helvetica Neue',Arial,
   pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;}
 .toast.show{opacity:1;}
 .toast.err{background:var(--rojo);}
+.btn-etq{background:none;border:1px solid var(--borde);border-radius:6px;color:var(--oro);
+  font-size:.9rem;padding:5px 9px;cursor:pointer;flex-shrink:0;line-height:1;}
+.btn-etq:active{background:rgba(201,160,80,.15);}
+#qrReader{border-radius:8px;overflow:hidden;}
+#qrReader video{border-radius:8px;}
 </style>
 </head>
 <body>
@@ -300,7 +305,10 @@ function abrirModal(html) {
   document.getElementById('modalBody').innerHTML=html;
   document.getElementById('modalBg').className='modal-bg open';
 }
-function cerrarModal() { document.getElementById('modalBg').className='modal-bg'; }
+function cerrarModal() {
+  if(window._qrScanner){window._qrScanner.stop().catch(function(){});window._qrScanner=null;}
+  document.getElementById('modalBg').className='modal-bg';
+}
 
 // ============================================================
 // MÓDULO: VENTA
@@ -325,7 +333,8 @@ function pageVenta() {
   var cliOpts='<option value="">Sin cliente</option>';
   d.clientes.forEach(function(c){cliOpts+='<option value="'+c.id+'">'+c.nombre+'</option>';});
   return '<div class="sec-title">Nueva Venta</div>'+
-    '<div class="card"><div class="f"><label>Buscar producto del inventario</label>'+
+    '<button class="btn btn-s" onclick="activarEscaneo()" style="margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.85rem;">📷 Escanear etiqueta con la cámara</button>'+
+    '<div class="card"><div class="f"><label>O busca por nombre</label>'+
       '<div class="s-wrap"><input type="text" id="buscaProd" placeholder="Escribe el nombre del producto..." oninput="buscarProd(this.value)" autocomplete="off"/>'+
       '<div class="s-drop" id="sDrop"></div></div></div></div>'+
     (d.inventario.length===0 ?
@@ -421,7 +430,10 @@ function pageInventario() {
     var bTxt=p.stock>0?p.stock+' uds.':'Agotado';
     return '<div class="inv-row'+(p.stock<=0?' out':'')+'" onclick="editProd(\''+p.id+'\')">'+
       '<div class="inv-main"><div class="inv-nm">'+p.nombre+'</div><div class="inv-mt">'+p.categoria+' · Talla '+p.talla+'</div></div>'+
-      '<div class="inv-right"><div class="inv-p">'+mon(p.precio)+'</div><span class="badge '+bClass+'">'+bTxt+'</span></div>'+
+      '<div class="inv-right" style="display:flex;align-items:center;gap:8px;">'+
+        '<div><div class="inv-p">'+mon(p.precio)+'</div><span class="badge '+bClass+'">'+bTxt+'</span></div>'+
+        '<button class="btn-etq" onclick="event.stopPropagation();abrirEtiqueta(\''+p.id+'\')" title="Imprimir etiqueta">🏷</button>'+
+      '</div>'+
     '</div>';
   }).join('') :
   '<div class="empty"><div class="empty-icon">📦</div><p>No hay productos aquí.</p></div>';
@@ -429,6 +441,7 @@ function pageInventario() {
   return '<div class="sec-title">Inventario ('+d.inventario.length+')</div>'+
     '<div style="display:flex;gap:8px;margin-bottom:13px;flex-wrap:wrap">'+
       '<button class="btn btn-p btn-sm" onclick="modalProd()">+ Nuevo Producto</button>'+
+      '<button class="btn btn-s btn-sm" onclick="imprimirTodas()">🏷 Todas las etiquetas</button>'+
       '<button class="btn btn-s btn-sm" onclick="importarSitio()">⬇ Importar del sitio</button>'+
     '</div>'+
     '<div class="filtros">'+filHtml+'</div>'+
@@ -885,6 +898,123 @@ function exportar() {
   a.download='CKR_Contabilidad_'+hoy()+'.csv';a.click();
   toast('✅ Archivo exportado');
 }
+
+// ============================================================
+// ETIQUETAS — GENERACIÓN E IMPRESIÓN
+// ============================================================
+function etiquetaWindowHTML(prods) {
+  var items=prods.map(function(p){
+    var qr='https://api.qrserver.com/v1/create-qr-code/?size=160x160&data='+encodeURIComponent('CKRPRD:'+p.id);
+    var pr='$'+Number(p.precio).toLocaleString('es-CO')+' COP';
+    var nm=p.nombre.length>30?p.nombre.substring(0,28)+'…':p.nombre;
+    return '<div class="etq">'+
+      '<div class="ef">'+
+        '<div class="elogo">◆ CKR Boutique ◆</div>'+
+        '<div class="enm">'+nm+'</div>'+
+        '<div class="ecat">'+p.categoria+'</div>'+
+        '<div class="etal">Talla: '+p.talla+'</div>'+
+        '<div class="epr">'+pr+'</div>'+
+      '</div>'+
+      '<div class="dob"><span>✂ doblar aquí</span></div>'+
+      '<div class="eb">'+
+        '<img src="'+qr+'" class="eqr" onerror="this.style.display=\'none\'"/>'+
+        '<div class="eid">'+p.id+'</div>'+
+        '<div class="eweb">ckrnow.com</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  return '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">'+
+    '<meta name="viewport" content="width=device-width,initial-scale=1"/>'+
+    '<title>Etiquetas CKR</title><style>'+
+    '*{margin:0;padding:0;box-sizing:border-box;}'+
+    'body{font-family:Arial,Helvetica,sans-serif;background:#f0f0f0;padding:6mm;}'+
+    '.top{text-align:center;margin-bottom:5mm;}'+
+    '.top button{background:#1a3a2a;color:#c9a050;border:none;padding:11px 28px;'+
+      'border-radius:7px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:6px;}'+
+    '.top p{font-size:10px;color:#666;}'+
+    '.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm;}'+
+    '.etq{background:#fff;border:1px solid #ddd;border-radius:3mm;break-inside:avoid;overflow:hidden;}'+
+    '.ef{padding:4mm 3mm 3mm;text-align:center;}'+
+    '.elogo{font-size:8pt;font-weight:900;color:#1a3a2a;letter-spacing:2px;margin-bottom:3mm;}'+
+    '.enm{font-size:8pt;font-weight:700;line-height:1.3;margin-bottom:2mm;color:#111;min-height:20px;}'+
+    '.ecat{font-size:7pt;color:#888;margin-bottom:1mm;}'+
+    '.etal{font-size:8.5pt;font-weight:700;color:#333;margin-bottom:2.5mm;}'+
+    '.epr{font-size:12pt;font-weight:900;color:#1a3a2a;}'+
+    '.dob{border-top:1.5px dashed #ccc;position:relative;margin:0 3mm;}'+
+    '.dob span{position:absolute;left:50%;transform:translateX(-50%) translateY(-50%);'+
+      'background:#fff;padding:0 2mm;font-size:5.5pt;color:#bbb;white-space:nowrap;}'+
+    '.eb{padding:4mm 3mm 3mm;text-align:center;background:#fafafa;}'+
+    '.eqr{width:24mm;height:24mm;display:block;margin:0 auto 2mm;}'+
+    '.eid{font-size:5.5pt;color:#aaa;letter-spacing:1px;margin-bottom:1mm;}'+
+    '.eweb{font-size:7pt;font-weight:700;color:#1a3a2a;}'+
+    '@media print{.top{display:none!important;}body{background:#fff;padding:2mm;}'+
+    '.grid{gap:3mm;}.etq{border:0.5px solid #ccc;}}'+
+    '@media(max-width:500px){.grid{grid-template-columns:repeat(2,1fr);}}'+
+    '</style></head><body>'+
+    '<div class="top">'+
+      '<button onclick="window.print()">🖨 Imprimir / Guardar PDF</button>'+
+      '<p>Imprime · Corta · Dobla por la línea punteada · Prende a la prenda con un seguro o hilo</p>'+
+    '</div>'+
+    '<div class="grid">'+items+'</div>'+
+    '</body></html>';
+}
+
+function abrirEtiqueta(id) {
+  var d=db();
+  var p=d.inventario.find(function(x){return x.id===id;});
+  if(!p)return;
+  var w=window.open('','_blank');
+  if(!w){toast('Permite las ventanas emergentes en el navegador',true);return;}
+  w.document.write(etiquetaWindowHTML([p]));
+  w.document.close();
+}
+
+function imprimirTodas() {
+  var d=db();
+  if(!d.inventario.length){toast('El inventario está vacío',true);return;}
+  var w=window.open('','_blank');
+  if(!w){toast('Permite las ventanas emergentes en el navegador',true);return;}
+  w.document.write(etiquetaWindowHTML(d.inventario));
+  w.document.close();
+}
+
+// ============================================================
+// ESCÁNER DE CÁMARA
+// ============================================================
+function activarEscaneo() {
+  abrirModal(
+    '<div class="modal-hd">📷 Escanear Etiqueta'+
+    '<button class="modal-x" onclick="cerrarModal()">×</button></div>'+
+    '<div id="qrReader" style="width:100%;"></div>'+
+    '<p style="text-align:center;color:var(--sub);font-size:.78rem;margin-top:12px;">'+
+    'Apunta la cámara trasera al QR de la etiqueta</p>'
+  );
+  setTimeout(function(){
+    if(typeof Html5Qrcode==='undefined'){
+      toast('Librería de cámara no cargó. Revisa internet.',true);
+      cerrarModal();return;
+    }
+    var scanner=new Html5Qrcode('qrReader');
+    window._qrScanner=scanner;
+    scanner.start(
+      {facingMode:'environment'},
+      {fps:10,qrbox:{width:220,height:220}},
+      function(texto){
+        if(texto.startsWith('CKRPRD:')){
+          var id=texto.replace('CKRPRD:','');
+          cerrarModal();
+          addCarrito(id);
+          toast('✅ Producto escaneado y agregado');
+        }
+      },
+      function(){}
+    ).catch(function(e){
+      toast('No se pudo acceder a la cámara',true);
+      cerrarModal();
+    });
+  },350);
+}
 </script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </body>
 </html>
