@@ -58,6 +58,9 @@ document.querySelectorAll('.product-card, .contact-card').forEach(el => {
 });
 
 
+// ===== STOCK WEBHOOK (Google Apps Script) =====
+const CKR_STOCK_WEBHOOK = ''; // <- Pegar aquí la URL del Apps Script después de desplegarlo
+
 // ===== CARRITO DE COMPRAS =====
 
 let cart = JSON.parse(localStorage.getItem('ckr_cart') || '[]');
@@ -392,6 +395,7 @@ async function checkoutWompi() {
     'redirect-url': 'https://ckrnow.com/?pago=exitoso'
   });
 
+  localStorage.setItem('ckr_pending_payment', JSON.stringify(cart.map(i => i.name)));
   closeCart();
   window.location.href = 'https://checkout.wompi.co/p/?' + params.toString();
 }
@@ -408,6 +412,15 @@ window.addEventListener('DOMContentLoaded', () => {
     const metodo = params.get('metodo') || 'wompi';
     if (typeof fbq !== 'undefined') {
       fbq('track', 'Purchase', { value: 0, currency: 'COP', content_type: 'product', content_category: metodo });
+    }
+    const _pending = JSON.parse(localStorage.getItem('ckr_pending_payment') || '[]');
+    if (_pending.length && CKR_STOCK_WEBHOOK) {
+      fetch(CKR_STOCK_WEBHOOK, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ productos: _pending.join(',') }).toString()
+      }).catch(function(){});
+      localStorage.removeItem('ckr_pending_payment');
     }
     cart = [];
     saveCart();
