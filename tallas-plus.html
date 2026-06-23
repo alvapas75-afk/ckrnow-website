@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tallas Plus · CKR Boutique</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --berry:#7A1B3C;
+      --blush:#F8EEF3;
+      --rose:#C8849A;
+      --mauve:#E8C4D4;
+      --dark:#2C1220;
+      --white:#FDFAF9;
+    }
+    body{font-family:'Inter',sans-serif;background:var(--white);color:var(--dark)}
+
+    header{background:var(--berry);padding:18px 20px;text-align:center}
+    .brand{font-family:'Playfair Display',serif;color:white;font-size:1.9rem;letter-spacing:5px;font-weight:700}
+    .tagline{color:var(--mauve);font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;margin-top:3px}
+
+    .hero{background:linear-gradient(135deg,var(--berry) 0%,#B5305A 100%);color:white;padding:36px 20px;text-align:center}
+    .hero h1{font-family:'Playfair Display',serif;font-size:2.4rem;margin-bottom:6px}
+    .hero p{opacity:.85;font-size:.82rem;letter-spacing:2px;text-transform:uppercase}
+    .hero .badge{display:inline-block;background:white;color:var(--berry);padding:5px 16px;border-radius:20px;font-size:.75rem;font-weight:600;margin-top:14px;letter-spacing:1px}
+
+    .filters{position:sticky;top:0;z-index:10;background:white;border-bottom:1px solid var(--mauve);padding:11px 14px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+    .filters::-webkit-scrollbar{display:none}
+    .filter-btn{flex-shrink:0;padding:6px 16px;border-radius:20px;border:1.5px solid var(--rose);background:white;color:var(--berry);font-size:.82rem;font-weight:500;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+    .filter-btn.active,.filter-btn:hover{background:var(--berry);color:white;border-color:var(--berry)}
+
+    .count{text-align:center;padding:10px;color:var(--rose);font-size:.78rem;letter-spacing:1px}
+
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:16px;max-width:1200px;margin:0 auto}
+    @media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
+    @media(min-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
+
+    .card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(122,27,60,.08);transition:transform .2s,box-shadow .2s}
+    .card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(122,27,60,.15)}
+
+    .card-img{width:100%;aspect-ratio:3/4;object-fit:cover;background:var(--blush);display:block}
+    .card-body{padding:11px}
+    .card-name{font-size:.8rem;font-weight:500;color:var(--dark);line-height:1.35;margin-bottom:8px;min-height:2.4em}
+    .card-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+    .card-price{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--berry)}
+    .card-size{background:var(--blush);color:var(--berry);padding:2px 8px;border-radius:10px;font-size:.68rem;font-weight:600;letter-spacing:.5px}
+    .wa-btn{display:block;width:100%;padding:9px;background:var(--berry);color:white;text-align:center;text-decoration:none;border-radius:8px;font-size:.77rem;font-weight:600;letter-spacing:.5px;transition:background .2s}
+    .wa-btn:hover{background:#5E1230}
+
+    footer{background:var(--dark);color:white;text-align:center;padding:28px 20px;margin-top:40px}
+    footer .fb{font-family:'Playfair Display',serif;font-size:1.5rem;letter-spacing:3px}
+    footer p{color:#9B7A87;font-size:.78rem;margin-top:8px}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">CKR BOUTIQUE</div>
+  <div class="tagline">Moda Femenina Premium · Colombia</div>
+</header>
+
+<div class="hero">
+  <h1>Tallas Plus</h1>
+  <p>Verano 2026 · Nueva Colección</p>
+  <span class="badge" id="hero-badge">28 Prendas Disponibles</span>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-filter="all">Todas</button>
+  <button class="filter-btn" data-filter="XL">XL</button>
+  <button class="filter-btn" data-filter="1XL">1XL</button>
+  <button class="filter-btn" data-filter="2XL">2XL</button>
+  <button class="filter-btn" data-filter="3XL">3XL</button>
+  <button class="filter-btn" data-filter="Unica">Única</button>
+</div>
+
+<p class="count" id="count">28 productos</p>
+<div class="grid" id="grid"></div>
+
+<footer>
+  <div class="fb">CKR</div>
+  <p>Envíos a todo Colombia · WhatsApp 301 760 4292</p>
+</footer>
+
+<script>
+const P=[
+  {id:"CKR-PLS-001",n:"Blusón en Seda Magenta Animal Print",p:180000,s:"XL",i:"1o4X-3l3dm0UEaTCT-mJWa8nYqwTKJLd4",w:"Blusón%20Seda%20Magenta%20Animal%20Print%20%24180.000"},
+  {id:"CKR-PLS-002",n:"Set de Falda y Top Amarillo Estampado Floral",p:320000,s:"XL",i:"1ISL0m6n7O9XZgzilEWMS7j7TOuAWZCAu",w:"Set%20Falda%20Top%20Amarillo%20Floral%20%24320.000"},
+  {id:"CKR-PLS-003",n:"Vestido Largo Blanco",p:320000,s:"3XL",i:"1M0iAjhJ18bHTyGXAVP2hBP6PyWIUKpco",w:"Vestido%20Largo%20Blanco%20%24320.000"},
+  {id:"CKR-PLS-004",n:"Blusón Negro",p:150000,s:"Unica",i:"1ayQkyU7gJTwFvOvLwV3Gl_k1W_9XBKcu",w:"Blusón%20Negro%20%24150.000"},
+  {id:"CKR-PLS-005",n:"Blusa en Arandelas Fucsia Estampada",p:180000,s:"XL",i:"1sSe-mGAhQvAoO4LNtL9htf9OIlXaLc7Y",w:"Blusa%20Arandelas%20Fucsia%20Estampada%20%24180.000"},
+  {id:"CKR-PLS-006",n:"Vestido en Lino Europeo Estampado Tie Dye",p:380000,s:"Unica",i:"13-zKFETt2O-XrTaWAia7f2Sn1DOlvcKm",w:"Vestido%20Lino%20Europeo%20Tie%20Dye%20%24380.000"},
+  {id:"CKR-PLS-007",n:"Pantalón Fucsia",p:150000,s:"1XL",i:"12I2bVRc86BGIaM_dGVmv88YptB6-5I99",w:"Pantalón%20Fucsia%20%24150.000"},
+  {id:"CKR-PLS-008",n:"Set en Lino Europeo Café Moca Estampado",p:480000,s:"Unica",i:"1DuQrkVMrY0Ng8StCUtG-xwIL30rkr6YG",w:"Set%20Lino%20Café%20Moca%20%24480.000"},
+  {id:"CKR-PLS-009",n:"Blusón en Seda Estampado",p:180000,s:"1XL",i:"1kgb-sL1kynTe24y5pSZH7boHL7U1aQMo",w:"Blusón%20Seda%20Estampado%20%24180.000"},
+  {id:"CKR-PLS-010",n:"Blusón Beige",p:130000,s:"Unica",i:"1o-Oo7202IpdB4i9LEIOMOitDbpVJsgFq",w:"Blusón%20Beige%20%24130.000"},
+  {id:"CKR-PLS-011",n:"Jeans Azul Alto Tiro",p:220000,s:"14",i:"1UuihqnIK0OJPfU4fP2aCwdk_9ONYab3p",w:"Jeans%20Azul%20Alto%20Tiro%20%24220.000"},
+  {id:"CKR-PLS-012",n:"Pantalón en Lino Beige",p:180000,s:"2XL-1XL",i:"1-X_EBoDUY3-T95kyy79zrc-eUggwDF1T",w:"Pantalón%20Lino%20Beige%20%24180.000"},
+  {id:"CKR-PLS-013",n:"Set de Short y Camisa",p:220000,s:"XL",i:"1pCnzvyhG6ch8syHCseg-gYQeI7J_r3dr",w:"Set%20de%20Short%20y%20Camisa%20%24220.000"},
+  {id:"CKR-PLS-014",n:"Vestido Largo Terracota",p:380000,s:"Unica",i:"1bBu_0Fde-gOO9yv91eAhfmKh6ESNMSzb",w:"Vestido%20Largo%20Terracota%20%24380.000"},
+  {id:"CKR-PLS-015",n:"Pantalón Estampado Vichy Negro y Blanco",p:280000,s:"XL",i:"1rowcsY3T969uOqairi-LYIWHTxaEk7h1",w:"Pantalón%20Vichy%20Negro%20y%20Blanco%20%24280.000"},
+  {id:"CKR-PLS-016",n:"Blusón Baby Blue",p:130000,s:"XL",i:"1k-Yqa35RMzvN9SMBL0eAHthGUMmvbYV4",w:"Blusón%20Baby%20Blue%20%24130.000"},
+  {id:"CKR-PLS-017",n:"Enterizo Verde en Lino Europeo",p:380000,s:"Unica",i:"1W1BqZq3yBAW8-W5AilyAzqAWUZEtKCHJ",w:"Enterizo%20Verde%20Lino%20Europeo%20%24380.000"},
+  {id:"CKR-PLS-018",n:"Enterizo Gris en Lino Europeo",p:380000,s:"Unica",i:"11osyvUvkjx27kt4ZQu7vlM27QpJtr5py",w:"Enterizo%20Gris%20Lino%20Europeo%20%24380.000"},
+  {id:"CKR-PLS-019",n:"Set de Pantalón y Blusón Palo de Rosa en Lino Europeo",p:480000,s:"Unica",i:"1zthpgFtpUOgb9F0CMKqI_da1jb_QsJpe",w:"Set%20Pantalón%20Blusón%20Palo%20Rosa%20Lino%20%24480.000"},
+  {id:"CKR-PLS-020",n:"Pantalón en Seda Verde Estampado",p:180000,s:"2XL",i:"1H68rAe6AAYmjtz1RpxKvcZJmI-H5mQjJ",w:"Pantalón%20Seda%20Verde%20Estampado%20%24180.000"},
+  {id:"CKR-PLS-021",n:"Blusón en Seda Verde Animal Print",p:180000,s:"XL",i:"12gp2i884cauQt8pZYNJo_r3UzJeOVkpe",w:"Blusón%20Seda%20Verde%20Animal%20Print%20%24180.000"},
+  {id:"CKR-PLS-022",n:"Falda Larga Blanca en Ojalillo",p:220000,s:"Unica",i:"1pDW__sGIYZFwHUFJf6GkK64DnsMsyVGn",w:"Falda%20Larga%20Blanca%20Ojalillo%20%24220.000"},
+  {id:"CKR-PLS-023",n:"Vestido Largo Plisado Animal Print",p:280000,s:"Unica",i:"1WoHrHNvHJ1pu1AB1bi0haOEhEewCY7ct",w:"Vestido%20Largo%20Plisado%20Animal%20Print%20%24280.000"},
+  {id:"CKR-PLS-024",n:"Pantalón de Listas Azul",p:220000,s:"XL",i:"1mzLPtw4FCUKzk1b-4L0q4oC2Zp_xyc05",w:"Pantalón%20de%20Listas%20Azul%20%24220.000"},
+  {id:"CKR-PLS-025",n:"Falda Blanca Larga con Encaje",p:220000,s:"Unica",i:"1Xvh4bEKCUddHjbkLfaa67fURiAA4bSRC",w:"Falda%20Blanca%20Larga%20con%20Encaje%20%24220.000"},
+  {id:"CKR-BLU-001",n:"Blusón Troquelado Geométrico Rosa Pink",p:180000,s:"L-XL",i:"1HaNh5jBf67rOCo8i9Zzh7ViHk20lFEZx",w:"Blusón%20Troquelado%20Geométrico%20Rosa%20Pink%20%24180.000"},
+  {id:"CKR-BLU-002",n:"Blusón en Encaje Palo de Rosa",p:180000,s:"L-XL",i:"1DYk6QDT9gactOTr_nKtTPYPl4b4U4481",w:"Blusón%20en%20Encaje%20Palo%20de%20Rosa%20%24180.000"},
+  {id:"CKR-BLU-003",n:"Blusón Fucsia Troquelado Geométrico",p:180000,s:"L-XL",i:"1U2UPtZtC6AcHBiUZ2bndkRAETQsPatZr",w:"Blusón%20Fucsia%20Troquelado%20Geométrico%20%24180.000"}
+];
+
+function fmt(p){return'$'+(p/1000).toFixed(0)+'.000'}
+function matchSize(sz,f){return sz.split(/[-,\/]+/).some(x=>x.trim()===f)||(f==='XL'&&sz==='L-XL')}
+
+function render(f){
+  const list=f==='all'?P:P.filter(x=>matchSize(x.s,f));
+  const n=list.length;
+  document.getElementById('count').textContent=n+' producto'+(n!==1?'s':'');
+  document.getElementById('hero-badge').textContent=n+' Prendas Disponibles';
+  document.getElementById('grid').innerHTML=list.map(x=>`
+    <div class="card">
+      <img class="card-img" src="https://lh3.googleusercontent.com/d/${x.i}" alt="${x.n}" loading="lazy">
+      <div class="card-body">
+        <p class="card-name">${x.n}</p>
+        <div class="card-meta">
+          <span class="card-price">${fmt(x.p)}</span>
+          <span class="card-size">${x.s==='Unica'?'Única':x.s}</span>
+        </div>
+        <a class="wa-btn" href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20${x.w}" target="_blank">Pedir por WhatsApp</a>
+      </div>
+    </div>`).join('');
+}
+
+document.querySelectorAll('.filter-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    render(b.dataset.filter);
+  });
+});
+
+render('all');
+</script>
+</body>
+</html>
