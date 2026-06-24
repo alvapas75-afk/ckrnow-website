@@ -100,6 +100,29 @@
     @media (min-width: 900px) {
       .nav-links li a { font-size: 0.65rem !important; letter-spacing: 0.8px; }
     }
+    /* ===== SECCIÓN SALE ===== */
+    #sale { background: #fff8f8; }
+    .sale-section-header h2 { color: #cc0000; }
+    .sale-section-header .section-sub { color: #cc0000; letter-spacing: 3px; }
+    .sale-section-header .section-desc { color: #555; }
+    .sale-badge { background: #cc0000 !important; color: #fff !important; font-weight: 700 !important; font-size: 0.78rem !important; letter-spacing: 1.5px; }
+    .product-price-original {
+      text-decoration: line-through;
+      color: #aaa;
+      font-size: 0.82rem;
+      font-family: var(--font-sans);
+      margin: 4px 0 0;
+      letter-spacing: 0.5px;
+    }
+    .sale-price { color: #cc0000 !important; font-size: 1.12rem !important; }
+    .sale-no-code {
+      font-size: 0.7rem;
+      color: #999;
+      text-align: center;
+      margin: 6px 0 0;
+      letter-spacing: 0.3px;
+      font-family: var(--font-sans);
+    }
     /* ===== ACCESORIO SUB-SECCIONES ===== */
     .acc-subsection { margin-bottom: 8px; }
     .acc-sub-title {
@@ -120,7 +143,7 @@
 
   <!-- BARRA PROMO -->
   <div class="promo-bar">
-    🎁 <strong>10% de descuento</strong> en tu primera compra · Usa el código <span class="promo-code">CKR10</span> · 🚚 <strong>Envío gratis</strong> a todo Colombia
+    🎁 <strong>10% de descuento</strong> en tu primera compra · Código <span class="promo-code">CKR10</span> · 🚚 <strong>Envío gratis</strong> a todo Colombia · <strong style="color:#8b0000">*No aplica en SALE</strong>
   </div>
 
   <!-- NAVBAR -->
@@ -128,6 +151,7 @@
     <div class="nav-inner">
       <div class="nav-logo">CKR <span>Boutique</span></div>
       <ul class="nav-links">
+        <li><a href="#sale" style="color:#cc0000;font-weight:700">🔥 SALE</a></li>
         <li><a href="#inicio">Inicio</a></li>
         <li><a href="#vestidos">Vestidos</a></li>
         <li><a href="#jumpers">Jumpers</a></li>
@@ -181,6 +205,210 @@
     <div class="value-item">✅ <span>100% Original y Exclusivo</span></div>
     <div class="value-item">📦 <span>Envíos a todo Colombia</span></div>
     <div class="value-item">💳 <span>Cuotas sin interés con Addi</span></div>
+  </section>
+
+  <!-- ===== SALE ===== -->
+  <section id="sale" class="collection">
+    <div class="section-header sale-section-header">
+      <p class="section-sub">🔥 Liquidación</p>
+      <h2>SALE — 50% OFF</h2>
+      <p class="section-desc">Prendas seleccionadas con <strong>50% de descuento</strong>. Stock limitado, precio final. Código CKR10 no aplica sobre precios de liquidación.</p>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1ZE384AhaRp2Gu7OgtoAudxhJDPlzrcmz" alt="Vestido en Seda Verde Asimétrico" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Vestido en Seda Verde Asimétrico</h3>
+          <p class="product-price-original">Antes: $280.000</p>
+          <p class="product-price sale-price">Hoy: $140.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="addToCart('Vestido en Seda Verde Asimétrico (SALE)', 140000, 'S', true); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20en%20Seda%20Verde%20Asim%C3%A9trico%20(SALE)%20%24140.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">⚠️ Precio SALE · código CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1Gdj3hdMeNNZcYObLF8hn9rtMnDayw82q" alt="Vestido en Seda Fucsia Drapeado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Vestido en Seda Fucsia Drapeado</h3>
+          <p class="product-price-original">Antes: $320.000</p>
+          <p class="product-price sale-price">Hoy: $160.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="addToCart('Vestido en Seda Fucsia Drapeado (SALE)', 160000, 'S', true); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20en%20Seda%20Fucsia%20Drapeado%20(SALE)%20%24160.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">⚠️ Precio SALE · código CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/12ECJQstryTWDewooNwbzY-2VUr0828wG" alt="Vestido Verde Lima Asimétrico" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Vestido Verde Lima Asimétrico</h3>
+          <p class="product-price-original">Antes: $320.000</p>
+          <p class="product-price sale-price">Hoy: $160.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="addToCart('Vestido Verde Lima Asimétrico (SALE)', 160000, 'S', true); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Verde%20Lima%20Asim%C3%A9trico%20(SALE)%20%24160.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">⚠️ Precio SALE · código CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1CURCOcV2Fo9NmTq20Wj_rC-w3f6PHmNl" alt="Vestido Corto Verde Lima" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Vestido Corto Verde Lima</h3>
+          <p class="product-price-original">Antes: $240.000</p>
+          <p class="product-price sale-price">Hoy: $120.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="addToCart('Vestido Corto Verde Lima (SALE)', 120000, 'S', true); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Corto%20Verde%20Lima%20(SALE)%20%24120.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">⚠️ Precio SALE · código CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1DzZUtjaTOY1U5U1V-R6nXvWPxacepM6J" alt="Set Pantalón y Top Verde Menta" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Set Pantalón y Top Verde Menta</h3>
+          <p class="product-price-original">Antes: $240.000</p>
+          <p class="product-price sale-price">Hoy: $120.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="addToCart('Set Pantalón y Top Verde Menta (SALE)', 120000, 'S', true); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Pantal%C3%B3n%20y%20Top%20Verde%20Menta%20(SALE)%20%24120.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">⚠️ Precio SALE · código CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1OyP_FHOnEB8z-G56p8QftOKhXlc_8txo" alt="Set Short y Top Azul Estampado Tie Dye" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Set Short y Top Azul Tie Dye</h3>
+          <p class="product-price-original">Antes: $320.000</p>
+          <p class="product-price sale-price">Hoy: $160.000 COP</p>
+          <p class="product-sizes">Talla: Única</p>
+          <button class="btn-agregar" onclick="addToCart('Set Short y Top Azul Tie Dye (SALE)', 160000, 'Única', true); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Short%20y%20Top%20Azul%20Tie%20Dye%20(SALE)%20%24160.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">⚠️ Precio SALE · código CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1mSMn4z0dI9CO2ngcejJl_4rz63qSTbk5" alt="Set Short y Top Lila" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Set Short y Top Lila</h3>
+          <p class="product-price-original">Antes: $160.000</p>
+          <p class="product-price sale-price">Hoy: $80.000 COP</p>
+          <p class="product-sizes">Talla: Única</p>
+          <button class="btn-agregar" onclick="addToCart('Set Short y Top Lila (SALE)', 80000, 'Única', true); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Short%20y%20Top%20Lila%20(SALE)%20%2480.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">⚠️ Precio SALE · código CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1vVM67SYoYGjMfr1HrE1mEGRdGiQRJHQ3" alt="Falda Lápiz con Abertura Azul Rey" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Falda Lápiz con Abertura Azul Rey</h3>
+          <p class="product-price-original">Antes: $160.000</p>
+          <p class="product-price sale-price">Hoy: $80.000 COP</p>
+          <p class="product-sizes">Talla: Única</p>
+          <button class="btn-agregar" onclick="addToCart('Falda Lápiz con Abertura Azul Rey (SALE)', 80000, 'Única', true); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Falda%20L%C3%A1piz%20Azul%20Rey%20(SALE)%20%2480.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">⚠️ Precio SALE · código CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1oISFVcrDAdRYRqEwkci2sykh8cNZvd8l" alt="Falda Naranja en Lino" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Falda Naranja en Lino</h3>
+          <p class="product-price-original">Antes: $180.000</p>
+          <p class="product-price sale-price">Hoy: $90.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="addToCart('Falda Naranja en Lino (SALE)', 90000, 'S', true); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Falda%20Naranja%20en%20Lino%20(SALE)%20%2490.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">⚠️ Precio SALE · código CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/16G1TfcDH2gE_x0W2hzN8R_R2srrKR2Be" alt="Pantalón Rojo Tiro Medio" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Pantalón Rojo Tiro Medio</h3>
+          <p class="product-price-original">Antes: $220.000</p>
+          <p class="product-price sale-price">Hoy: $110.000 COP</p>
+          <p class="product-sizes">Talla: Única</p>
+          <button class="btn-agregar" onclick="addToCart('Pantalón Rojo Tiro Medio (SALE)', 110000, 'Única', true); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantal%C3%B3n%20Rojo%20Tiro%20Medio%20(SALE)%20%24110.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">⚠️ Precio SALE · código CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1lnSQRD5GUPF-H7kG4djORJdRq2HTb5On" alt="Short Magenta de Pinzas" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">SALE</div>
+        </div>
+        <div class="product-info">
+          <h3>Short Magenta de Pinzas</h3>
+          <p class="product-price-original">Antes: $120.000</p>
+          <p class="product-price sale-price">Hoy: $80.000 COP</p>
+          <p class="product-sizes">Talla: Única</p>
+          <button class="btn-agregar" onclick="addToCart('Short Magenta de Pinzas (SALE)', 80000, 'Única', true); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Short%20Magenta%20de%20Pinzas%20(SALE)%20%2480.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">⚠️ Precio SALE · código CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="https://lh3.googleusercontent.com/d/1yrjnnQ8qOWZGZxC-bee5uxvBKbv3sfKu" alt="Top Rosa Pink con Cremallera" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Top Rosa Pink con Cremallera</h3>
+          <p class="product-price-original">Antes: $180.000</p>
+          <p class="product-price sale-price">Hoy: $90.000 COP</p>
+          <p class="product-sizes">Talla: Única</p>
+          <button class="btn-agregar" onclick="addToCart('Top Rosa Pink con Cremallera (SALE)', 90000, 'Única', true); openCart();">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Top%20Rosa%20Pink%20con%20Cremallera%20(SALE)%20%2490.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">⚠️ Precio SALE · código CKR10 no aplica</p>
+        </div>
+      </div>
+
+    </div>
   </section>
 
   <!-- ===== VESTIDOS ===== -->

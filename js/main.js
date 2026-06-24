@@ -98,12 +98,12 @@ function showToast() {
 }
 
 // ---- AGREGAR AL CARRITO ----
-function addToCart(name, price, size) {
+function addToCart(name, price, size, isSale) {
   const existing = cart.find(i => i.name === name && i.size === size);
   if (existing) {
     existing.qty++;
   } else {
-    cart.push({ name, price, size, qty: 1 });
+    cart.push({ name, price, size, qty: 1, isSale: !!isSale });
   }
   saveCart();
   updateCartBadge();
@@ -303,6 +303,9 @@ function checkoutWhatsApp() {
       total += item.price * item.qty;
     });
     msg += `━━━━━━━━━━━━━━━\n*TOTAL: ${formatPrice(total)}*\n\n`;
+    if (cart.some(i => i.isSale)) {
+      msg += `⚠️ *Incluye productos en SALE — código CKR10 no aplica sobre precios de liquidación.*\n\n`;
+    }
     msg += `📋 *Datos de envío:*\n`;
     msg += `👤 ${nombre}\n📧 ${email}\n📞 ${tel}\n📍 ${dir}`;
     if (typeof fbq !== 'undefined') {
@@ -331,6 +334,9 @@ function checkoutAddi() {
       msg += `   ${formatPrice(item.price * item.qty)}\n\n`;
     });
     msg += `━━━━━━━━━━━━━━━\n*TOTAL: ${formatPrice(total)}*\n\n`;
+    if (cart.some(i => i.isSale)) {
+      msg += `⚠️ *Incluye productos en SALE — código CKR10 no aplica sobre precios de liquidación.*\n\n`;
+    }
     msg += `📋 *Datos de envío:*\n`;
     msg += `👤 ${nombre}\n📧 ${email}\n📞 ${tel}\n📍 ${dir}\n\n`;
     msg += `¿Me puedes enviar el link de pago Addi?`;
