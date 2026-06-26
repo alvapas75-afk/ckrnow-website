@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SALE · CKR Boutique</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --berry:#7A1B3C;
+      --blush:#F8EEF3;
+      --rose:#C8849A;
+      --mauve:#E8C4D4;
+      --dark:#2C1220;
+      --white:#FDFAF9;
+      --sale-red:#C0392B;
+      --sale-orange:#E67E22;
+    }
+    body{font-family:'Inter',sans-serif;background:var(--white);color:var(--dark)}
+
+    header{background:var(--berry);padding:18px 20px;text-align:center}
+    .brand{font-family:'Playfair Display',serif;color:white;font-size:1.9rem;letter-spacing:5px;font-weight:700}
+    .tagline{color:var(--mauve);font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;margin-top:3px}
+
+    .hero{background:linear-gradient(135deg,#8B0000 0%,#C0392B 50%,#E67E22 100%);color:white;padding:36px 20px;text-align:center;position:relative;overflow:hidden}
+    .hero::before{content:'SALE';position:absolute;font-family:'Playfair Display',serif;font-size:12rem;font-weight:700;opacity:.05;top:50%;left:50%;transform:translate(-50%,-50%);letter-spacing:-8px;pointer-events:none}
+    .hero h1{font-family:'Playfair Display',serif;font-size:2.8rem;margin-bottom:4px;letter-spacing:6px}
+    .hero h2{font-size:1rem;opacity:.9;font-weight:300;letter-spacing:3px;margin-bottom:8px}
+    .hero .pct{font-size:4rem;font-weight:700;letter-spacing:-2px;line-height:1}
+    .hero p{opacity:.85;font-size:.82rem;letter-spacing:2px;text-transform:uppercase;margin-top:8px}
+    .hero .badge{display:inline-block;background:white;color:var(--sale-red);padding:5px 16px;border-radius:20px;font-size:.75rem;font-weight:700;margin-top:14px;letter-spacing:1px}
+
+    .filters{position:sticky;top:0;z-index:10;background:white;border-bottom:1px solid var(--mauve);padding:11px 14px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+    .filters::-webkit-scrollbar{display:none}
+    .filter-btn{flex-shrink:0;padding:6px 16px;border-radius:20px;border:1.5px solid var(--sale-red);background:white;color:var(--sale-red);font-size:.82rem;font-weight:500;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+    .filter-btn.active,.filter-btn:hover{background:var(--sale-red);color:white;border-color:var(--sale-red)}
+
+    .count{text-align:center;padding:10px;color:var(--rose);font-size:.78rem;letter-spacing:1px}
+
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:16px;max-width:1200px;margin:0 auto}
+    @media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
+    @media(min-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
+
+    .card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(122,27,60,.08);transition:transform .2s,box-shadow .2s;position:relative}
+    .card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(192,57,43,.2)}
+
+    .sale-badge{position:absolute;top:10px;right:10px;background:var(--sale-red);color:white;padding:4px 10px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:.5px;z-index:2}
+
+    .card-img{width:100%;aspect-ratio:3/4;object-fit:cover;background:var(--blush);display:block}
+    .card-body{padding:11px}
+    .card-name{font-size:.8rem;font-weight:500;color:var(--dark);line-height:1.35;margin-bottom:8px;min-height:2.4em}
+    .card-meta{margin-bottom:9px}
+    .price-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+    .card-price-old{font-size:.82rem;color:#999;text-decoration:line-through}
+    .card-price-new{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--sale-red)}
+    .size-row{display:flex;align-items:center;gap:6px}
+    .card-size{background:#FDECEC;color:var(--sale-red);padding:2px 8px;border-radius:10px;font-size:.68rem;font-weight:600;letter-spacing:.5px}
+    .savings{font-size:.68rem;color:var(--sale-orange);font-weight:600}
+    .wa-btn{display:block;width:100%;padding:9px;background:var(--sale-red);color:white;text-align:center;text-decoration:none;border-radius:8px;font-size:.77rem;font-weight:600;letter-spacing:.5px;transition:background .2s;margin-top:9px}
+    .wa-btn:hover{background:#A93226}
+
+    footer{background:var(--dark);color:white;text-align:center;padding:28px 20px;margin-top:40px}
+    footer .fb{font-family:'Playfair Display',serif;font-size:1.5rem;letter-spacing:3px}
+    footer p{color:#9B7A87;font-size:.78rem;margin-top:8px}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">CKR BOUTIQUE</div>
+  <div class="tagline">Moda Femenina Premium · Colombia</div>
+</header>
+
+<div class="hero">
+  <h1>SALE</h1>
+  <h2>Hasta</h2>
+  <div class="pct">50% OFF</div>
+  <p>Verano 2026 · Prendas seleccionadas</p>
+  <span class="badge" id="hero-badge">12 Prendas en Oferta</span>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-filter="all">Todas</button>
+  <button class="filter-btn" data-filter="S">S</button>
+  <button class="filter-btn" data-filter="M">M</button>
+  <button class="filter-btn" data-filter="L">L</button>
+  <button class="filter-btn" data-filter="Unica">Única</button>
+</div>
+
+<p class="count" id="count">12 productos</p>
+<div class="grid" id="grid"></div>
+
+<footer>
+  <div class="fb">CKR</div>
+  <p>Envíos a todo Colombia · WhatsApp 301 760 4292</p>
+</footer>
+
+<script>
+const P=[
+  {id:"CKR-SAL-001",n:"Jumper Estampado Floral Cut Out",a:280000,p:140000,s:"M",i:"1eahYCAAtJKIAogUI18JWQjfJyIJ3jHzE",w:"Jumper%20Estampado%20Floral%20Cut%20Out%20SALE%20%24140.000"},
+  {id:"CKR-SAL-002",n:"Vestido Blanco Corto Cut Out",a:280000,p:140000,s:"S",i:"1H2ptTxKhxPYKf03sQFjjv46TSWc_CsHv",w:"Vestido%20Blanco%20Corto%20Cut%20Out%20SALE%20%24140.000"},
+  {id:"CKR-SAL-003",n:"Blusa Drapeada Naranja",a:160000,p:80000,s:"S",i:"1Djcyw85peEs9iYXNC1ERTp8tAjusaDIC",w:"Blusa%20Drapeada%20Naranja%20SALE%20%2480.000"},
+  {id:"CKR-SAL-004",n:"Vestido Amarillo con Arandelas",a:280000,p:140000,s:"S",i:"10IC2ns_gEKEyZ6zm6C9eNvv-JZwY9njj",w:"Vestido%20Amarillo%20con%20Arandelas%20SALE%20%24140.000"},
+  {id:"CKR-SAL-005",n:"Vestido en Seda Beige",a:280000,p:140000,s:"S",i:"12ejy0-pdn7vavx3aRWJ8-Tb0KaJLelPP",w:"Vestido%20en%20Seda%20Beige%20SALE%20%24140.000"},
+  {id:"CKR-SAL-006",n:"Top Naranja",a:140000,p:70000,s:"S",i:"1BebdtBqKZkoSti1Mj9pN6DlHyI_s1eRi",w:"Top%20Naranja%20SALE%20%2470.000"},
+  {id:"CKR-SAL-007",n:"Set de Short y Blusa",a:180000,p:90000,s:"Unica",i:"1P21nNFuJkPbLD7ku9BLXqsboFtgC9me7",w:"Set%20de%20Short%20y%20Blusa%20SALE%20%2490.000"},
+  {id:"CKR-SAL-008",n:"Vestido Blanco Largo Cut Out",a:280000,p:140000,s:"L",i:"1GCkB-yG3QBc3yaH6Wj8XUEJ6UNc7WSeE",w:"Vestido%20Blanco%20Largo%20Cut%20Out%20SALE%20%24140.000"},
+  {id:"CKR-SAL-009",n:"Jumper Blanco",a:280000,p:140000,s:"L",i:"17MpBvGlo2tkN5TDWuEzq-mBoGr7tE2Aq",w:"Jumper%20Blanco%20SALE%20%24140.000"},
+  {id:"CKR-SAL-010",n:"Blusa Verde en Ojalillo",a:160000,p:80000,s:"S",i:"1LDWdWYyirm0he1nPyUxEeBgfcl_rHFPm",w:"Blusa%20Verde%20en%20Ojalillo%20SALE%20%2480.000"},
+  {id:"CKR-SAL-011",n:"Jumper Corto Rojo",a:180000,p:90000,s:"Unica",i:"1FQBGjU_xuRARQjEid62qm0w9UOlhdCNo",w:"Jumper%20Corto%20Rojo%20SALE%20%2490.000"},
+  {id:"CKR-SAL-012",n:"Bata Rosa Estampada Floral",a:320000,p:160000,s:"Unica",i:"1Vrvnhb0IsuXnjzu83BxP67T-i9YjZQQe",w:"Bata%20Rosa%20Estampada%20Floral%20SALE%20%24160.000"}
+];
+
+function fmt(p){return'$'+(p/1000).toFixed(0)+'.000'}
+function save(a,p){return'Ahorras '+'$'+((a-p)/1000).toFixed(0)+'.000'}
+
+function render(f){
+  const list=f==='all'?P:P.filter(x=>x.s===f);
+  const n=list.length;
+  document.getElementById('count').textContent=n+' producto'+(n!==1?'s':'');
+  document.getElementById('hero-badge').textContent=n+' Prendas en Oferta';
+  document.getElementById('grid').innerHTML=list.map(x=>`
+    <div class="card">
+      <span class="sale-badge">-50%</span>
+      <img class="card-img" src="https://lh3.googleusercontent.com/d/${x.i}" alt="${x.n}" loading="lazy">
+      <div class="card-body">
+        <p class="card-name">${x.n}</p>
+        <div class="card-meta">
+          <div class="price-row">
+            <span class="card-price-old">${fmt(x.a)}</span>
+            <span class="card-price-new">${fmt(x.p)}</span>
+          </div>
+          <div class="size-row">
+            <span class="card-size">${x.s==='Unica'?'Única':x.s}</span>
+            <span class="savings">${save(x.a,x.p)}</span>
+          </div>
+        </div>
+        <a class="wa-btn" href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20${x.w}" target="_blank">Pedir por WhatsApp</a>
+      </div>
+    </div>`).join('');
+}
+
+document.querySelectorAll('.filter-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    render(b.dataset.filter);
+  });
+});
+
+render('all');
+</script>
+</body>
+</html>
