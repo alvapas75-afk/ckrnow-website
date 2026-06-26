@@ -123,7 +123,7 @@ function render(f){
   document.getElementById('grid').innerHTML=list.map(x=>`
     <div class="card">
       <span class="sale-badge">-50%</span>
-      <img class="card-img" src="https://lh3.googleusercontent.com/d/${x.i}" alt="${x.n}" loading="lazy">
+      <img class="card-img" src="https://drive.google.com/thumbnail?id=${x.i}&sz=w600" alt="${x.n}" loading="lazy" onerror="this.style.background='var(--blush)'">
       <div class="card-body">
         <p class="card-name">${x.n}</p>
         <div class="card-meta">
