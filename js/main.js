@@ -404,7 +404,19 @@ async function checkoutWompi() {
   localStorage.setItem('ckr_pending_payment', JSON.stringify(cart.map(i => i.name)));
   localStorage.setItem('ckr_pending_total', total.toString());
   closeCart();
-  window.location.href = 'https://checkout.wompi.co/p/?' + params.toString();
+  // Usar form submit para evitar bloqueo de navegación async en Safari/móvil
+  const form = document.createElement('form');
+  form.method = 'GET';
+  form.action = 'https://checkout.wompi.co/p/';
+  params.forEach((value, key) => {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = value;
+    form.appendChild(input);
+  });
+  document.body.appendChild(form);
+  form.submit();
 }
 
 function closeSuccessModal() {
@@ -459,6 +471,5 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartBadge();
   setTimeout(() => {
     initSizeButtons();
-    injectAddiWidgets();
   }, 600);
 });
