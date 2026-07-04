@@ -918,10 +918,16 @@ function importarSitio() {
 // MÓDULO: CLIENTES
 // ============================================================
 function renderClienteList(list, hayBusqueda) {
+  var conteo={};
+  list.forEach(function(c){var k=(c.nombre||'').trim().toLowerCase();conteo[k]=(conteo[k]||0)+1;});
+  var visto={};
   return list.length ? list.map(function(c){
+    var k=(c.nombre||'').trim().toLowerCase();
+    var esDup=conteo[k]>1;
+    visto[k]=(visto[k]||0)+1;
     return '<div class="cli-row" onclick="verCliente(\''+c.id+'\')">'+
       '<div class="avatar">'+(c.nombre||'?').charAt(0).toUpperCase()+'</div>'+
-      '<div><div class="cli-nm">'+c.nombre+'</div>'+
+      '<div><div class="cli-nm">'+c.nombre+(esDup?' <span style="color:var(--oro);font-size:.72rem">('+visto[k]+' de '+conteo[k]+' con este nombre)</span>':'')+'</div>'+
       '<div class="cli-sub">'+(c.telefono||'Sin teléfono')+(c.ciudad?' · '+c.ciudad:'')+'</div>'+
       '<div class="cli-stat">'+(c.numCompras||0)+' compras · '+mon(c.totalComprado||0)+((c.saldoPendiente||0)>0?' · <span style="color:#ff6b6b">Debe '+mon(c.saldoPendiente)+'</span>':'')+'</div></div>'+
     '</div>';
