@@ -903,7 +903,7 @@ var CATALOGO = [
 function importarSitio() {
   var d=db();var count=0;
   CATALOGO.forEach(function(p){
-    if(d.inventario.find(function(x){return x.nombre===p.nombre;}))return;
+    if(d.inventario.find(function(x){return x.nombre===p.nombre&&x.talla===p.talla;}))return;
     d.inventario.push({id:uid('PRD'),nombre:p.nombre,categoria:p.categoria,
       talla:p.talla,precio:p.precio,costo:0,stock:1,notas:'',fechaIngreso:hoy()});
     count++;
