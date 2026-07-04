@@ -1035,7 +1035,10 @@ function verCliente(id) {
   var hHtml=compras.length?compras.map(function(v){
     return '<div class="mov-row"><div><div>'+v.items.map(function(i){return i.nombre;}).join(', ')+'</div>'+
       '<div class="mov-lbl">'+fecStr(v.fecha)+' · '+v.hora+'</div></div>'+
-      '<div class="mov-val mv-g">'+mon(v.total)+'</div></div>';
+      '<div style="display:flex;align-items:center;gap:8px">'+
+        '<div class="mov-val mv-g">'+mon(v.total)+'</div>'+
+        '<button class="btn-etq" onclick="eliminarVenta(\''+v.id+'\',\''+id+'\')" title="Eliminar venta">🗑</button>'+
+      '</div></div>';
   }).join(''):'<p style="color:var(--sub);font-size:.8rem;padding:12px 0">Sin compras registradas.</p>';
   abrirModal(
     '<div class="modal-hd">'+c.nombre+'<button class="modal-x" onclick="cerrarModal()">×</button></div>'+
@@ -1068,6 +1071,35 @@ function marcarPagado(id) {
   setTimeout(function(){verCliente(id);},50);
 }
 
+function eliminarVenta(id, clienteId) {
+  if(!confirm('¿Eliminar esta venta? Se devuelve el stock y se resta del total del cliente.'))return;
+  var d=db();
+  var v=d.ventas.find(function(x){return x.id===id;});
+  if(!v)return;
+  v.items.forEach(function(it){
+    var p=d.inventario.find(function(x){return x.id===it.prodId;});
+    if(p) p.stock=(p.stock||0)+it.qty;
+  });
+  if(v.clienteId){
+    var c=d.clientes.find(function(x){return x.id===v.clienteId;});
+    if(c){c.numCompras=Math.max(0,(c.numCompras||0)-1);c.totalComprado=Math.max(0,(c.totalComprado||0)-v.total);}
+  }
+  d.ventas=d.ventas.filter(function(x){return x.id!==id;});
+  guardar(d);
+  toast('🗑 Venta eliminada');
+  if(clienteId){cerrarModal();setTimeout(function(){verCliente(clienteId);},50);}
+  else ir('contabilidad');
+}
+
+function eliminarGasto(id) {
+  if(!confirm('¿Eliminar este gasto?'))return;
+  var d=db();
+  d.gastos=d.gastos.filter(function(x){return x.id!==id;});
+  guardar(d);
+  toast('🗑 Gasto eliminado');
+  ir('contabilidad');
+}
+
 // ============================================================
 // MÓDULO: CONTABILIDAD
 // ============================================================
@@ -1098,15 +1130,18 @@ function pageContabilidad() {
     return '<button class="ptab'+(periodo===p?' active':'')+'" onclick="periodo=\''+p+'\';ir(\'contabilidad\')">'+lbl+'</button>';
   }).join('');
 
-  var movs=vFil.map(function(v){return{tipo:'V',f:v.fecha,h:v.hora||'',desc:v.items.map(function(i){return i.nombre;}).join(', '),val:v.total,met:v.metodo};})
-    .concat(gFil.map(function(g){return{tipo:'G',f:g.fecha,h:g.hora||'',desc:g.descripcion,val:g.monto,met:g.categoria};}))
+  var movs=vFil.map(function(v){return{tipo:'V',id:v.id,f:v.fecha,h:v.hora||'',desc:v.items.map(function(i){return i.nombre;}).join(', '),val:v.total,met:v.metodo};})
+    .concat(gFil.map(function(g){return{tipo:'G',id:g.id,f:g.fecha,h:g.hora||'',desc:g.descripcion,val:g.monto,met:g.categoria};}))
     .sort(function(a,b){return(b.f+b.h).localeCompare(a.f+a.h);}).slice(0,30);
 
   var movHtml=movs.length?movs.map(function(m){
     return '<div class="mov-row"><div><div>'+m.desc+'</div>'+
       '<div class="mov-lbl">'+(m.h?m.h+' · ':'')+fecStr(m.f)+'</div></div>'+
-      '<div style="text-align:right"><div class="mov-val '+(m.tipo==='G'?'mv-r':'mv-g')+'">'+(m.tipo==='G'?'-':'')+mon(m.val)+'</div>'+
-      '<span class="mov-met">'+m.met+'</span></div></div>';
+      '<div style="display:flex;align-items:center;gap:8px">'+
+        '<div style="text-align:right"><div class="mov-val '+(m.tipo==='G'?'mv-r':'mv-g')+'">'+(m.tipo==='G'?'-':'')+mon(m.val)+'</div>'+
+        '<span class="mov-met">'+m.met+'</span></div>'+
+        '<button class="btn-etq" onclick="'+(m.tipo==='G'?'eliminarGasto':'eliminarVenta')+'(\''+m.id+'\')" title="Eliminar">🗑</button>'+
+      '</div></div>';
   }).join(''):'<div class="empty"><p>Sin movimientos en este período.</p></div>';
 
   return '<div class="sec-title">Contabilidad</div>'+
