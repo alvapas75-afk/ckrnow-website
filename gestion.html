@@ -73,10 +73,13 @@ body{background:var(--bg);color:var(--texto);font-family:'Helvetica Neue',Arial,
 .s-wrap{position:relative;}
 .s-drop{position:absolute;top:calc(100% + 3px);left:0;right:0;background:var(--card);
   border:1px solid var(--oro);border-radius:8px;z-index:50;max-height:200px;overflow-y:auto;display:none;}
-.s-opt{padding:11px 13px;cursor:pointer;border-bottom:1px solid var(--borde);font-size:.86rem;}
+.s-opt{padding:9px 13px;cursor:pointer;border-bottom:1px solid var(--borde);font-size:.86rem;display:flex;align-items:center;gap:9px;}
 .s-opt:last-child{border-bottom:none;}
 .s-opt:active{background:rgba(201,160,80,.1);}
 .s-name{font-weight:600;}.s-meta{font-size:.7rem;color:var(--sub);}
+.s-thumb{width:38px;height:38px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--verde);}
+.s-thumb-ph{width:38px;height:38px;border-radius:6px;flex-shrink:0;background:rgba(201,160,80,.08);
+  border:1px solid var(--borde);display:flex;align-items:center;justify-content:center;font-size:1rem;}
 .sale-list{margin-bottom:14px;}
 .sale-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--borde);}
 .sale-row:last-child{border-bottom:none;}
@@ -357,7 +360,9 @@ function pageVenta() {
   var total=0;
   ventaCarrito.forEach(function(it,i){
     total+=it.precio*it.qty;
+    var img=imgFor(it.nombre);
     filas+='<div class="sale-row">'+
+      (img?'<img class="s-thumb" src="'+img+'" loading="lazy" onerror="this.outerHTML=\'<div class=&quot;s-thumb-ph&quot;>👗</div>\'"/>':'<div class="s-thumb-ph">👗</div>')+
       '<div class="sr-info"><div class="sr-nm">'+it.nombre+'</div><div class="sr-tl">Talla: '+it.talla+'</div></div>'+
       '<div class="qty-ctrl">'+
         '<button class="qty-b" onclick="cQty('+i+',-1)">−</button>'+
@@ -399,9 +404,11 @@ function buscarProd(q) {
   var r=d.inventario.filter(function(p){return p.stock>0&&p.nombre.toLowerCase().includes(q.toLowerCase());});
   if(!r.length){drop.style.display='none';return;}
   drop.innerHTML=r.map(function(p){
+    var img=imgFor(p.nombre);
     return '<div class="s-opt" onclick="addCarrito(\''+p.id+'\')">'+
-      '<div class="s-name">'+p.nombre+'</div>'+
-      '<div class="s-meta">Talla: '+p.talla+' · Stock: '+p.stock+' · '+mon(p.precio)+'</div>'+
+      (img?'<img class="s-thumb" src="'+img+'" loading="lazy" onerror="this.outerHTML=\'<div class=&quot;s-thumb-ph&quot;>👗</div>\'"/>':'<div class="s-thumb-ph">👗</div>')+
+      '<div><div class="s-name">'+p.nombre+'</div>'+
+      '<div class="s-meta">Talla: '+p.talla+' · Stock: '+p.stock+' · '+mon(p.precio)+'</div></div>'+
     '</div>';
   }).join('');
   drop.style.display='block';
