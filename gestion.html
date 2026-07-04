@@ -231,7 +231,40 @@ function db() {
 }
 function base() { return {clientes:[],inventario:[],ventas:[],gastos:[]}; }
 function guardar(d) { localStorage.setItem(DB, JSON.stringify(d)); }
-function uid(p) { return p+Date.now().toString(36).toUpperCase(); }
+var uidSeq=0;
+function uid(p) { uidSeq++; return p+Date.now().toString(36).toUpperCase()+'-'+uidSeq.toString(36)+Math.random().toString(36).slice(2,6).toUpperCase(); }
+
+// Corrige IDs duplicados generados antes del fix de uid() (colisionaban por
+// usar solo Date.now(), asi que varios clientes/productos podian compartir
+// el mismo id y al abrir uno se mostraba otro distinto con el mismo id).
+function repararIdsDuplicados() {
+  var d=db();var cambios=0;
+  var vistos={};
+  (d.clientes||[]).forEach(function(x){
+    if(!x.id)return;
+    if(vistos[x.id]){ x.id=uid('CLI'); cambios++; }
+    else { vistos[x.id]=true; }
+  });
+  vistos={};
+  (d.inventario||[]).forEach(function(x){
+    if(!x.id)return;
+    if(vistos[x.id]){ x.id=uid('PRD'); cambios++; }
+    else { vistos[x.id]=true; }
+  });
+  vistos={};
+  ['ventas','gastos'].forEach(function(col){
+    (d[col]||[]).forEach(function(x){
+      if(!x.id)return;
+      if(vistos[x.id]){ x.id=uid(col.slice(0,3).toUpperCase()); cambios++; }
+      else { vistos[x.id]=true; }
+    });
+  });
+  // Las ventas que apuntaban a un id que ahora quedo duplicado siguen
+  // apuntando al PRIMER cliente/producto que tenia ese id (no se reasignan,
+  // ya que no hay forma de saber cual de los duplicados era el correcto).
+  if(cambios>0) guardar(d);
+  return cambios;
+}
 
 // ---- FORMATO ----
 function mon(n) { return '$'+Number(n||0).toLocaleString('es-CO')+' COP'; }
@@ -255,6 +288,8 @@ function pp(v) {
       actualizarFecha();
       if(db().inventario.length===0) importarSitio();
       if(db().clientes.length===0) cargarClientes();
+      var idsCorregidos=repararIdsDuplicados();
+      if(idsCorregidos>0) toast('🔧 '+idsCorregidos+' registros con ID duplicado corregidos');
       ir('venta');
     } else {
       document.getElementById('pinErr').textContent='PIN incorrecto';
