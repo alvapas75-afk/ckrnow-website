@@ -925,7 +925,7 @@ function pageClientes() {
       '<div class="avatar">'+(c.nombre||'?').charAt(0).toUpperCase()+'</div>'+
       '<div><div class="cli-nm">'+c.nombre+'</div>'+
       '<div class="cli-sub">'+(c.telefono||'Sin teléfono')+(c.ciudad?' · '+c.ciudad:'')+'</div>'+
-      '<div class="cli-stat">'+(c.numCompras||0)+' compras · '+mon(c.totalComprado||0)+'</div></div>'+
+      '<div class="cli-stat">'+(c.numCompras||0)+' compras · '+mon(c.totalComprado||0)+((c.saldoPendiente||0)>0?' · <span style="color:#ff6b6b">Debe '+mon(c.saldoPendiente)+'</span>':'')+'</div></div>'+
     '</div>';
   }).join('') :
   '<div class="empty"><div class="empty-icon">👥</div><p>Aún no hay clientes registrados.<br>Toca el botón de arriba para agregar.</p></div>';
@@ -945,6 +945,7 @@ function modalCliente(id) {
     '<div class="f"><label>Ciudad / Barrio</label><input id="cCiu" value="'+(c?c.ciudad||'':'')+'" placeholder="Ej: Cali, Granada"/></div>'+
     '<div class="f"><label>Email</label><input id="cEma" type="email" value="'+(c?c.email||'':'')+'" placeholder="correo@gmail.com"/></div>'+
     '<div class="f"><label>Notas (talla habitual, gustos...)</label><textarea id="cNot">'+(c?c.notas||'':'')+'</textarea></div>'+
+    '<div class="f"><label>Saldo pendiente (COP)</label><input id="cSaldo" type="number" value="'+(c?(c.saldoPendiente||0):0)+'" placeholder="0"/></div>'+
     '<button class="btn btn-p" onclick="guardarCliente(\''+(id||'')+'\')">'+(c?'Guardar cambios':'Registrar cliente')+'</button>'
   );
 }
@@ -958,13 +959,13 @@ function guardarCliente(id) {
     if(c){c.nombre=nom;c.telefono=document.getElementById('cTel').value.trim();
       c.ciudad=document.getElementById('cCiu').value.trim();
       c.email=document.getElementById('cEma').value.trim();
-      c.notas=document.getElementById('cNot').value.trim();}
+      c.notas=document.getElementById('cNot').value.trim();c.saldoPendiente=parseInt(document.getElementById('cSaldo').value)||0;}
   } else {
     d.clientes.push({id:uid('CLI'),nombre:nom,
       telefono:document.getElementById('cTel').value.trim(),
       ciudad:document.getElementById('cCiu').value.trim(),
       email:document.getElementById('cEma').value.trim(),
-      notas:document.getElementById('cNot').value.trim(),
+      notas:document.getElementById('cNot').value.trim(),saldoPendiente:parseInt(document.getElementById('cSaldo').value)||0,
       numCompras:0,totalComprado:0,fechaRegistro:hoy()});
   }
   guardar(d);cerrarModal();toast(id?'✅ Cliente actualizado':'✅ Cliente registrado');ir('clientes');
@@ -991,12 +992,24 @@ function verCliente(id) {
       '<div class="kpi"><div class="kpi-l">Compras</div><div class="kpi-v b">'+(c.numCompras||0)+'</div></div>'+
       '<div class="kpi"><div class="kpi-l">Total gastado</div><div class="kpi-v g" style="font-size:.95rem">'+mon(c.totalComprado||0)+'</div></div>'+
     '</div>'+
+    ((c.saldoPendiente||0)>0?'<div style="background:#3a1a1a;border:1px solid #ff6b6b;border-radius:10px;padding:10px 12px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:.7rem;color:#ff9b9b">Saldo pendiente</div><div style="font-weight:700;color:#ff6b6b">'+mon(c.saldoPendiente)+'</div></div><button class="btn btn-s btn-sm" onclick="marcarPagado(\''+id+'\')">Marcar pagado</button></div>':'')+
     '<div class="sec-title">Últimas compras</div>'+hHtml+
     '<div class="btn-row" style="margin-top:14px">'+
       '<button class="btn btn-s btn-sm" onclick="cerrarModal();setTimeout(function(){modalCliente(\''+id+'\');},50)">Editar</button>'+
       (c.telefono?'<a href="https://wa.me/'+c.telefono.replace(/\D/g,'')+'" target="_blank" style="flex:1;text-decoration:none"><button class="btn btn-p" style="width:100%">WhatsApp</button></a>':'')+
     '</div>'
   );
+}
+
+function marcarPagado(id) {
+  var d=db();
+  var c=d.clientes.find(function(x){return x.id===id;});
+  if(!c)return;
+  c.saldoPendiente=0;
+  guardar(d);
+  toast('✅ Saldo marcado como pagado');
+  cerrarModal();
+  setTimeout(function(){verCliente(id);},50);
 }
 
 // ============================================================
