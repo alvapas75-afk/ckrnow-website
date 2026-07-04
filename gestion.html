@@ -917,10 +917,8 @@ function importarSitio() {
 // ============================================================
 // MÓDULO: CLIENTES
 // ============================================================
-function pageClientes() {
-  var d=db();
-  var list=d.clientes.slice().sort(function(a,b){return(b.numCompras||0)-(a.numCompras||0);});
-  var html=list.length ? list.map(function(c){
+function renderClienteList(list, hayBusqueda) {
+  return list.length ? list.map(function(c){
     return '<div class="cli-row" onclick="verCliente(\''+c.id+'\')">'+
       '<div class="avatar">'+(c.nombre||'?').charAt(0).toUpperCase()+'</div>'+
       '<div><div class="cli-nm">'+c.nombre+'</div>'+
@@ -928,11 +926,28 @@ function pageClientes() {
       '<div class="cli-stat">'+(c.numCompras||0)+' compras · '+mon(c.totalComprado||0)+((c.saldoPendiente||0)>0?' · <span style="color:#ff6b6b">Debe '+mon(c.saldoPendiente)+'</span>':'')+'</div></div>'+
     '</div>';
   }).join('') :
-  '<div class="empty"><div class="empty-icon">👥</div><p>Aún no hay clientes registrados.<br>Toca el botón de arriba para agregar.</p></div>';
+  hayBusqueda ?
+    '<div class="empty"><div class="empty-icon">🔎</div><p>No se encontraron clientes con ese nombre.</p></div>' :
+    '<div class="empty"><div class="empty-icon">👥</div><p>Aún no hay clientes registrados.<br>Toca el botón de arriba para agregar.</p></div>';
+}
 
+function pageClientes() {
+  var d=db();
+  var list=d.clientes.slice().sort(function(a,b){return(b.numCompras||0)-(a.numCompras||0);});
   return '<div class="sec-title">Clientes ('+list.length+')</div>'+
     '<div style="margin-bottom:13px"><button class="btn btn-p btn-sm" onclick="modalCliente()">+ Nuevo Cliente</button></div>'+
-    html;
+    '<div class="f"><input type="text" id="buscaCli" placeholder="Buscar por nombre o apellido..." oninput="filtrarClientes(this.value)" autocomplete="off"/></div>'+
+    '<div id="cliListWrap">'+renderClienteList(list)+'</div>';
+}
+
+function filtrarClientes(q) {
+  var d=db();
+  q=(q||'').trim().toLowerCase();
+  var list=d.clientes.slice().sort(function(a,b){return(b.numCompras||0)-(a.numCompras||0);});
+  if(q){
+    list=list.filter(function(c){return (c.nombre||'').toLowerCase().includes(q);});
+  }
+  document.getElementById('cliListWrap').innerHTML=renderClienteList(list,!!q);
 }
 
 function modalCliente(id) {
