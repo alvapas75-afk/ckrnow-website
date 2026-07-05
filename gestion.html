@@ -500,7 +500,7 @@ function setFil(c){filtroInv=c;ir('inventario');}
 function modalProd(id) {
   var d=db();
   var p=id?d.inventario.find(function(x){return x.id===id;}):null;
-  var cats=['Vestidos','Conjuntos','Blusas','Shorts','Jeans','Pantalones','Jumpers','Accesorios','Otro'];
+  var cats=['Vestidos','Conjuntos','Blusas','Shorts','Jeans','Pantalones','Jumpers','Faldas','Accesorios','Hombres','Otro'];
   abrirModal(
     '<div class="modal-hd">'+(p?'Editar Producto':'Nuevo Producto')+'<button class="modal-x" onclick="cerrarModal()">×</button></div>'+
     (p&&imgFor(p.nombre)?'<img src="'+imgFor(p.nombre)+'" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-bottom:14px" loading="lazy"/>':'')+
@@ -974,7 +974,21 @@ var CATALOGO = [
   {nombre:'Reloj Michael Kors Bicolor',categoria:'Accesorios',talla:'N/A',precio:1800000},
   {nombre:'Reloj Michael Kors Plateado',categoria:'Accesorios',talla:'N/A',precio:1500000},
   {nombre:'Reloj Michael Kors Dorado Talko Rojo',categoria:'Accesorios',talla:'N/A',precio:1800000},
-  {nombre:'Perfume Ferragamo 100 ml',categoria:'Accesorios',talla:'N/A',precio:550000}
+  {nombre:'Perfume Ferragamo 100 ml',categoria:'Accesorios',talla:'N/A',precio:550000},
+  {nombre:'Camisuéter Rosado Náutica',categoria:'Hombres',talla:'L',precio:220000},
+  {nombre:'Camisuéter Rojo Náutica',categoria:'Hombres',talla:'L',precio:220000},
+  {nombre:'Camisuéter Azul Marino Náutica',categoria:'Hombres',talla:'L',precio:220000},
+  {nombre:'Camisuéter Verde Náutica',categoria:'Hombres',talla:'M',precio:220000},
+  {nombre:'Camisuéter Gris Oscuro Lacoste',categoria:'Hombres',talla:'L',precio:320000},
+  {nombre:'Camisuéter Negro Tommy Hilfiger',categoria:'Hombres',talla:'L',precio:250000},
+  {nombre:'Camisuéter de Listas Express',categoria:'Hombres',talla:'L',precio:190000},
+  {nombre:'Camisa Blanca en Lino Tommy Hilfiger',categoria:'Hombres',talla:'L',precio:320000},
+  {nombre:'Camisa Negra Tommy Hilfiger',categoria:'Hombres',talla:'L',precio:320000},
+  {nombre:'Camisa Vino Tinto Tommy Hilfiger',categoria:'Hombres',talla:'XL',precio:320000},
+  {nombre:'Camisa Vino Tinto Manga Corta Tommy Hilfiger',categoria:'Hombres',talla:'XL',precio:320000},
+  {nombre:'Camisa Azul Turquí Michael Kors',categoria:'Hombres',talla:'XL',precio:280000},
+  {nombre:'Suéter Azul Cuello en V Lacoste',categoria:'Hombres',talla:'XL',precio:180000},
+  {nombre:'Suéter Verde Agua Náutica',categoria:'Hombres',talla:'XL',precio:150000}
 ];
 
 // IMG_MAP — nombre de producto normalizado (minusculas, sin tildes) -> foto real tomada del catalogo de ckrnow.com
@@ -1288,7 +1302,21 @@ var IMG_MAP = {
   'reloj michael kors bicolor':'https://lh3.googleusercontent.com/d/1-UttbNwBiQ-5dMEhI3TqPiONagmeXJoM',
   'reloj michael kors plateado':'https://lh3.googleusercontent.com/d/1PGw01WGFvCG0uSWn5nakhu6PJ3mP0exi',
   'reloj michael kors dorado talko rojo':'https://lh3.googleusercontent.com/d/1BV7Xku8iUb-IqK__jKzv7zNkSLrd0tMO',
-  'perfume ferragamo 100 ml':'https://lh3.googleusercontent.com/d/1Sqn3BFKzsdVSnHssJELCsPS8G47k1TgD'
+  'perfume ferragamo 100 ml':'https://lh3.googleusercontent.com/d/1Sqn3BFKzsdVSnHssJELCsPS8G47k1TgD',
+  'camisueter rosado nautica':'https://lh3.googleusercontent.com/d/1eQO_KO8zrJmkNnWclavHftT4mTASPiE4',
+  'camisueter rojo nautica':'https://lh3.googleusercontent.com/d/1J45B7lnN8Ky9LnsTEoojyaNjur8eJ7co',
+  'camisueter azul marino nautica':'https://lh3.googleusercontent.com/d/1OBoVZXsaFv-jqZxG5VFCXXrP45AUbkeN',
+  'camisueter verde nautica':'https://lh3.googleusercontent.com/d/1YTZEbBYuLCcJ1EoVRf4sncxRujpmHBgy',
+  'camisueter gris oscuro lacoste':'https://lh3.googleusercontent.com/d/1lYoM_bD3LMQS2sRhxCP2HpmRa2q7fYV5',
+  'camisueter negro tommy hilfiger':'https://lh3.googleusercontent.com/d/1Ne9YfGf7ICb2TO8QIDm_oWTA81_UwRd1',
+  'camisueter de listas express':'https://lh3.googleusercontent.com/d/1BH_NmIYGF92wigPRAElOAmp-bK9cZ1DN',
+  'camisa blanca en lino tommy hilfiger':'https://lh3.googleusercontent.com/d/117QWctXan3M_Pt5pFAJtlgQ61zGVaV0P',
+  'camisa negra tommy hilfiger':'https://lh3.googleusercontent.com/d/177aTggS8cKD4oUK3rZaWB-dksJPdQYuJ',
+  'camisa vino tinto tommy hilfiger':'https://lh3.googleusercontent.com/d/1quTY7WyTxBzhwmYXuo387CeUuMEoOY6C',
+  'camisa vino tinto manga corta tommy hilfiger':'https://lh3.googleusercontent.com/d/1tPo2wvq1N3FqBMAgL1r9xfWIEzfiKuFy',
+  'camisa azul turqui michael kors':'https://lh3.googleusercontent.com/d/1a--lZ59ctXVM-oaqmpiOCz9BiCizztBu',
+  'sueter azul cuello en v lacoste':'https://lh3.googleusercontent.com/d/1wWGwN7LoH2KRz4hjM_rZG6-wYIubPx93',
+  'sueter verde agua nautica':'https://lh3.googleusercontent.com/d/1kPTsMKU0buWlp1wf-20awEzU9GFibO6p'
 };
 function imgFor(nombre) {
   var k=(nombre||'').toLowerCase();
