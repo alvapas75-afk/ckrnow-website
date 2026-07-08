@@ -401,7 +401,7 @@ function buscarProd(q) {
   var drop=document.getElementById('sDrop');
   if(!q){drop.style.display='none';return;}
   var d=db();
-  var r=d.inventario.filter(function(p){return p.stock>0&&p.nombre.toLowerCase().includes(q.toLowerCase());});
+  var r=d.inventario.filter(function(p){return p.stock>0&&sinTildes(p.nombre).includes(sinTildes(q));});
   if(!r.length){drop.style.display='none';return;}
   drop.innerHTML=r.map(function(p){
     var img=imgFor(p.nombre);
@@ -1440,10 +1440,11 @@ var IMG_MAP = {
   'vestido corto cloud dancer':'https://lh3.googleusercontent.com/d/1CqBnh0SdggLPcHcMA4gyYRtXMjgc6uiP',
   'sandalias plateadas':'https://lh3.googleusercontent.com/d/153Qj6UaGzjBCjG0bAeo8VXkG9fyTLOAj'
 };
+function sinTildes(s) {
+  return (s||'').toLowerCase().replace(/[áàä]/g,'a').replace(/[éèë]/g,'e').replace(/[íìï]/g,'i').replace(/[óòö]/g,'o').replace(/[úùü]/g,'u').replace(/ñ/g,'n');
+}
 function imgFor(nombre) {
-  var k=(nombre||'').toLowerCase();
-  k=k.replace(/[áàä]/g,'a').replace(/[éèë]/g,'e').replace(/[íìï]/g,'i').replace(/[óòö]/g,'o').replace(/[úùü]/g,'u').replace(/ñ/g,'n');
-  return IMG_MAP[k]||null;
+  return IMG_MAP[sinTildes(nombre)]||null;
 }
 
 function importarSitio() {
