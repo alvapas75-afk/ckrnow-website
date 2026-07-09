@@ -389,7 +389,7 @@ function pageVenta() {
         '<div class="total-bar"><div><div class="total-lbl">Total de la venta</div></div><div class="total-val">'+mon(total)+'</div></div>'+
         '<div class="f"><label>Cliente (opcional)</label><select id="vCli">'+cliOpts+'</select></div>'+
         '<div class="f"><label>Método de pago</label><select id="vMet">'+
-          '<option>Efectivo</option><option>Transferencia / Nequi</option><option>Tarjeta</option><option>Wompi</option>'+
+          '<option>Efectivo</option><option>Transferencia / Nequi</option><option>Tarjeta</option><option>Wompi</option><option>Crédito</option><option>Addi</option>'+
         '</select></div>'+
         '<div class="f"><label>Notas</label><textarea id="vNotas" placeholder="Opcional..."></textarea></div>'+
         '<div class="btn-row">'+
@@ -1727,7 +1727,7 @@ function pageContabilidad() {
       '<div class="mov-lbl">'+(m.h?m.h+' · ':'')+fecStr(m.f)+'</div></div>'+
       '<div style="display:flex;align-items:center;gap:8px">'+
         '<div style="text-align:right"><div class="mov-val '+(m.tipo==='G'?'mv-r':'mv-g')+'">'+(m.tipo==='G'?'-':'')+mon(m.val)+'</div>'+
-        '<span class="mov-met">'+m.met+'</span></div>'+
+        '<span class="mov-met"'+(m.tipo==='V'?' style="cursor:pointer;text-decoration:underline dotted" onclick="editarMetodoVenta(\''+m.id+'\')" title="Tocar para corregir método de pago"':'')+'>'+m.met+'</span></div>'+
         '<button class="btn-etq" onclick="'+(m.tipo==='G'?'eliminarGasto':'eliminarVenta')+'(\''+m.id+'\')" title="Eliminar">🗑</button>'+
       '</div></div>';
   }).join(''):'<div class="empty"><p>Sin movimientos en este período.</p></div>';
@@ -1745,6 +1745,31 @@ function pageContabilidad() {
       '<button class="btn btn-s btn-sm" onclick="exportar()">⬇ Exportar CSV</button>'+
     '</div>'+
     '<div class="card">'+movHtml+'</div>';
+}
+
+function editarMetodoVenta(id) {
+  var d=db();
+  var v=d.ventas.find(function(x){return x.id===id;});
+  if(!v)return;
+  var metodos=['Efectivo','Transferencia / Nequi','Tarjeta','Wompi','Crédito','Addi'];
+  abrirModal(
+    '<div class="modal-hd">Método de pago<button class="modal-x" onclick="cerrarModal()">×</button></div>'+
+    '<div class="f"><label>Método</label><select id="mVenMet">'+
+      metodos.map(function(m){return '<option'+(v.metodo===m?' selected':'')+'>'+m+'</option>';}).join('')+
+    '</select></div>'+
+    '<div class="btn-row"><button class="btn btn-p" style="width:100%" onclick="guardarMetodoVenta(\''+id+'\')">Guardar</button></div>'
+  );
+}
+
+function guardarMetodoVenta(id) {
+  var d=db();
+  var v=d.ventas.find(function(x){return x.id===id;});
+  if(!v)return;
+  v.metodo=document.getElementById('mVenMet').value;
+  guardar(d);
+  toast('✅ Método de pago actualizado');
+  cerrarModal();
+  ir('contabilidad');
 }
 
 function modalGasto() {
