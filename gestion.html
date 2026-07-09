@@ -1773,10 +1773,16 @@ function guardarMetodoVenta(id) {
 }
 
 function modalGasto() {
-  var cats=['Arriendo','Mercancía','Transporte / Envío','Publicidad','Empaque','Comisión','Servicios','Otro'];
+  var gruposCat={
+    'Negocio CKR':['Arriendo','Mercancía','Transporte / Envío','Publicidad','Empaque','Comisión','Servicios','Otro'],
+    'Personal':['Verduras','Carnes','Salida a Comer','Cumple Gaby','Zapatos','Arreglo Vestido','Consumo Carro','Shein','Gym','Apple','Creatina','Temu','Netflix','Servicios Personales','Celular','Anastasia','Drogas','Impuestos Gobierno','Pastillas','Chance','Uñas','Bolsas','Solventa','Inyección','Pelo','Envíos Personales','Madre','Seguro','Taty','Andreina','Cuavas','Tarjeta Éxito','Mamá','Sandalias','Concierto','Ludys','Ofrenda']
+  };
+  var catOpts=Object.keys(gruposCat).map(function(g){
+    return '<optgroup label="'+g+'">'+gruposCat[g].map(function(c){return '<option>'+c+'</option>';}).join('')+'</optgroup>';
+  }).join('');
   abrirModal(
     '<div class="modal-hd">Registrar Gasto<button class="modal-x" onclick="cerrarModal()">×</button></div>'+
-    '<div class="f"><label>Categoría</label><select id="gCat">'+cats.map(function(c){return'<option>'+c+'</option>';}).join('')+'</select></div>'+
+    '<div class="f"><label>Categoría</label><select id="gCat">'+catOpts+'</select></div>'+
     '<div class="f"><label>Descripción *</label><input id="gDes" placeholder="Ej: Envío DHL 3 prendas"/></div>'+
     '<div class="f"><label>Monto *</label><input id="gMon" type="number" placeholder="50000"/></div>'+
     '<div class="f"><label>Fecha</label><input id="gFec" type="date" value="'+hoy()+'"/></div>'+
