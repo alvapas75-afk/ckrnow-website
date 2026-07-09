@@ -59,7 +59,7 @@ document.querySelectorAll('.product-card, .contact-card').forEach(el => {
 
 
 // ===== STOCK WEBHOOK (Google Apps Script) =====
-const CKR_STOCK_WEBHOOK = ''; // <- Pegar aquí la URL del Apps Script después de desplegarlo
+const CKR_STOCK_WEBHOOK = 'https://script.google.com/macros/s/AKfycbwg9Exn5g-aEe3hpP3-MCHZz-mAUKXYve_FU1Sha7xwSbhLy7B6eWnvf1XrcrF29bs/exec';
 
 // ===== CARRITO DE COMPRAS =====
 
