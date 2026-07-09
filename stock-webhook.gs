@@ -3,6 +3,9 @@
 // 1) Recibe productos vendidos via Wompi y actualiza stock.json
 // 2) Crea guias de envio en Envia.com y le avisa al cliente por correo
 // 3) Guarda pedidos de Addi/WhatsApp pendientes de guia en pedidos.json
+// 4) Respalda ventas/clientes/inventario/gastos de gestion.html en Drive
+//    (privado — nunca en el repo publico de GitHub) para que no se pierdan
+//    al entrar desde otro celular/navegador o si se borra el localStorage.
 // Todo corre gratis sobre Google Apps Script, sin servidor propio.
 //
 // INSTRUCCIONES DE CONFIGURACION:
@@ -33,12 +36,13 @@
 // propietaria para que la cree manualmente como respaldo.
 // ============================================================
 
-var GITHUB_REPO   = 'alvapas75-afk/ckrnow-website';
-var STOCK_FILE    = 'stock.json';
-var PEDIDOS_FILE  = 'pedidos.json';
-var ENVIA_BASE    = 'https://api.envia.com';
-var QUERIES_BASE  = 'https://queries.envia.com';
-var OWNER_EMAIL   = 'alvapas75@gmail.com';
+var GITHUB_REPO      = 'alvapas75-afk/ckrnow-website';
+var STOCK_FILE       = 'stock.json';
+var PEDIDOS_FILE     = 'pedidos.json';
+var ENVIA_BASE       = 'https://api.envia.com';
+var QUERIES_BASE     = 'https://queries.envia.com';
+var OWNER_EMAIL      = 'alvapas75@gmail.com';
+var GESTION_BACKUP_FILE = 'ckr_gestion_backup.json';
 
 function doPost(e) {
   try {
@@ -64,6 +68,8 @@ function doPost(e) {
       var d = leerJsonGitHub(PEDIDOS_FILE);
       var p = d.contenido.pedidos.find(function(x){ return x.id === pedidoId; });
       if (p) crearGuia(p, pedidoId);
+    } else if (accion === 'guardar_backup') {
+      guardarBackupDrive(e.parameter.datos);
     }
   } catch (err) {
     Logger.log('Error en doPost: ' + err);
@@ -71,7 +77,11 @@ function doPost(e) {
   return ContentService.createTextOutput('ok');
 }
 
-function doGet() {
+function doGet(e) {
+  var accion = e && e.parameter && e.parameter.accion;
+  if (accion === 'cargar_backup') {
+    return cargarBackupDriveJsonp(e.parameter.callback);
+  }
   return ContentService.createTextOutput('CKR Backend activo ✓');
 }
 
@@ -260,6 +270,35 @@ function avisarFalloAPropietaria(pedido, motivo) {
       'Por favor crea la guía manualmente desde tu cuenta de Envia.com.';
     MailApp.sendEmail(OWNER_EMAIL, '⚠️ Revisar: guía de envío no se pudo crear', cuerpo);
   } catch (e) { Logger.log('No se pudo avisar a la propietaria: ' + e); }
+}
+
+// ============================================================
+// RESPALDO DE GESTION.HTML (Drive — privado, nunca en GitHub publico)
+// ============================================================
+function guardarBackupDrive(datosJson) {
+  if (!datosJson) return;
+  var archivos = DriveApp.getFilesByName(GESTION_BACKUP_FILE);
+  var contenido = JSON.stringify({
+    guardadoEn: new Date().toISOString(),
+    datos: JSON.parse(datosJson)
+  });
+  if (archivos.hasNext()) {
+    archivos.next().setContent(contenido);
+  } else {
+    DriveApp.createFile(GESTION_BACKUP_FILE, contenido, MimeType.PLAIN_TEXT);
+  }
+}
+
+// Se responde como JSONP (callback(...)) porque las respuestas de Apps
+// Script via fetch() normal desde el navegador chocan con CORS — con un
+// <script> dinamico en el navegador esto siempre funciona.
+function cargarBackupDriveJsonp(callback) {
+  var cb = callback || 'callback';
+  var archivos = DriveApp.getFilesByName(GESTION_BACKUP_FILE);
+  var cuerpo = archivos.hasNext() ? archivos.next().getBlob().getDataAsString() : 'null';
+  return ContentService
+    .createTextOutput(cb + '(' + cuerpo + ')')
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
 }
 
 // ============================================================

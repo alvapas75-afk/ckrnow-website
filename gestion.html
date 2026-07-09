@@ -244,7 +244,51 @@ function db() {
   try { return JSON.parse(localStorage.getItem(DB)) || base(); } catch(e){ return base(); }
 }
 function base() { return {clientes:[],inventario:[],ventas:[],gastos:[]}; }
-function guardar(d) { localStorage.setItem(DB, JSON.stringify(d)); }
+function guardar(d) { localStorage.setItem(DB, JSON.stringify(d)); sincronizarNube(d); }
+
+// ---- RESPALDO EN LA NUBE (Drive, via el mismo backend de Apps Script) ----
+function sincronizarNube(d) {
+  if (!CKR_STOCK_WEBHOOK) return;
+  fetch(CKR_STOCK_WEBHOOK, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ accion: 'guardar_backup', datos: JSON.stringify(d) }).toString()
+  }).then(function(){
+    localStorage.setItem('ckr_g2_ultimo_sync', Date.now().toString());
+  }).catch(function(){});
+}
+
+// Trae el respaldo de la nube (JSONP — evita problemas de CORS con Apps Script).
+// Si la nube tiene igual o mas ventas que el navegador actual, reemplaza los
+// datos locales — esto es lo que evita que se pierdan ventas al entrar desde
+// otro celular/navegador con localStorage vacio.
+function cargarBackupNube(onDone) {
+  if (!CKR_STOCK_WEBHOOK) { onDone(false); return; }
+  var cbName = 'ckrBackupCb' + Date.now();
+  var terminado = false;
+  var script = document.createElement('script');
+  function finalizar(restaurado) {
+    if (terminado) return;
+    terminado = true;
+    clearTimeout(timeoutId);
+    delete window[cbName];
+    if (script.parentNode) script.parentNode.removeChild(script);
+    onDone(restaurado);
+  }
+  var timeoutId = setTimeout(function(){ finalizar(false); }, 8000);
+  window[cbName] = function(resp) {
+    var local = db();
+    if (resp && resp.datos && (resp.datos.ventas||[]).length >= (local.ventas||[]).length) {
+      localStorage.setItem(DB, JSON.stringify(resp.datos));
+      finalizar(true);
+    } else {
+      finalizar(false);
+    }
+  };
+  script.src = CKR_STOCK_WEBHOOK + '?accion=cargar_backup&callback=' + cbName;
+  script.onerror = function(){ finalizar(false); };
+  document.body.appendChild(script);
+}
 var uidSeq=0;
 function uid(p) { uidSeq++; return p+Date.now().toString(36).toUpperCase()+'-'+uidSeq.toString(36)+Math.random().toString(36).slice(2,6).toUpperCase(); }
 
@@ -300,11 +344,14 @@ function pp(v) {
       document.getElementById('appMain').style.display='flex';
       document.getElementById('appMain').style.flexDirection='column';
       actualizarFecha();
-      if(db().inventario.length===0) importarSitio();
-      if(db().clientes.length===0) cargarClientes();
-      var idsCorregidos=repararIdsDuplicados();
-      if(idsCorregidos>0) toast('🔧 '+idsCorregidos+' registros con ID duplicado corregidos');
-      ir('venta');
+      cargarBackupNube(function(restaurado){
+        if(db().inventario.length===0) importarSitio();
+        if(db().clientes.length===0) cargarClientes();
+        var idsCorregidos=repararIdsDuplicados();
+        if(idsCorregidos>0) toast('🔧 '+idsCorregidos+' registros con ID duplicado corregidos');
+        if(restaurado) toast('☁️ Datos restaurados desde el respaldo en la nube');
+        ir('venta');
+      });
     } else {
       document.getElementById('pinErr').textContent='PIN incorrecto';
       pinActual='';
@@ -1753,6 +1800,9 @@ function pageContabilidad() {
   }).join('');
 
   return '<div class="sec-title">Contabilidad</div>'+
+    '<div class="card" id="respaldoNubeWrap" style="margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:10px">'+
+      htmlEstadoRespaldo()+
+    '</div>'+
     '<div class="card" id="pedidosPendientesWrap" style="margin-bottom:14px">'+
       '<div class="sec-title" style="margin:0 0 8px">📦 Pedidos pendientes de guía</div>'+
       '<p style="color:var(--sub);font-size:.78rem">Cargando...</p>'+
@@ -1796,6 +1846,38 @@ function guardarMetodoVenta(id) {
   toast('✅ Método de pago actualizado');
   cerrarModal();
   ir('contabilidad');
+}
+
+function htmlEstadoRespaldo() {
+  var ts = parseInt(localStorage.getItem('ckr_g2_ultimo_sync')||'0');
+  var texto;
+  if (!ts) {
+    texto = 'Aún no se ha sincronizado en la nube';
+  } else {
+    var minutos = Math.floor((Date.now()-ts)/60000);
+    texto = minutos < 1 ? 'Último respaldo: hace unos segundos' :
+      minutos < 60 ? 'Último respaldo: hace '+minutos+' min' :
+      'Último respaldo: hace '+Math.floor(minutos/60)+' h';
+  }
+  return '<div>☁️ <span id="respaldoTexto" style="color:var(--sub);font-size:.78rem">'+texto+'</span></div>'+
+    '<button class="btn btn-s btn-sm" onclick="sincronizarAhora(this)">Sincronizar ahora</button>';
+}
+
+function sincronizarAhora(btn) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Sincronizando...'; }
+  fetch(CKR_STOCK_WEBHOOK, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ accion: 'guardar_backup', datos: JSON.stringify(db()) }).toString()
+  }).then(function(){
+    localStorage.setItem('ckr_g2_ultimo_sync', Date.now().toString());
+    var wrap = document.getElementById('respaldoNubeWrap');
+    if (wrap) wrap.innerHTML = htmlEstadoRespaldo();
+    toast('☁️ Respaldo actualizado');
+  }).catch(function(){
+    toast('No se pudo sincronizar (revisa tu conexión)', true);
+    if (btn) { btn.disabled = false; btn.textContent = 'Sincronizar ahora'; }
+  });
 }
 
 function cargarPedidosPendientes() {
