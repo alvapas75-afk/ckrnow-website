@@ -229,6 +229,7 @@ var seccion = 'venta';
 var periodo = 'hoy';
 var ventaCarrito = [];
 var filtroInv = 'Todos';
+var filtroCliSaldo = false;
 
 // ---- DB ----
 var DB = 'ckr_g2';
@@ -1486,17 +1487,26 @@ function renderClienteList(list, hayBusqueda) {
 
 function pageClientes() {
   var d=db();
-  var list=d.clientes.slice().sort(function(a,b){return(b.numCompras||0)-(a.numCompras||0);});
+  var conSaldo=d.clientes.filter(function(c){return(c.saldoPendiente||0)>0;});
+  var list=filtroCliSaldo ? conSaldo.slice().sort(function(a,b){return(b.saldoPendiente||0)-(a.saldoPendiente||0);})
+    : d.clientes.slice().sort(function(a,b){return(b.numCompras||0)-(a.numCompras||0);});
   return '<div class="sec-title">Clientes ('+list.length+')</div>'+
-    '<div style="margin-bottom:13px"><button class="btn btn-p btn-sm" onclick="modalCliente()">+ Nuevo Cliente</button></div>'+
+    '<div style="margin-bottom:13px;display:flex;gap:8px;flex-wrap:wrap">'+
+      '<button class="btn btn-p btn-sm" onclick="modalCliente()">+ Nuevo Cliente</button>'+
+      '<button class="btn btn-sm '+(filtroCliSaldo?'btn-p':'btn-s')+'" onclick="toggleFiltroSaldo()">💰 Con saldo pendiente ('+conSaldo.length+')</button>'+
+    '</div>'+
     '<div class="f"><input type="text" id="buscaCli" placeholder="Buscar por nombre o apellido..." oninput="filtrarClientes(this.value)" autocomplete="off"/></div>'+
     '<div id="cliListWrap">'+renderClienteList(list)+'</div>';
 }
 
+function toggleFiltroSaldo() { filtroCliSaldo=!filtroCliSaldo; ir('clientes'); }
+
 function filtrarClientes(q) {
   var d=db();
   q=(q||'').trim().toLowerCase();
-  var list=d.clientes.slice().sort(function(a,b){return(b.numCompras||0)-(a.numCompras||0);});
+  var conSaldo=d.clientes.filter(function(c){return(c.saldoPendiente||0)>0;});
+  var list=filtroCliSaldo ? conSaldo.slice().sort(function(a,b){return(b.saldoPendiente||0)-(a.saldoPendiente||0);})
+    : d.clientes.slice().sort(function(a,b){return(b.numCompras||0)-(a.numCompras||0);});
   if(q){
     list=list.filter(function(c){return (c.nombre||'').toLowerCase().includes(q);});
   }
