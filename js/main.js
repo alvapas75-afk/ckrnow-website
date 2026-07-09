@@ -284,9 +284,10 @@ function submitCustomerForm() {
     alert('Por favor completa todos los campos para continuar.');
     return;
   }
+  const callback = _checkoutCallback; // guardar antes de cerrar, closeCustomerForm() lo pone en null
   closeCustomerForm();
   saveContactBrevo({ nombre, email, tel, dir: `${dir}, ${ciudad}, ${depto}` }); // guarda en Brevo en paralelo
-  if (_checkoutCallback) _checkoutCallback({ nombre, email, tel, dir, ciudad, depto, cp });
+  if (callback) callback({ nombre, email, tel, dir, ciudad, depto, cp });
 }
 
 // ---- REGISTRAR PEDIDO PENDIENTE DE GUÍA (Addi / WhatsApp — confirmación manual) ----
