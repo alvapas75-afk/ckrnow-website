@@ -6234,7 +6234,19 @@
       </div>
       <div class="cf-field">
         <label>Dirección de envío *</label>
-        <input id="cf-dir" type="text" placeholder="Calle, ciudad, departamento">
+        <input id="cf-dir" type="text" placeholder="Calle, número, barrio">
+      </div>
+      <div class="cf-field">
+        <label>Ciudad *</label>
+        <input id="cf-ciudad" type="text" placeholder="Ej: Cali">
+      </div>
+      <div class="cf-field">
+        <label>Departamento *</label>
+        <input id="cf-depto" type="text" placeholder="Ej: Valle del Cauca">
+      </div>
+      <div class="cf-field">
+        <label>Código postal *</label>
+        <input id="cf-cp" type="text" placeholder="Ej: 760001 (búscalo en Google si no lo sabes)">
       </div>
       <button class="cf-submit" onclick="submitCustomerForm()">Continuar →</button>
     </div>
@@ -6245,7 +6257,7 @@
     <div style="background:#fff;border-radius:16px;padding:40px 32px;max-width:360px;width:90%;text-align:center;">
       <div style="font-size:3rem;margin-bottom:12px">✅</div>
       <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#1a1a1a;margin-bottom:8px">¡Pago recibido!</h2>
-      <p style="color:#555;font-size:0.95rem;margin-bottom:20px">Tu pedido está confirmado. Te escribiremos por WhatsApp con los detalles del envío.</p>
+      <p style="color:#555;font-size:0.95rem;margin-bottom:20px">Tu pedido está confirmado. En unos minutos te llega un correo con tu guía de envío y el link para rastrearla.</p>
       <button onclick="closeSuccessModal()" style="background:#1a1a1a;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:0.95rem;cursor:pointer">Cerrar</button>
     </div>
   </div>

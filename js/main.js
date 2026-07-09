@@ -277,13 +277,32 @@ function submitCustomerForm() {
   const email  = document.getElementById('cf-email').value.trim();
   const tel    = document.getElementById('cf-tel').value.trim();
   const dir    = document.getElementById('cf-dir').value.trim();
-  if (!nombre || !email || !tel || !dir) {
+  const ciudad = document.getElementById('cf-ciudad').value.trim();
+  const depto  = document.getElementById('cf-depto').value.trim();
+  const cp     = document.getElementById('cf-cp').value.trim();
+  if (!nombre || !email || !tel || !dir || !ciudad || !depto || !cp) {
     alert('Por favor completa todos los campos para continuar.');
     return;
   }
   closeCustomerForm();
-  saveContactBrevo({ nombre, email, tel, dir }); // guarda en Brevo en paralelo
-  if (_checkoutCallback) _checkoutCallback({ nombre, email, tel, dir });
+  saveContactBrevo({ nombre, email, tel, dir: `${dir}, ${ciudad}, ${depto}` }); // guarda en Brevo en paralelo
+  if (_checkoutCallback) _checkoutCallback({ nombre, email, tel, dir, ciudad, depto, cp });
+}
+
+// ---- REGISTRAR PEDIDO PENDIENTE DE GUÍA (Addi / WhatsApp — confirmación manual) ----
+function registrarPedidoPendiente(cliente, total) {
+  if (!CKR_STOCK_WEBHOOK) return;
+  const pedido = {
+    cliente,
+    items: cart.map(i => ({ nombre: i.name, talla: i.size, qty: i.qty, precio: i.price })),
+    total,
+    metodo: cliente.metodo
+  };
+  fetch(CKR_STOCK_WEBHOOK, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ accion: 'registrar_pedido', pedido: JSON.stringify(pedido) }).toString()
+  }).catch(function(){});
 }
 
 // ---- CHECKOUT POR WHATSAPP ----
@@ -293,7 +312,7 @@ function checkoutWhatsApp() {
     return;
   }
   closeCart();
-  showCustomerForm(({ nombre, email, tel, dir }) => {
+  showCustomerForm(({ nombre, email, tel, dir, ciudad, depto, cp }) => {
     let msg = '¡Hola CKR Boutique! 🛍️ Quiero hacer el siguiente pedido:\n\n';
     let total = 0;
     cart.forEach((item, i) => {
@@ -307,10 +326,11 @@ function checkoutWhatsApp() {
       msg += `⚠️ *Incluye productos en SALE — código CKR10 no aplica sobre precios de liquidación.*\n\n`;
     }
     msg += `📋 *Datos de envío:*\n`;
-    msg += `👤 ${nombre}\n📧 ${email}\n📞 ${tel}\n📍 ${dir}`;
+    msg += `👤 ${nombre}\n📧 ${email}\n📞 ${tel}\n📍 ${dir}, ${ciudad}, ${depto}`;
     if (typeof fbq !== 'undefined') {
       fbq('track', 'InitiateCheckout', { value: total, currency: 'COP', num_items: cart.reduce((s,i)=>s+i.qty,0), content_type: 'product' });
     }
+    registrarPedidoPendiente({ nombre, email, tel, dir, ciudad, depto, cp, metodo: 'whatsapp' }, total);
     window.open('https://wa.me/573017604292?text=' + encodeURIComponent(msg), '_blank');
   });
 }
@@ -322,7 +342,7 @@ function checkoutAddi() {
     return;
   }
   closeCart();
-  showCustomerForm(({ nombre, email, tel, dir }) => {
+  showCustomerForm(({ nombre, email, tel, dir, ciudad, depto, cp }) => {
     const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
     if (typeof fbq !== 'undefined') {
       fbq('track', 'InitiateCheckout', { value: total, currency: 'COP', num_items: cart.reduce((s,i)=>s+i.qty,0), content_type: 'product' });
@@ -338,8 +358,9 @@ function checkoutAddi() {
       msg += `⚠️ *Incluye productos en SALE — código CKR10 no aplica sobre precios de liquidación.*\n\n`;
     }
     msg += `📋 *Datos de envío:*\n`;
-    msg += `👤 ${nombre}\n📧 ${email}\n📞 ${tel}\n📍 ${dir}\n\n`;
+    msg += `👤 ${nombre}\n📧 ${email}\n📞 ${tel}\n📍 ${dir}, ${ciudad}, ${depto}\n\n`;
     msg += `¿Me puedes enviar el link de pago Addi?`;
+    registrarPedidoPendiente({ nombre, email, tel, dir, ciudad, depto, cp, metodo: 'addi' }, total);
     window.open('https://wa.me/573017604292?text=' + encodeURIComponent(msg), '_blank');
   });
 }
@@ -373,50 +394,58 @@ async function generateIntegrityHash(reference, amountInCents) {
     .join('');
 }
 
-async function checkoutWompi() {
+function checkoutWompi() {
   if (cart.length === 0) {
     alert('Tu carrito está vacío. Agrega productos primero.');
     return;
   }
-
-  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-  const amountInCents = total * 100;
-  const reference = 'CKR-' + Date.now();
-  const integrityHash = await generateIntegrityHash(reference, amountInCents);
-
-  if (typeof fbq !== 'undefined') {
-    fbq('track', 'InitiateCheckout', {
-      value: total, currency: 'COP',
-      num_items: cart.reduce((sum, i) => sum + i.qty, 0),
-      content_type: 'product'
-    });
-  }
-
-  const params = new URLSearchParams({
-    'public-key': WOMPI_PUBLIC_KEY,
-    'currency': 'COP',
-    'amount-in-cents': amountInCents,
-    'reference': reference,
-    'signature:integrity': integrityHash,
-    'redirect-url': 'https://ckrnow.com/?pago=exitoso'
-  });
-
-  localStorage.setItem('ckr_pending_payment', JSON.stringify(cart.map(i => i.name)));
-  localStorage.setItem('ckr_pending_total', total.toString());
   closeCart();
-  // Usar form submit para evitar bloqueo de navegación async en Safari/móvil
-  const form = document.createElement('form');
-  form.method = 'GET';
-  form.action = 'https://checkout.wompi.co/p/';
-  params.forEach((value, key) => {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = key;
-    input.value = value;
-    form.appendChild(input);
+  showCustomerForm(async ({ nombre, email, tel, dir, ciudad, depto, cp }) => {
+    const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+    const amountInCents = total * 100;
+    const reference = 'CKR-' + Date.now();
+    const integrityHash = await generateIntegrityHash(reference, amountInCents);
+
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'InitiateCheckout', {
+        value: total, currency: 'COP',
+        num_items: cart.reduce((sum, i) => sum + i.qty, 0),
+        content_type: 'product'
+      });
+    }
+
+    const params = new URLSearchParams({
+      'public-key': WOMPI_PUBLIC_KEY,
+      'currency': 'COP',
+      'amount-in-cents': amountInCents,
+      'reference': reference,
+      'signature:integrity': integrityHash,
+      'redirect-url': 'https://ckrnow.com/?pago=exitoso'
+    });
+
+    localStorage.setItem('ckr_pending_payment', JSON.stringify(cart.map(i => i.name)));
+    localStorage.setItem('ckr_pending_total', total.toString());
+    localStorage.setItem('ckr_pending_order', JSON.stringify({
+      cliente: { nombre, email, tel, dir, ciudad, depto, cp },
+      items: cart.map(i => ({ nombre: i.name, talla: i.size, qty: i.qty, precio: i.price })),
+      total,
+      metodo: 'wompi'
+    }));
+
+    // Usar form submit para evitar bloqueo de navegación async en Safari/móvil
+    const form = document.createElement('form');
+    form.method = 'GET';
+    form.action = 'https://checkout.wompi.co/p/';
+    params.forEach((value, key) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = value;
+      form.appendChild(input);
+    });
+    document.body.appendChild(form);
+    form.submit();
   });
-  document.body.appendChild(form);
-  form.submit();
 }
 
 function closeSuccessModal() {
@@ -442,6 +471,15 @@ window.addEventListener('DOMContentLoaded', () => {
         body: new URLSearchParams({ productos: _pending.join(',') }).toString()
       }).catch(function(){});
       localStorage.removeItem('ckr_pending_payment');
+    }
+    const _pendingOrder = JSON.parse(localStorage.getItem('ckr_pending_order') || 'null');
+    if (_pendingOrder && CKR_STOCK_WEBHOOK) {
+      fetch(CKR_STOCK_WEBHOOK, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ accion: 'crear_guia', pedido: JSON.stringify(_pendingOrder) }).toString()
+      }).catch(function(){});
+      localStorage.removeItem('ckr_pending_order');
     }
     cart = [];
     saveCart();

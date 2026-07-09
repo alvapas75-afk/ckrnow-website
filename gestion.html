@@ -231,6 +231,7 @@ var ventaCarrito = [];
 var filtroInv = 'Todos';
 var filtroCliSaldo = false;
 var filtroGasto = 'Todos';
+var CKR_STOCK_WEBHOOK = ''; // <- misma URL del Apps Script que en js/main.js de index.html
 
 // ---- CATEGORIAS DE GASTOS (negocio vs personal) ----
 var CAT_NEGOCIO = ['Arriendo','Mercancía','Transporte / Envío','Publicidad','Empaque','Comisión','Servicios','Otro','Celular','Consumo Carro','Shein','Temu','Ludys','Cuavas','Envíos','Apple'];
@@ -339,6 +340,7 @@ function ir(s) {
                 s==='clientes' ? pageClientes() :
                 pageContabilidad();
   c.scrollTop=0;
+  if (s === 'contabilidad') cargarPedidosPendientes();
 }
 
 // ---- TOAST ----
@@ -1747,6 +1749,10 @@ function pageContabilidad() {
   }).join('');
 
   return '<div class="sec-title">Contabilidad</div>'+
+    '<div class="card" id="pedidosPendientesWrap" style="margin-bottom:14px">'+
+      '<div class="sec-title" style="margin:0 0 8px">📦 Pedidos pendientes de guía</div>'+
+      '<p style="color:var(--sub);font-size:.78rem">Cargando...</p>'+
+    '</div>'+
     '<div class="period-tabs">'+tabs+'</div>'+
     '<div class="kpis">'+
       '<div class="kpi"><div class="kpi-l">Ventas ('+vFil.length+')</div><div class="kpi-v g">'+mon(totV)+'</div></div>'+
@@ -1786,6 +1792,51 @@ function guardarMetodoVenta(id) {
   toast('✅ Método de pago actualizado');
   cerrarModal();
   ir('contabilidad');
+}
+
+function cargarPedidosPendientes() {
+  var wrap = document.getElementById('pedidosPendientesWrap');
+  if (!wrap) return;
+  fetch('https://ckrnow.com/pedidos.json?nocache=' + Date.now())
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var wrapNow = document.getElementById('pedidosPendientesWrap');
+      if (!wrapNow) return; // la propietaria pudo haber cambiado de pestaña mientras cargaba
+      var pendientes = (data.pedidos || []).filter(function(p){ return p.estado === 'pendiente_guia'; });
+      if (!pendientes.length) {
+        wrapNow.innerHTML = '<div class="sec-title" style="margin:0 0 8px">📦 Pedidos pendientes de guía</div>'+
+          '<p style="color:var(--sub);font-size:.78rem">No hay pedidos de Addi/WhatsApp esperando guía.</p>';
+        return;
+      }
+      wrapNow.innerHTML = '<div class="sec-title" style="margin:0 0 8px">📦 Pedidos pendientes de guía ('+pendientes.length+')</div>'+
+        pendientes.map(function(p){
+          return '<div class="mov-row"><div><div>'+p.cliente.nombre+' · '+(p.metodo||'')+'</div>'+
+            '<div class="mov-lbl">'+p.cliente.dir+', '+p.cliente.ciudad+' · '+mon(p.total)+'</div></div>'+
+            '<button class="btn btn-p btn-sm" onclick="crearGuiaManual(\''+p.id+'\',this)">Crear guía</button>'+
+          '</div>';
+        }).join('');
+    })
+    .catch(function(){
+      var wrapErr = document.getElementById('pedidosPendientesWrap');
+      if (wrapErr) wrapErr.innerHTML = '<div class="sec-title" style="margin:0 0 8px">📦 Pedidos pendientes de guía</div>'+
+        '<p style="color:var(--sub);font-size:.78rem">No se pudo cargar (revisa tu conexión).</p>';
+    });
+}
+
+function crearGuiaManual(pedidoId, btn) {
+  if (!CKR_STOCK_WEBHOOK) { toast('Falta configurar CKR_STOCK_WEBHOOK', true); return; }
+  if (btn) { btn.disabled = true; btn.textContent = 'Creando...'; }
+  fetch(CKR_STOCK_WEBHOOK, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ accion: 'marcar_guia_creada_manual', pedidoId: pedidoId }).toString()
+  }).then(function(){
+    toast('✅ Creando guía — revisa el correo del cliente en unos segundos');
+    setTimeout(cargarPedidosPendientes, 4000);
+  }).catch(function(){
+    toast('Error al conectar con el backend', true);
+    if (btn) { btn.disabled = false; btn.textContent = 'Crear guía'; }
+  });
 }
 
 function modalGasto() {
