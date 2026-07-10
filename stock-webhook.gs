@@ -82,14 +82,6 @@ function doGet(e) {
   if (accion === 'cargar_backup') {
     return cargarBackupDriveJsonp(e.parameter.callback);
   }
-  if (accion === 'test_backup') {
-    try {
-      guardarBackupDrive('{"ventas":[{"id":"DIAG"}],"clientes":[],"inventario":[],"gastos":[]}');
-      return ContentService.createTextOutput('OK-GUARDADO');
-    } catch (err) {
-      return ContentService.createTextOutput('ERROR: ' + err);
-    }
-  }
   return ContentService.createTextOutput('CKR Backend activo ✓');
 }
 
