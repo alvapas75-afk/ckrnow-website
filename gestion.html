@@ -507,7 +507,11 @@ function registrarVenta() {
   d.ventas.push(v);
   if(v.clienteId){
     var c=d.clientes.find(function(x){return x.id===v.clienteId;});
-    if(c){c.totalComprado=(c.totalComprado||0)+total;c.numCompras=(c.numCompras||0)+1;}
+    if(c){
+      c.totalComprado=(c.totalComprado||0)+total;
+      c.numCompras=(c.numCompras||0)+1;
+      if(v.metodo==='Crédito') c.saldoPendiente=(c.saldoPendiente||0)+total;
+    }
   }
   guardar(d);
   ventaCarrito=[];
@@ -1855,7 +1859,16 @@ function guardarMetodoVenta(id) {
   var d=db();
   var v=d.ventas.find(function(x){return x.id===id;});
   if(!v)return;
-  v.metodo=document.getElementById('mVenMet').value;
+  var metodoAnterior=v.metodo;
+  var metodoNuevo=document.getElementById('mVenMet').value;
+  v.metodo=metodoNuevo;
+  if(v.clienteId && metodoAnterior!==metodoNuevo){
+    var c=d.clientes.find(function(x){return x.id===v.clienteId;});
+    if(c){
+      if(metodoAnterior==='Crédito') c.saldoPendiente=Math.max(0,(c.saldoPendiente||0)-v.total);
+      if(metodoNuevo==='Crédito') c.saldoPendiente=(c.saldoPendiente||0)+v.total;
+    }
+  }
   guardar(d);
   toast('✅ Método de pago actualizado');
   cerrarModal();
