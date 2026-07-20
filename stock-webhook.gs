@@ -277,15 +277,30 @@ function avisarFalloAPropietaria(pedido, motivo) {
 // ============================================================
 function guardarBackupDrive(datosJson) {
   if (!datosJson) return;
-  var archivos = DriveApp.getFilesByName(GESTION_BACKUP_FILE);
   var contenido = JSON.stringify({
     guardadoEn: new Date().toISOString(),
     datos: JSON.parse(datosJson)
   });
+  var archivos = DriveApp.getFilesByName(GESTION_BACKUP_FILE);
   if (archivos.hasNext()) {
     archivos.next().setContent(contenido);
   } else {
     DriveApp.createFile(GESTION_BACKUP_FILE, contenido, MimeType.PLAIN_TEXT);
+  }
+
+  // Respaldo diario congelado (2026-07-20): ademas del archivo "vivo" de
+  // arriba (que se sobrescribe constantemente y por eso Drive no le guarda
+  // historial util), se guarda una copia con fecha que solo se toca durante
+  // ESE mismo dia. Al pasar la medianoche esa copia queda congelada para
+  // siempre, así que si el respaldo vivo alguna vez se corrompe (ej. un
+  // dispositivo cae de vuelta a los datos de fabrica y eso se auto-sincroniza)
+  // siempre queda al menos el estado de cada dia anterior para recuperar.
+  var nombreDiario = 'ckr_gestion_backup_' + Utilities.formatDate(new Date(), 'America/Bogota', 'yyyy-MM-dd') + '.json';
+  var diarios = DriveApp.getFilesByName(nombreDiario);
+  if (diarios.hasNext()) {
+    diarios.next().setContent(contenido);
+  } else {
+    DriveApp.createFile(nombreDiario, contenido, MimeType.PLAIN_TEXT);
   }
 }
 

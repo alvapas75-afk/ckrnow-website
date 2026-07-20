@@ -247,8 +247,16 @@ function base() { return {clientes:[],inventario:[],ventas:[],gastos:[]}; }
 function guardar(d) { localStorage.setItem(DB, JSON.stringify(d)); sincronizarNube(d); }
 
 // ---- RESPALDO EN LA NUBE (Drive, via el mismo backend de Apps Script) ----
+// Bandera de seguridad (agregada 2026-07-20 tras perder clientes/ventas): si
+// pp() detecta que este dispositivo quedo vacio Y no logro confirmar el
+// respaldo de la nube, se activa esta pausa para que NINGUN guardar()
+// posterior suba datos (posiblemente de fabrica) que sobrescriban el
+// respaldo bueno en Drive. Solo se libera si el respaldo de la nube se
+// logra cargar con exito, o si la propietaria confirma manualmente con el
+// boton "Sincronizar ahora".
 function sincronizarNube(d) {
   if (!CKR_STOCK_WEBHOOK) return;
+  if (localStorage.getItem('ckr_g2_sync_pausado') === '1') return;
   fetch(CKR_STOCK_WEBHOOK, {
     method: 'POST', mode: 'no-cors',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -262,32 +270,45 @@ function sincronizarNube(d) {
 // Si la nube tiene igual o mas ventas que el navegador actual, reemplaza los
 // datos locales — esto es lo que evita que se pierdan ventas al entrar desde
 // otro celular/navegador con localStorage vacio.
+// Reintenta hasta 3 veces con timeouts crecientes (2026-07-20: el intento
+// unico de 8s fallaba seguido con el archivo de respaldo ya pesando ~150KB
+// y el arranque en frio de Apps Script, causando falsos "restaurado:false").
 function cargarBackupNube(onDone) {
   if (!CKR_STOCK_WEBHOOK) { onDone(false); return; }
-  var cbName = 'ckrBackupCb' + Date.now();
-  var terminado = false;
-  var script = document.createElement('script');
-  function finalizar(restaurado) {
-    if (terminado) return;
-    terminado = true;
-    clearTimeout(timeoutId);
-    delete window[cbName];
-    if (script.parentNode) script.parentNode.removeChild(script);
-    onDone(restaurado);
-  }
-  var timeoutId = setTimeout(function(){ finalizar(false); }, 8000);
-  window[cbName] = function(resp) {
-    var local = db();
-    if (resp && resp.datos && (resp.datos.ventas||[]).length >= (local.ventas||[]).length) {
-      localStorage.setItem(DB, JSON.stringify(resp.datos));
-      finalizar(true);
-    } else {
-      finalizar(false);
+  var TIMEOUTS = [8000, 15000, 20000];
+  var intento = 0;
+  function intentar() {
+    var cbName = 'ckrBackupCb' + Date.now() + '_' + intento;
+    var terminado = false;
+    var script = document.createElement('script');
+    function finalizar(restaurado) {
+      if (terminado) return;
+      terminado = true;
+      clearTimeout(timeoutId);
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+      if (!restaurado && intento < TIMEOUTS.length - 1) {
+        intento++;
+        intentar();
+      } else {
+        onDone(restaurado);
+      }
     }
-  };
-  script.src = CKR_STOCK_WEBHOOK + '?accion=cargar_backup&callback=' + cbName;
-  script.onerror = function(){ finalizar(false); };
-  document.body.appendChild(script);
+    var timeoutId = setTimeout(function(){ finalizar(false); }, TIMEOUTS[intento]);
+    window[cbName] = function(resp) {
+      var local = db();
+      if (resp && resp.datos && (resp.datos.ventas||[]).length >= (local.ventas||[]).length) {
+        localStorage.setItem(DB, JSON.stringify(resp.datos));
+        finalizar(true);
+      } else {
+        finalizar(false);
+      }
+    };
+    script.src = CKR_STOCK_WEBHOOK + '?accion=cargar_backup&callback=' + cbName;
+    script.onerror = function(){ finalizar(false); };
+    document.body.appendChild(script);
+  }
+  intentar();
 }
 var uidSeq=0;
 function uid(p) { uidSeq++; return p+Date.now().toString(36).toUpperCase()+'-'+uidSeq.toString(36)+Math.random().toString(36).slice(2,6).toUpperCase(); }
@@ -345,6 +366,28 @@ function pp(v) {
       document.getElementById('appMain').style.flexDirection='column';
       actualizarFecha();
       cargarBackupNube(function(restaurado){
+        // Seguridad (agregada 2026-07-20 tras perder 279 clientes y ventas a
+        // credito): si este dispositivo no tiene NADA guardado y ademas no
+        // se pudo confirmar el respaldo de la nube (probable falla de red,
+        // no necesariamente que la nube este vacia), antes se cargaban datos
+        // de fabrica en silencio y el siguiente guardar() los subia,
+        // borrando el respaldo real para siempre. Ahora se avisa y se pausa
+        // la subida hasta que se confirme.
+        var vacioLocal = db().clientes.length===0 && db().inventario.length===0 && db().ventas.length===0;
+        if (!restaurado && vacioLocal) {
+          localStorage.setItem('ckr_g2_sync_pausado','1');
+          var continuar = confirm('⚠️ No se pudo conectar con el respaldo en la nube y este dispositivo no tiene datos guardados.\n\nSi continúas, se van a mostrar datos de fábrica (NO tus clientes/ventas reales) y quedarán bloqueados para subir a la nube hasta que lo confirmes manualmente — así no se arriesga a borrar tu respaldo real.\n\nRecomendado: cancela, revisa tu conexión a internet, y vuelve a entrar el PIN.\n\n¿Continuar de todas formas con datos de fábrica?');
+          if (!continuar) {
+            document.getElementById('lockScreen').style.display='';
+            document.getElementById('appMain').style.display='none';
+            pinActual='';
+            for(var k=0;k<4;k++) document.getElementById('d'+k).className='pin-dot';
+            return;
+          }
+          toast('⚠️ Sincronización pausada — usa "Sincronizar ahora" en Cuentas solo cuando confirmes que estos SÍ son tus datos reales', true);
+        } else if (restaurado) {
+          localStorage.removeItem('ckr_g2_sync_pausado');
+        }
         if(db().inventario.length===0) importarSitio();
         if(db().clientes.length===0) cargarClientes();
         var idsCorregidos=repararIdsDuplicados();
@@ -1888,6 +1931,7 @@ function htmlEstadoRespaldo() {
 
 function sincronizarAhora(btn) {
   if (btn) { btn.disabled = true; btn.textContent = 'Sincronizando...'; }
+  localStorage.removeItem('ckr_g2_sync_pausado'); // confirmacion manual explicita de la propietaria
   fetch(CKR_STOCK_WEBHOOK, {
     method: 'POST', mode: 'no-cors',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
