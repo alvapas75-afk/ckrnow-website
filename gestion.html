@@ -505,14 +505,28 @@ function pageVenta() {
 }
 
 // Lector fisico USB/Bluetooth (2026-07-20): estos lectores funcionan como
-// un teclado que "escribe" el contenido del código muy rápido y termina
-// con Enter — no necesitan camara ni libreria aparte, solo hay que leer lo
-// que escriben en el mismo campo de busqueda y detectar el prefijo
-// CKRPRD: que ya usan las etiquetas QR impresas (ver activarEscaneo()).
+// un teclado que "escribe" el contenido del código muy rápido — no
+// necesitan camara ni libreria aparte, solo hay que leer lo que escriben
+// en el mismo campo de busqueda y detectar el prefijo CKRPRD: que ya usan
+// las etiquetas QR impresas (ver activarEscaneo()). Algunos lectores NO
+// mandan Enter al terminar (probado 2026-07-20 con el lector real de la
+// propietaria), asi que ademas del atajo por Enter (onkeydown mas abajo)
+// se detecta por "pausa de escritura": como el lector escribe todo el
+// codigo en milisegundos (mucho mas rapido que una persona escribiendo),
+// si no llega ningun caracter nuevo en 150ms se asume que el escaneo ya
+// termino y se procesa solo.
+var _scanTimer = null;
 function leerCodigoEscaneado(input) {
+  clearTimeout(_scanTimer);
   var texto=input.value.trim();
   if(texto.startsWith('CKRPRD:')){
     var id=texto.replace('CKRPRD:','');
+    var d=db();
+    if (!d.inventario.some(function(p){return p.id===id;})) {
+      toast('No se encontró ese producto en el inventario', true);
+      input.value='';
+      return;
+    }
     addCarrito(id);
     toast('✅ Producto escaneado y agregado');
     document.getElementById('sDrop').style.display='none';
@@ -521,7 +535,16 @@ function leerCodigoEscaneado(input) {
 
 function buscarProd(q) {
   var drop=document.getElementById('sDrop');
-  if(!q || q.startsWith('CKRPRD:')){drop.style.display='none';return;}
+  if(!q){drop.style.display='none';return;}
+  if(q.startsWith('CKRPRD:')){
+    drop.style.display='none';
+    clearTimeout(_scanTimer);
+    _scanTimer=setTimeout(function(){
+      var input=document.getElementById('buscaProd');
+      if(input) leerCodigoEscaneado(input);
+    },150);
+    return;
+  }
   var d=db();
   var r=d.inventario.filter(function(p){return p.stock>0&&sinTildes(p.nombre).includes(sinTildes(q));});
   if(!r.length){drop.style.display='none';return;}
