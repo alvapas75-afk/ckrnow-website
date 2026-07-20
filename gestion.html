@@ -431,6 +431,14 @@ function ir(s) {
                 pageContabilidad();
   c.scrollTop=0;
   if (s === 'contabilidad') cargarPedidosPendientes();
+  // Enfoca el buscador en Venta para que un lector fisico de codigos (que
+  // funciona como teclado) pueda escanear sin necesidad de tocar el campo
+  // primero. No usa el atributo autofocus porque no se dispara de forma
+  // confiable al insertar HTML dinamico via innerHTML.
+  if (s === 'venta') {
+    var bp=document.getElementById('buscaProd');
+    if (bp) bp.focus();
+  }
 }
 
 // ---- TOAST ----
@@ -476,8 +484,8 @@ function pageVenta() {
   d.clientes.forEach(function(c){cliOpts+='<option value="'+c.id+'">'+c.nombre+'</option>';});
   return '<div class="sec-title">Nueva Venta</div>'+
     '<button class="btn btn-s" onclick="activarEscaneo()" style="margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.85rem;">📷 Escanear etiqueta con la cámara</button>'+
-    '<div class="card"><div class="f"><label>O busca por nombre</label>'+
-      '<div class="s-wrap"><input type="text" id="buscaProd" placeholder="Escribe el nombre del producto..." oninput="buscarProd(this.value)" autocomplete="off"/>'+
+    '<div class="card"><div class="f"><label>O busca por nombre — tambien acepta lector de código de barras/QR fisico</label>'+
+      '<div class="s-wrap"><input type="text" id="buscaProd" placeholder="Escribe el nombre del producto..." oninput="buscarProd(this.value)" onkeydown="if(event.key===\'Enter\')leerCodigoEscaneado(this)" autocomplete="off"/>'+
       '<div class="s-drop" id="sDrop"></div></div></div></div>'+
     (d.inventario.length===0 ?
       '<div class="empty"><div class="empty-icon">📦</div><p>El inventario está vacío.<br>Ve a <strong>Inventario → Importar del sitio</strong><br>para cargar los productos.</p></div>' :
@@ -496,9 +504,24 @@ function pageVenta() {
         '</div></div>');
 }
 
+// Lector fisico USB/Bluetooth (2026-07-20): estos lectores funcionan como
+// un teclado que "escribe" el contenido del código muy rápido y termina
+// con Enter — no necesitan camara ni libreria aparte, solo hay que leer lo
+// que escriben en el mismo campo de busqueda y detectar el prefijo
+// CKRPRD: que ya usan las etiquetas QR impresas (ver activarEscaneo()).
+function leerCodigoEscaneado(input) {
+  var texto=input.value.trim();
+  if(texto.startsWith('CKRPRD:')){
+    var id=texto.replace('CKRPRD:','');
+    addCarrito(id);
+    toast('✅ Producto escaneado y agregado');
+    document.getElementById('sDrop').style.display='none';
+  }
+}
+
 function buscarProd(q) {
   var drop=document.getElementById('sDrop');
-  if(!q){drop.style.display='none';return;}
+  if(!q || q.startsWith('CKRPRD:')){drop.style.display='none';return;}
   var d=db();
   var r=d.inventario.filter(function(p){return p.stock>0&&sinTildes(p.nombre).includes(sinTildes(q));});
   if(!r.length){drop.style.display='none';return;}
