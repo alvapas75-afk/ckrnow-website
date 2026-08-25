@@ -1813,7 +1813,7 @@ function registrarAbono(id) {
   setTimeout(function(){verCliente(id);},50);
 }
 
-function eliminarAbono(id, abonoId) {
+function eliminarAbono(id, abonoId, desdeContabilidad) {
   var d=db();
   var c=d.clientes.find(function(x){return x.id===id;});
   if(!c)return;
@@ -1823,8 +1823,8 @@ function eliminarAbono(id, abonoId) {
   c.abonos.splice(idx,1);
   guardar(d);
   toast('Abono eliminado');
-  cerrarModal();
-  setTimeout(function(){verCliente(id);},50);
+  if(desdeContabilidad){ ir('contabilidad'); }
+  else { cerrarModal(); setTimeout(function(){verCliente(id);},50); }
 }
 
 function marcarPagado(id) {
@@ -1884,7 +1884,14 @@ function pageContabilidad() {
   var gFil=d.gastos.filter(function(g){return enPeriodo(g.fecha);});
   var gFilNegocio=gFil.filter(function(g){return esGastoNegocio(g.categoria);});
   var gFilPersonal=gFil.filter(function(g){return !esGastoNegocio(g.categoria);});
+  var aFil=[];
+  d.clientes.forEach(function(c){
+    (c.abonos||[]).forEach(function(a){
+      if(enPeriodo(a.fecha)) aFil.push({id:a.id,fecha:a.fecha,monto:a.monto,clienteId:c.id,clienteNombre:c.nombre});
+    });
+  });
   var totV=vFil.reduce(function(s,v){return s+v.total;},0);
+  var totA=aFil.reduce(function(s,a){return s+a.monto;},0);
   var totGNeg=gFilNegocio.reduce(function(s,g){return s+g.monto;},0);
   var totGPer=gFilPersonal.reduce(function(s,g){return s+g.monto;},0);
   var costo=vFil.reduce(function(s,v){
@@ -1903,15 +1910,17 @@ function pageContabilidad() {
   var gMovs=filtroGasto==='Negocio'?gFilNegocio:filtroGasto==='Personal'?gFilPersonal:gFil;
   var movs=vFil.map(function(v){return{tipo:'V',id:v.id,f:v.fecha,h:v.hora||'',desc:v.items.map(function(i){return i.nombre;}).join(', '),val:v.total,met:v.metodo};})
     .concat(gMovs.map(function(g){return{tipo:'G',id:g.id,f:g.fecha,h:g.hora||'',desc:g.descripcion,val:g.monto,met:g.categoria,neg:esGastoNegocio(g.categoria)};}))
+    .concat(aFil.map(function(a){return{tipo:'A',id:a.id,clienteId:a.clienteId,f:a.fecha,h:'',desc:'Abono · '+a.clienteNombre,val:a.monto,met:'Abono'};}))
     .sort(function(a,b){return(b.f+b.h).localeCompare(a.f+a.h);}).slice(0,30);
 
   var movHtml=movs.length?movs.map(function(m){
+    var delOnclick=m.tipo==='G'?'eliminarGasto(\''+m.id+'\')':m.tipo==='A'?'eliminarAbono(\''+m.clienteId+'\',\''+m.id+'\',true)':'eliminarVenta(\''+m.id+'\')';
     return '<div class="mov-row"><div><div>'+m.desc+(m.tipo==='G'?' <span style="font-size:.62rem;color:var(--sub)">'+(m.neg?'· Negocio':'· Personal')+'</span>':'')+'</div>'+
       '<div class="mov-lbl">'+(m.h?m.h+' · ':'')+fecStr(m.f)+'</div></div>'+
       '<div style="display:flex;align-items:center;gap:8px">'+
         '<div style="text-align:right"><div class="mov-val '+(m.tipo==='G'?'mv-r':'mv-g')+'">'+(m.tipo==='G'?'-':'')+mon(m.val)+'</div>'+
         '<span class="mov-met"'+(m.tipo==='V'?' style="cursor:pointer;text-decoration:underline dotted" onclick="editarMetodoVenta(\''+m.id+'\')" title="Tocar para corregir método de pago"':'')+'>'+m.met+'</span></div>'+
-        '<button class="btn-etq" onclick="'+(m.tipo==='G'?'eliminarGasto':'eliminarVenta')+'(\''+m.id+'\')" title="Eliminar">🗑</button>'+
+        '<button class="btn-etq" onclick="'+delOnclick+'" title="Eliminar">🗑</button>'+
       '</div></div>';
   }).join(''):'<div class="empty"><p>Sin movimientos en este período.</p></div>';
 
@@ -1929,11 +1938,13 @@ function pageContabilidad() {
     '</div>'+
     '<div class="period-tabs">'+tabs+'</div>'+
     '<div class="kpis">'+
+      '<div class="kpi"><div class="kpi-l">Ingresos Totales</div><div class="kpi-v g">'+mon(totV+totA)+'</div></div>'+
       '<div class="kpi"><div class="kpi-l">Ventas ('+vFil.length+')</div><div class="kpi-v g">'+mon(totV)+'</div></div>'+
+      '<div class="kpi"><div class="kpi-l">Abonos cobrados ('+aFil.length+')</div><div class="kpi-v g">'+mon(totA)+'</div></div>'+
       '<div class="kpi"><div class="kpi-l">Utilidad Negocio</div><div class="kpi-v o">'+mon(util)+'</div></div>'+
       '<div class="kpi"><div class="kpi-l">Gastos Negocio</div><div class="kpi-v r">'+mon(totGNeg)+'</div></div>'+
       '<div class="kpi"><div class="kpi-l">Gastos Personales</div><div class="kpi-v r">'+mon(totGPer)+'</div></div>'+
-      '<div class="kpi"><div class="kpi-l">Transacciones</div><div class="kpi-v b">'+(vFil.length+gFil.length)+'</div></div>'+
+      '<div class="kpi"><div class="kpi-l">Transacciones</div><div class="kpi-v b">'+(vFil.length+gFil.length+aFil.length)+'</div></div>'+
     '</div>'+
     '<div style="display:flex;gap:8px;margin-bottom:13px">'+
       '<button class="btn btn-p btn-sm" onclick="modalGasto()">+ Registrar Gasto</button>'+
