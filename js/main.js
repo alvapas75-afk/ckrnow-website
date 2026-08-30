@@ -505,10 +505,31 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 
+// ---- ENLACE DIRECTO A PRODUCTO (deep link para historias/redes) ----
+// Uso: https://ckrnow.com/#prod-nombre-del-producto (ver id="prod-..." en cada tarjeta)
+function scrollToProductFromHash() {
+  const hash = window.location.hash;
+  if (!hash || !hash.startsWith('#prod-')) return;
+  const el = document.querySelector(hash);
+  if (!el) return;
+
+  const navbar = document.getElementById('navbar');
+  const promoBar = document.querySelector('.promo-bar');
+  const offset = (navbar ? navbar.offsetHeight : 0) + (promoBar ? promoBar.offsetHeight : 0) + 16;
+
+  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+  window.scrollTo({ top, behavior: 'smooth' });
+
+  el.classList.add('product-highlight');
+  setTimeout(() => el.classList.remove('product-highlight'), 2600);
+}
+
 // ---- INICIALIZAR ----
 document.addEventListener('DOMContentLoaded', () => {
   updateCartBadge();
   setTimeout(() => {
     initSizeButtons();
   }, 600);
+  setTimeout(scrollToProductFromHash, 500);
 });
+window.addEventListener('hashchange', scrollToProductFromHash);
