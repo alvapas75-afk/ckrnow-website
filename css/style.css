@@ -237,6 +237,11 @@ body {
 .product-sizes {
   font-size: 0.8rem; color: #888; margin-bottom: 10px; margin-top: -10px;
 }
+.product-shipping-note {
+  font-size: 0.72rem; color: #8a5a00; background: #fdf1d9;
+  border: 1px solid #f0dba8; border-radius: 4px;
+  padding: 5px 8px; margin: 0 0 8px; line-height: 1.35;
+}
 .product-price {
   font-size: 0.95rem; font-weight: 500;
   color: var(--gold); margin-bottom: 8px;
