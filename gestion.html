@@ -347,7 +347,7 @@ function repararIdsDuplicados() {
 
 // ---- FORMATO ----
 function mon(n) { return '$'+Number(n||0).toLocaleString('es-CO')+' COP'; }
-function hoy() { return new Date().toISOString().slice(0,10); }
+function hoy() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
 function hora() { return new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'}); }
 function fecStr(iso) { if(!iso)return''; var p=iso.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
 
