@@ -63,6 +63,7 @@ body {
 }
 .nav-dropdown:hover .nav-dropdown-menu,
 .nav-dropdown:focus-within .nav-dropdown-menu { display: flex; }
+.nav-dropdown.menu-cerrado .nav-dropdown-menu { display: none !important; }
 .nav-dropdown-menu li a {
   display: block;
   padding: 10px 20px;

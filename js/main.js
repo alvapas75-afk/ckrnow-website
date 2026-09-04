@@ -31,6 +31,24 @@ function toggleMenu() {
   menu.classList.toggle('open');
 }
 
+// Los desplegables del menú (Mujeres, Hombres, etc.) se abren con :hover.
+// Como el panel es alto, tapa la primera fila de productos de la sección a
+// la que se salta al hacer clic — y como seguir con el mouse ahí ENCIMA
+// cuenta como "hover", el panel se reabre solo y no deja hacer clic en
+// nada de abajo. Con la clase .menu-cerrado (display:none !important) lo
+// forzamos cerrado apenas se hace clic, sin importar que el mouse se
+// quede sobre esa zona, y solo se vuelve a habilitar cuando el mouse
+// realmente sale del todo del menú (mouseleave).
+document.querySelectorAll('.nav-dropdown').forEach(li => {
+  li.addEventListener('mouseleave', () => li.classList.remove('menu-cerrado'));
+});
+document.querySelectorAll('.nav-dropdown-menu a').forEach(a => {
+  a.addEventListener('click', () => {
+    const li = a.closest('.nav-dropdown');
+    if (li) li.classList.add('menu-cerrado');
+  });
+});
+
 window.addEventListener('scroll', () => {
   const nav = document.getElementById('navbar');
   if (window.scrollY > 50) {
