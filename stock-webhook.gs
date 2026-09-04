@@ -6,6 +6,8 @@
 // 4) Respalda ventas/clientes/inventario/gastos de gestion.html en Drive
 //    (privado — nunca en el repo publico de GitHub) para que no se pierdan
 //    al entrar desde otro celular/navegador o si se borra el localStorage.
+// 5) Checkout directo con Addi (pago en cuotas): crea la transaccion en la
+//    API de Addi y recibe el resultado final (aprobado/rechazado) por webhook.
 // Todo corre gratis sobre Google Apps Script, sin servidor propio.
 //
 // INSTRUCCIONES DE CONFIGURACION:
@@ -22,6 +24,9 @@
 //      ORIGEN_CIUDAD         = ciudad de recogida (ej: Cali)
 //      ORIGEN_DEPARTAMENTO   = departamento de recogida (ej: Valle del Cauca)
 //      ORIGEN_CODIGO_POSTAL  = codigo postal de recogida
+//      ADDI_CLIENT_ID        = Client Id del portal de aliados de Addi (seccion Integraciones)
+//      ADDI_CLIENT_SECRET    = Client Secret del portal de aliados de Addi
+//      ADDI_ALLY_SLUG        = ckrboutique-ecommerce
 // 4. Menu: Implementar -> Nueva implementacion
 //    Tipo: Aplicacion web
 //    Ejecutar como: Yo (alvapas75@gmail.com)
@@ -45,6 +50,14 @@ var OWNER_EMAIL      = 'alvapas75@gmail.com';
 var GESTION_BACKUP_FILE = 'ckr_gestion_backup.json';
 
 function doPost(e) {
+  // Addi llama esta URL directamente (no via e.parameter.accion normal) para
+  // avisar el resultado final de una transaccion. Se maneja aparte porque
+  // Addi exige una respuesta HTTP 200 con el MISMO cuerpo JSON que envio,
+  // asi que no puede pasar por el flujo generico de abajo (que siempre
+  // devuelve 'ok').
+  if (e.parameter.accion === 'addi_webhook') {
+    return addiProcesarWebhook(e);
+  }
   try {
     var accion = e.parameter.accion;
     if (!accion) {
@@ -81,6 +94,9 @@ function doGet(e) {
   var accion = e && e.parameter && e.parameter.accion;
   if (accion === 'cargar_backup') {
     return cargarBackupDriveJsonp(e.parameter.callback);
+  }
+  if (accion === 'addi_crear_transaccion') {
+    return addiCrearTransaccionJsonp(e.parameter);
   }
   return ContentService.createTextOutput('CKR Backend activo ✓');
 }
@@ -314,6 +330,209 @@ function cargarBackupDriveJsonp(callback) {
   return ContentService
     .createTextOutput(cb + '(' + cuerpo + ')')
     .setMimeType(ContentService.MimeType.JAVASCRIPT);
+}
+
+// ============================================================
+// ADDI — checkout directo en la pagina (pago en cuotas / BNPL)
+// ============================================================
+// Documentacion oficial:
+//  - Auth:          https://api-docs.addi-staging.com/auth/#/authentication
+//  - Transacciones: https://api-docs.addi-staging.com/integration/#/online%20application
+//
+// Propiedades del script que hay que configurar (Proyecto -> Propiedades del
+// proyecto -> Propiedades del script), ademas de las que ya existian:
+//   ADDI_CLIENT_ID     = Client Id que muestra el portal de aliados de Addi
+//   ADDI_CLIENT_SECRET = Client Secret que muestra el portal de aliados de Addi
+//   ADDI_ALLY_SLUG     = ckrboutique-ecommerce
+//
+// IMPORTANTE sobre seguridad del webhook: Addi exige que el callbackUrl este
+// protegido con autenticacion basica (usuario/contraseña que se generan en el
+// portal de aliados, seccion "Credenciales de notificacion"). Las Web Apps de
+// Google Apps Script NO exponen los headers HTTP de la peticion entrante
+// (no hay forma de leer el header Authorization que Addi envia), asi que no
+// es posible validar esas credenciales aqui. Como mitigacion, el webhook solo
+// procesa notificaciones cuyo "orderId" coincide con un pedido que este mismo
+// sistema genero y registro de antemano (son UUID unicos e imposibles de
+// adivinar) — alguien externo no podria falsificar el estado de una compra
+// real sin conocer ese identificador.
+
+var ADDI_AUTH_URL = 'https://auth.addi.com/oauth/token';
+var ADDI_API_URL  = 'https://api.addi.com/v1/online-applications';
+var ADDI_AUDIENCE = 'https://api.addi.com';
+
+function addiObtenerToken() {
+  var clientId = PropertiesService.getScriptProperties().getProperty('ADDI_CLIENT_ID');
+  var clientSecret = PropertiesService.getScriptProperties().getProperty('ADDI_CLIENT_SECRET');
+  if (!clientId || !clientSecret) {
+    throw new Error('Faltan ADDI_CLIENT_ID / ADDI_CLIENT_SECRET en las propiedades del script.');
+  }
+  var res = UrlFetchApp.fetch(ADDI_AUTH_URL, {
+    method: 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify({
+      audience: ADDI_AUDIENCE,
+      grant_type: 'client_credentials',
+      client_id: clientId,
+      client_secret: clientSecret
+    }),
+    muteHttpExceptions: true
+  });
+  var json = JSON.parse(res.getContentText());
+  if (!json.access_token) {
+    throw new Error('Addi no devolvio access_token: ' + res.getContentText().slice(0, 300));
+  }
+  return json.access_token;
+}
+
+// Llamado desde el navegador via JSONP (evita problemas de CORS con Apps
+// Script, mismo patron ya usado para el respaldo de gestion.html).
+function addiCrearTransaccionJsonp(params) {
+  var cb = params.callback || 'callback';
+  var resultado;
+  try {
+    resultado = addiCrearTransaccion(params);
+  } catch (err) {
+    Logger.log('Error creando transaccion Addi: ' + err);
+    resultado = { ok: false, error: 'No se pudo iniciar el pago con Addi. Intenta de nuevo o elige otro metodo.' };
+  }
+  return ContentService
+    .createTextOutput(cb + '(' + JSON.stringify(resultado) + ')')
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
+}
+
+function addiCrearTransaccion(params) {
+  var pedido = JSON.parse(params.pedido);
+  var cliente = pedido.cliente;
+  if (!cliente || !cliente.cedula) {
+    return { ok: false, error: 'Falta el numero de cedula para pagar con Addi.' };
+  }
+
+  var allySlug = PropertiesService.getScriptProperties().getProperty('ADDI_ALLY_SLUG') || 'ckrboutique-ecommerce';
+  var webhookBase = ScriptApp.getService().getUrl();
+  var orderId = Utilities.getUuid();
+
+  var partesNombre = (cliente.nombre || '').trim().split(/\s+/);
+  var firstName = partesNombre[0] || cliente.nombre;
+  var lastName = partesNombre.slice(1).join(' ') || partesNombre[0] || cliente.nombre;
+
+  var itemsAddi = (pedido.items || []).map(function (it) {
+    return {
+      sku: String(it.nombre).slice(0, 30),
+      name: it.nombre,
+      quantity: String(it.qty || 1),
+      unitPrice: Number(it.precio) || 0,
+      tax: 0,
+      category: 'moda',
+      brand: 'CKR Boutique'
+    };
+  });
+
+  var direccion = { lineOne: cliente.dir, city: cliente.ciudad, country: 'CO' };
+
+  var body = {
+    orderId: orderId,
+    totalAmount: String(pedido.total),
+    shippingAmount: '0',
+    totalTaxesAmount: '0',
+    currency: 'COP',
+    items: itemsAddi,
+    client: {
+      idType: 'CC',
+      idNumber: String(cliente.cedula).replace(/\D/g, ''),
+      firstName: firstName,
+      lastName: lastName,
+      email: cliente.email,
+      cellphone: (cliente.tel || '').replace(/\D/g, ''),
+      cellphoneCountryCode: '+57',
+      address: direccion
+    },
+    shippingAddress: direccion,
+    billingAddress: direccion,
+    allyUrlRedirection: {
+      callbackUrl: webhookBase + '?accion=addi_webhook',
+      redirectionUrl: 'https://ckrnow.com/addi-resultado.html?orderId=' + orderId
+    }
+  };
+
+  var token = addiObtenerToken();
+  var res = UrlFetchApp.fetch(ADDI_API_URL, {
+    method: 'post',
+    contentType: 'application/json',
+    headers: { Authorization: 'Bearer ' + token },
+    payload: JSON.stringify(body),
+    muteHttpExceptions: true,
+    followRedirects: false
+  });
+
+  var code = res.getResponseCode();
+  if (code === 301) {
+    var headers = res.getAllHeaders();
+    var location = headers['Location'] || headers['location'];
+    if (!location) {
+      Logger.log('Addi devolvio 301 sin Location: ' + JSON.stringify(headers));
+      return { ok: false, error: 'Addi no devolvio una URL de redireccion. Intenta de nuevo.' };
+    }
+    // Registrar el pedido pendiente reusando el flujo existente de
+    // Addi/WhatsApp, para que aparezca igual en gestion.html.
+    var pedidoParaRegistrar = {
+      cliente: cliente,
+      items: pedido.items,
+      total: pedido.total,
+      metodo: 'addi',
+      addiOrderId: orderId
+    };
+    registrarPedido(pedidoParaRegistrar);
+    return { ok: true, redirectUrl: location };
+  }
+
+  Logger.log('Error Addi (' + code + '): ' + res.getContentText());
+  var mensaje = 'No se pudo iniciar el pago con Addi.';
+  try {
+    var errJson = JSON.parse(res.getContentText());
+    if (errJson.message) mensaje = errJson.message;
+  } catch (e2) { /* dejar mensaje generico */ }
+  if (code === 409) mensaje = 'Ya tienes un credito activo con Addi. Contacta a Addi o paga con otro metodo.';
+  return { ok: false, error: mensaje };
+}
+
+// Recibe la notificacion final de Addi (aprobado/rechazado/etc). Addi exige
+// responder HTTP 200 con exactamente el mismo cuerpo JSON que envio.
+function addiProcesarWebhook(e) {
+  try {
+    var body = JSON.parse(e.postData.contents);
+    var r = leerJsonGitHub(PEDIDOS_FILE);
+    var data = r.contenido;
+    var p = data.pedidos.find(function (x) { return x.addiOrderId === body.orderId; });
+    if (p) {
+      var estadoAddi = String(body.status || '').toUpperCase();
+      p.estado = 'addi_' + estadoAddi.toLowerCase();
+      p.addiApplicationId = body.applicationId;
+      p.addiApprovedAmount = body.approvedAmount;
+      escribirJsonGitHub(PEDIDOS_FILE, data, 'Addi ' + estadoAddi + ': ' + p.cliente.nombre, r.sha);
+      if (estadoAddi === 'APPROVED') {
+        crearGuia(p, p.id);
+        avisarPropietariaVentaAddi(p);
+      }
+    } else {
+      Logger.log('Webhook de Addi con orderId desconocido: ' + body.orderId);
+    }
+  } catch (err) {
+    Logger.log('Error procesando webhook de Addi: ' + err);
+  }
+  // Responder EXACTAMENTE el mismo cuerpo recibido, como exige Addi.
+  return ContentService
+    .createTextOutput(e.postData.contents)
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function avisarPropietariaVentaAddi(pedido) {
+  try {
+    var cuerpo = '¡Nueva venta aprobada con Addi! 🎉\n\n' +
+      'Cliente: ' + pedido.cliente.nombre + ' · ' + pedido.cliente.tel + ' · ' + pedido.cliente.email + '\n' +
+      'Total: ' + pedido.total + '\n\n' +
+      'La guia de envio se esta creando automaticamente (revisa el correo de confirmacion al cliente).';
+    MailApp.sendEmail(OWNER_EMAIL, '✅ Venta aprobada con Addi', cuerpo);
+  } catch (e) { Logger.log('No se pudo avisar la venta Addi: ' + e); }
 }
 
 // ============================================================

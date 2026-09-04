@@ -1,7 +1,7 @@
 // ===== CKR BOUTIQUE — Main JS + Carrito de Compras =====
 
 // ===== ADDI — CONFIGURACIÓN =====
-const ADDI_ALLY_SLUG = 'cloakroomstore-ecommerce';
+const ADDI_ALLY_SLUG = 'ckrboutique-ecommerce';
 
 // ===== BREVO — EMAIL MARKETING (sin API key, via formulario público) =====
 const BREVO_FORM_URL = 'https://47b1f749.sibforms.com/serve/MUIFAA-IsvjPheutjKfFn3MDr4wtyygWknBQ-3LRZ6zcMVkrL6cHkZUv9rg-3WcO_L3rvvedlcz07gCsbgNEIZfiRfBcWFkbmuqbZuikLBoW2WAopiFAL18t3RbbOJZcEJCCeFpzqYb4upPWBGgrSNnyALLw00jVDHfJl7gNje6rJvaVeIJLU6LmQQHvf1L9tdBIRzRDBPLVK_tkgQ==';
@@ -261,9 +261,12 @@ function initSizeButtons() {
 
 // ---- FORMULARIO DE DATOS DEL CLIENTE ----
 let _checkoutCallback = null;
+let _checkoutRequiereCedula = false;
 
-function showCustomerForm(callback) {
+function showCustomerForm(callback, requiereCedula) {
   _checkoutCallback = callback;
+  _checkoutRequiereCedula = !!requiereCedula;
+  document.getElementById('cf-cedula-field').style.display = _checkoutRequiereCedula ? 'block' : 'none';
   document.getElementById('customerFormModal').style.display = 'flex';
 }
 
@@ -274,6 +277,7 @@ function closeCustomerForm() {
 
 function submitCustomerForm() {
   const nombre = document.getElementById('cf-nombre').value.trim();
+  const cedula = document.getElementById('cf-cedula').value.trim();
   const email  = document.getElementById('cf-email').value.trim();
   const tel    = document.getElementById('cf-tel').value.trim();
   const dir    = document.getElementById('cf-dir').value.trim();
@@ -284,10 +288,14 @@ function submitCustomerForm() {
     alert('Por favor completa todos los campos para continuar.');
     return;
   }
+  if (_checkoutRequiereCedula && !cedula) {
+    alert('Para pagar con Addi necesitamos tu número de cédula.');
+    return;
+  }
   const callback = _checkoutCallback; // guardar antes de cerrar, closeCustomerForm() lo pone en null
   closeCustomerForm();
   saveContactBrevo({ nombre, email, tel, dir: `${dir}, ${ciudad}, ${depto}` }); // guarda en Brevo en paralelo
-  if (callback) callback({ nombre, email, tel, dir, ciudad, depto, cp });
+  if (callback) callback({ nombre, cedula, email, tel, dir, ciudad, depto, cp });
 }
 
 // ---- REGISTRAR PEDIDO PENDIENTE DE GUÍA (Addi / WhatsApp — confirmación manual) ----
@@ -336,34 +344,67 @@ function checkoutWhatsApp() {
   });
 }
 
-// ---- CHECKOUT CON ADDI (vía WhatsApp — el link Addi lo genera la vendedora desde su portal) ----
+// ---- CHECKOUT CON ADDI (directo en la página — redirige a Addi a decidir el crédito) ----
 function checkoutAddi() {
   if (cart.length === 0) {
     alert('Tu carrito está vacío. Agrega productos primero.');
     return;
   }
   closeCart();
-  showCustomerForm(({ nombre, email, tel, dir, ciudad, depto, cp }) => {
+  showCustomerForm(({ nombre, cedula, email, tel, dir, ciudad, depto, cp }) => {
     const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
     if (typeof fbq !== 'undefined') {
-      fbq('track', 'InitiateCheckout', { value: total, currency: 'COP', num_items: cart.reduce((s,i)=>s+i.qty,0), content_type: 'product' });
+      fbq('track', 'InitiateCheckout', { value: total, currency: 'COP', num_items: cart.reduce((s,i)=>s+i.qty,0), content_type: 'product', payment_method: 'addi' });
     }
-    let msg = '¡Hola CKR Boutique! 🛍️ Quiero pagar en cuotas con *Addi*. Mi pedido:\n\n';
-    cart.forEach((item, i) => {
-      msg += `${i + 1}. *${item.name}*\n`;
-      msg += `   Talla: ${item.size} · Cant: ${item.qty}\n`;
-      msg += `   ${formatPrice(item.price * item.qty)}\n\n`;
-    });
-    msg += `━━━━━━━━━━━━━━━\n*TOTAL: ${formatPrice(total)}*\n\n`;
-    if (cart.some(i => i.isSale)) {
-      msg += `⚠️ *Incluye productos en SALE — código CKR10 no aplica sobre precios de liquidación.*\n\n`;
+    const pedido = {
+      cliente: { nombre, cedula, email, tel, dir, ciudad, depto, cp },
+      items: cart.map(i => ({ nombre: i.name, talla: i.size, qty: i.qty, precio: i.price })),
+      total
+    };
+    addiIniciarCheckout(pedido);
+  }, true); // true = requiere cédula
+}
+
+// Llama al backend (Apps Script) para crear la transacción en Addi y
+// redirige al cliente a la página de Addi donde decide si acepta el crédito.
+// Se usa JSONP (script dinámico) en vez de fetch() normal porque las
+// respuestas de Apps Script no traen headers CORS legibles desde el navegador.
+function addiIniciarCheckout(pedido) {
+  const overlay = document.createElement('div');
+  overlay.id = 'addi-loading-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:99999;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;text-align:center;padding:20px;';
+  overlay.innerHTML = '<div>⏳ Conectando con Addi...<br><small style="opacity:.8">No cierres esta ventana</small></div>';
+  document.body.appendChild(overlay);
+
+  const cbName = 'addiCb_' + Date.now();
+  const cleanup = () => {
+    const s = document.getElementById(cbName + '_script');
+    if (s) s.remove();
+    delete window[cbName];
+    overlay.remove();
+  };
+
+  window[cbName] = function (res) {
+    cleanup();
+    if (res && res.ok && res.redirectUrl) {
+      window.location.href = res.redirectUrl;
+    } else {
+      alert((res && res.error) || 'No se pudo iniciar el pago con Addi. Intenta de nuevo o elige otro método.');
     }
-    msg += `📋 *Datos de envío:*\n`;
-    msg += `👤 ${nombre}\n📧 ${email}\n📞 ${tel}\n📍 ${dir}, ${ciudad}, ${depto}\n\n`;
-    msg += `¿Me puedes enviar el link de pago Addi?`;
-    registrarPedidoPendiente({ nombre, email, tel, dir, ciudad, depto, cp, metodo: 'addi' }, total);
-    window.open('https://wa.me/573017604292?text=' + encodeURIComponent(msg), '_blank');
-  });
+  };
+
+  const script = document.createElement('script');
+  script.id = cbName + '_script';
+  script.src = CKR_STOCK_WEBHOOK + '?accion=addi_crear_transaccion'
+    + '&callback=' + encodeURIComponent(cbName)
+    + '&pedido=' + encodeURIComponent(JSON.stringify(pedido));
+  script.onerror = () => { cleanup(); alert('No se pudo conectar con Addi. Revisa tu conexión e intenta de nuevo.'); };
+  document.body.appendChild(script);
+
+  // Salvavidas: si Addi/Apps Script no responde en 20s, no dejar a la clienta esperando para siempre.
+  setTimeout(() => {
+    if (window[cbName]) { cleanup(); alert('Addi está tardando demasiado en responder. Intenta de nuevo en un momento.'); }
+  }, 20000);
 }
 
 // ---- WIDGET DE CUOTAS ADDI EN PRODUCTOS ----
