@@ -31,7 +31,7 @@
   <script src="https://s3.amazonaws.com/widgets.addi.com/bundle.min.js" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=shop11"/>
+  <link rel="stylesheet" href="css/style.css?v=shop12"/>
   <style>
     /* ===== BARRA PROMO ===== */
     .promo-bar {
@@ -165,8 +165,29 @@
             <li><a href="#conjuntos">Sets y Conjuntos</a></li>
           </ul>
         </li>
-        <li><a href="#hombres">Hombres</a></li>
-        <li><a href="#accesorios">Accesorios</a></li>
+        <li class="nav-dropdown">
+          <a href="#hombres">Hombres ▾</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="#hom-camisueter">Camisuéter</a></li>
+            <li><a href="#hom-camisas">Camisas</a></li>
+            <li><a href="#hom-sueteres">Suéteres</a></li>
+            <li><a href="#hom-jeans">Jeans</a></li>
+            <li><a href="#hom-trajes">Trajes</a></li>
+            <li><a href="#hom-interiores">Interiores</a></li>
+          </ul>
+        </li>
+        <li class="nav-dropdown">
+          <a href="#accesorios">Accesorios ▾</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="#acc-bolsos">Bolsos y Carteras</a></li>
+            <li><a href="#acc-relojes">Relojes</a></li>
+            <li><a href="#acc-perfumes">Perfumes</a></li>
+            <li><a href="#acc-gafas">Gafas</a></li>
+            <li><a href="#acc-zapatos">Zapatos</a></li>
+            <li><a href="#acc-gorras">Gorras</a></li>
+            <li><a href="#acc-interiores">Interiores</a></li>
+          </ul>
+        </li>
         <li><a href="#tallas-plus">Tallas Plus</a></li>
         <li><a href="#contacto">Contacto</a></li>
       </ul>
@@ -188,9 +209,22 @@
       <a href="#pantalones" onclick="toggleMenu()">Pantalones</a>
       <a href="#faldas" onclick="toggleMenu()">Faldas</a>
       <a href="#conjuntos" onclick="toggleMenu()">Sets &amp; Conjuntos</a>
+      <span class="mobile-menu-label">Hombres</span>
+      <a href="#hom-camisueter" onclick="toggleMenu()">Camisuéter</a>
+      <a href="#hom-camisas" onclick="toggleMenu()">Camisas</a>
+      <a href="#hom-sueteres" onclick="toggleMenu()">Suéteres</a>
+      <a href="#hom-jeans" onclick="toggleMenu()">Jeans</a>
+      <a href="#hom-trajes" onclick="toggleMenu()">Trajes</a>
+      <a href="#hom-interiores" onclick="toggleMenu()">Interiores</a>
+      <span class="mobile-menu-label">Accesorios</span>
+      <a href="#acc-bolsos" onclick="toggleMenu()">Bolsos y Carteras</a>
+      <a href="#acc-relojes" onclick="toggleMenu()">Relojes</a>
+      <a href="#acc-perfumes" onclick="toggleMenu()">Perfumes</a>
+      <a href="#acc-gafas" onclick="toggleMenu()">Gafas</a>
+      <a href="#acc-zapatos" onclick="toggleMenu()">Zapatos</a>
+      <a href="#acc-gorras" onclick="toggleMenu()">Gorras</a>
+      <a href="#acc-interiores" onclick="toggleMenu()">Interiores</a>
       <span class="mobile-menu-label">Más categorías</span>
-      <a href="#hombres" onclick="toggleMenu()">Hombres</a>
-      <a href="#accesorios" onclick="toggleMenu()">Accesorios</a>
       <a href="#tallas-plus" onclick="toggleMenu()">Tallas Plus</a>
       <a href="#contacto" onclick="toggleMenu()">Contacto</a>
       <a href="https://wa.me/573017604292" target="_blank">📲 WhatsApp</a>
@@ -4106,7 +4140,7 @@
       <p class="section-desc">Kate Spade · Tommy Hilfiger · Armani Exchange · Michael Kors</p>
     </div>
 
-    <div class="acc-subsection">
+    <div class="acc-subsection" id="acc-bolsos">
       <p class="acc-sub-title">Bolsos y Carteras</p>
       <div class="products-grid">
 
@@ -4295,7 +4329,7 @@
       </div>
     </div>
 
-    <div class="acc-subsection">
+    <div class="acc-subsection" id="acc-relojes">
       <p class="acc-sub-title">Relojes</p>
       <div class="products-grid">
 
@@ -4380,7 +4414,7 @@
       </div>
     </div>
 
-    <div class="acc-subsection">
+    <div class="acc-subsection" id="acc-interiores">
       <p class="acc-sub-title">Interiores</p>
       <div class="products-grid">
 
@@ -4414,7 +4448,7 @@
       </div>
     </div>
 
-    <div class="acc-subsection">
+    <div class="acc-subsection" id="acc-perfumes">
       <p class="acc-sub-title">Perfumes</p>
       <div class="products-grid">
 
@@ -4434,7 +4468,7 @@
       </div>
     </div>
 
-    <div class="acc-subsection">
+    <div class="acc-subsection" id="acc-zapatos">
       <p class="acc-sub-title">Zapatos</p>
       <div class="products-grid">
 
@@ -4483,7 +4517,7 @@
       </div>
     </div>
 
-    <div class="acc-subsection">
+    <div class="acc-subsection" id="acc-gafas">
       <p class="acc-sub-title">Gafas</p>
       <div class="products-grid">
 
@@ -4548,7 +4582,7 @@
       </div>
     </div>
 
-    <div class="acc-subsection">
+    <div class="acc-subsection" id="acc-gorras">
       <p class="acc-sub-title">Gorras</p>
       <div class="products-grid">
 
@@ -5144,7 +5178,7 @@
       <p class="section-desc">Nautica · Lacoste · Tommy Hilfiger · Michael Kors · Express</p>
     </div>
 
-    <div class="acc-subsection">
+    <div class="acc-subsection" id="hom-camisueter">
       <p class="acc-sub-title">Camisuéter</p>
       <div class="products-grid">
 
@@ -5263,7 +5297,7 @@
       </div>
     </div>
 
-    <div class="acc-subsection">
+    <div class="acc-subsection" id="hom-camisas">
       <p class="acc-sub-title">Camisas</p>
       <div class="products-grid">
 
@@ -5481,7 +5515,7 @@
       </div>
     </div>
 
-    <div class="acc-subsection">
+    <div class="acc-subsection" id="hom-sueteres">
       <p class="acc-sub-title">Suéteres</p>
       <div class="products-grid">
 
@@ -5684,7 +5718,7 @@
       </div>
     </div>
 
-    <div class="acc-subsection">
+    <div class="acc-subsection" id="hom-interiores">
       <p class="acc-sub-title">Interiores</p>
       <div class="products-grid">
 
@@ -5801,7 +5835,7 @@
       </div>
     </div>
 
-    <div class="acc-subsection">
+    <div class="acc-subsection" id="hom-trajes">
       <p class="acc-sub-title">Trajes</p>
       <div class="products-grid">
 
@@ -5822,7 +5856,7 @@
       </div>
     </div>
 
-    <div class="acc-subsection">
+    <div class="acc-subsection" id="hom-jeans">
       <p class="acc-sub-title">Jeans</p>
       <div class="products-grid">
 
@@ -6152,7 +6186,7 @@
   </div>
 
   <script src="https://checkout.wompi.co/widget.js"></script>
-  <script src="js/main.js?v=shop11"></script>
+  <script src="js/main.js?v=shop12"></script>
   <script>
   (function () {
     var lb = { scale: 1, x: 0, y: 0, dragging: false, lx: 0, ly: 0, pinchDist: 0, lastTap: 0 };
