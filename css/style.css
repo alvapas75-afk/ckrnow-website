@@ -53,13 +53,19 @@ body {
 .nav-dropdown-menu {
   display: none;
   position: absolute; top: 100%; left: -18px;
-  margin-top: 14px;
-  background: rgba(10,10,10,0.97);
-  border: 1px solid rgba(201,169,110,0.25);
+  margin-top: 0;
+  padding-top: 14px;
   min-width: 200px;
-  padding: 8px 0;
   list-style: none;
   flex-direction: column;
+  /* El fondo va en un degradado que empieza transparente (el "puente" de
+     14px hacia el boton) y se vuelve solido justo donde empiezan los
+     items — asi el hueco sigue siendo parte del recuadro con :hover
+     (no se pierde el hover al bajar el mouse) pero no se ve un bloque
+     oscuro flotando pegado al navbar. */
+  background: linear-gradient(to bottom, transparent 14px, rgba(10,10,10,0.97) 14px);
+  border: 1px solid rgba(201,169,110,0.25);
+  border-top: none;
 }
 .nav-dropdown:hover .nav-dropdown-menu,
 .nav-dropdown:focus-within .nav-dropdown-menu { display: flex; }
