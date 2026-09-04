@@ -755,6 +755,7 @@ addi-widget.addi-cuotas {
   align-items: center;
   justify-content: center;
   padding: 16px;
+  overflow-y: auto;
 }
 .cf-modal {
   background: #fff;
@@ -762,7 +763,11 @@ addi-widget.addi-cuotas {
   padding: 32px 24px 28px;
   width: 100%;
   max-width: 400px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   position: relative;
+  margin: auto;
 }
 .cf-close {
   position: absolute;
