@@ -55,7 +55,9 @@
       "addiOrderId": "0e03107c-979f-406d-8f4a-9787fd04c6dd",
       "id": "fddcb4d1-cea3-4d6c-b12a-f0651d552d07",
       "fecha": "2026-09-04T01:50:31.742Z",
-      "estado": "pendiente_guia"
+      "estado": "addi_rejected",
+      "addiApplicationId": "-99ab-25264a677417",
+      "addiApprovedAmount": "0"
     }
   ]
 }
