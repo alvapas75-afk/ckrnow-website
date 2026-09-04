@@ -42,13 +42,39 @@ body {
   color: var(--white); letter-spacing: 3px; text-transform: uppercase;
 }
 .nav-logo span { color: var(--gold); }
-.nav-links { display: flex; list-style: none; gap: 32px; }
+.nav-links { display: flex; list-style: none; gap: 26px; align-items: center; }
 .nav-links a {
   color: rgba(255,255,255,0.8); text-decoration: none;
   font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
   transition: color 0.3s;
 }
 .nav-links a:hover { color: var(--gold); }
+.nav-dropdown { position: relative; }
+.nav-dropdown-menu {
+  display: none;
+  position: absolute; top: 100%; left: -18px;
+  margin-top: 14px;
+  background: rgba(10,10,10,0.97);
+  border: 1px solid rgba(201,169,110,0.25);
+  min-width: 200px;
+  padding: 8px 0;
+  list-style: none;
+  flex-direction: column;
+}
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu { display: flex; }
+.nav-dropdown-menu li a {
+  display: block;
+  padding: 10px 20px;
+  white-space: nowrap;
+  font-size: 0.72rem;
+}
+.nav-dropdown-menu li a:hover { background: rgba(201,169,110,0.12); }
+.mobile-menu-label {
+  color: var(--gold);
+  font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+  margin-top: 10px; opacity: 0.8;
+}
 .nav-cta {
   background: var(--gold); color: var(--black);
   padding: 10px 20px; border-radius: 2px;
