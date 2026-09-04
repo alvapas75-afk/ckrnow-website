@@ -209,13 +209,12 @@ function parseTallas(text) {
   );
 }
 
-function showSizeSelector(name, price, sizes, imgSrc, waUrl) {
-  pendingProduct = { name, price, talla: null };
+function showSizeSelector(name, price, sizes, imgSrc, waUrl, colors) {
+  pendingProduct = { name, price, talla: null, color: null };
   const available = sizes && sizes.length > 0 ? sizes : ['XS','S','M','L','XL','Única'];
 
   document.getElementById('sizeProductName').textContent = name;
   document.getElementById('pmPrice').textContent = formatPrice(price);
-  document.getElementById('pmImg').src = imgSrc || '';
   document.getElementById('pmImg').alt = name;
   document.getElementById('pmWa').href = waUrl || 'https://wa.me/573017604292';
   document.getElementById('pmSizes').innerHTML = available.map(s =>
@@ -223,8 +222,37 @@ function showSizeSelector(name, price, sizes, imgSrc, waUrl) {
   ).join('');
   const hint = document.getElementById('pmNoTalla');
   if (hint) hint.style.display = 'none';
+
+  const colorLabel = document.getElementById('pmColorLabel');
+  const colorBox = document.getElementById('pmColors');
+  if (colors && colors.length > 0) {
+    pendingProduct.colors = colors;
+    colorLabel.style.display = 'block';
+    colorBox.style.display = 'flex';
+    colorBox.innerHTML = colors.map(c =>
+      `<button class="pm-talla-btn" onclick="highlightColor('${c.nombre}')">${c.nombre}</button>`
+    ).join('');
+    highlightColor(colors[0].nombre);
+  } else {
+    colorLabel.style.display = 'none';
+    colorBox.style.display = 'none';
+    colorBox.innerHTML = '';
+    document.getElementById('pmImg').src = imgSrc || '';
+  }
+
   document.getElementById('sizeModal').style.display = 'flex';
   document.body.style.overflow = 'hidden';
+}
+
+function highlightColor(colorName) {
+  if (!pendingProduct || !pendingProduct.colors) return;
+  const c = pendingProduct.colors.find(x => x.nombre === colorName);
+  if (!c) return;
+  pendingProduct.color = colorName;
+  document.getElementById('pmImg').src = c.img;
+  document.querySelectorAll('#pmColors .pm-talla-btn').forEach(b => b.classList.remove('selected'));
+  const btn = [...document.querySelectorAll('#pmColors .pm-talla-btn')].find(b => b.textContent === colorName);
+  if (btn) btn.classList.add('selected');
 }
 
 function highlightTalla(size) {
@@ -244,7 +272,10 @@ function addToCartFromModal() {
     if (hint) hint.style.display = 'block';
     return;
   }
-  addToCart(pendingProduct.name, pendingProduct.price, pendingProduct.talla);
+  const nombreFinal = pendingProduct.color
+    ? `${pendingProduct.name} - ${pendingProduct.color}`
+    : pendingProduct.name;
+  addToCart(nombreFinal, pendingProduct.price, pendingProduct.talla);
   closeSizeModal();
   openCart();
 }
@@ -271,7 +302,12 @@ function initSizeButtons() {
     const sizes = parseTallas(sizesText);
     const imgSrc = card?.querySelector('img')?.src || '';
     const waHref = card?.querySelector('.btn-whatsapp')?.getAttribute('href') || '';
-    const open = () => showSizeSelector(name, price, sizes, imgSrc, waHref);
+    const colorsAttr = card?.querySelector('.product-colors')?.getAttribute('data-colors');
+    let colors = null;
+    if (colorsAttr) {
+      try { colors = JSON.parse(colorsAttr); } catch (e) { colors = null; }
+    }
+    const open = () => showSizeSelector(name, price, sizes, imgSrc, waHref, colors);
     btn.removeAttribute('onclick');
     btn.addEventListener('click', open);
   });

@@ -31,7 +31,7 @@
   <script src="https://s3.amazonaws.com/widgets.addi.com/bundle.min.js" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=shop17"/>
+  <link rel="stylesheet" href="css/style.css?v=shop18"/>
   <style>
     /* ===== BARRA PROMO ===== */
     .promo-bar {
@@ -706,6 +706,22 @@
       <p class="section-desc">Estilos únicos para cada ocasión — desde el día hasta la noche.</p>
     </div>
     <div class="products-grid">
+
+      <div class="product-card" id="prod-vestido-boho-estampado-verde-agua">
+        <div class="product-colors" data-colors='[{"nombre":"Verde Agua","img":"images/vestido-boho-verde-agua.jpg"},{"nombre":"Azul","img":"images/vestido-boho-azul.jpg"}]' style="display:none"></div>
+        <div class="product-img-wrap">
+          <img src="images/vestido-boho-verde-agua.jpg" alt="Vestido Boho Estampado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Nuevo</div>
+        </div>
+        <div class="product-info">
+          <h3>Vestido Boho Estampado</h3>
+          <p class="product-price">$180.000 COP</p>
+          <p class="product-sizes">Tallas: S, M, L, XL</p>
+          <p class="product-shipping-note">⏳ Pedido especial — llega en 15 a 20 días hábiles</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Vestido Boho Estampado', 180000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Boho%20Estampado%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
 
       <div class="product-card" id="prod-vestido-midi-encaje-azul">
         <div class="product-img-wrap">
@@ -6106,6 +6122,9 @@
           <h3 id="sizeProductName" class="pm-name"></h3>
           <p id="pmPrice" class="pm-price"></p>
 
+          <p class="pm-talla-label" id="pmColorLabel" style="display:none">SELECCIONA TU COLOR</p>
+          <div class="size-options" id="pmColors" style="display:none"></div>
+
           <p class="pm-talla-label">SELECCIONA TU TALLA</p>
           <div class="size-options" id="pmSizes"></div>
           <p id="pmNoTalla" class="pm-no-talla" style="display:none">⚠️ Selecciona una talla para continuar</p>
@@ -6318,7 +6337,7 @@
   </div>
 
   <script src="https://checkout.wompi.co/widget.js"></script>
-  <script src="js/main.js?v=shop17"></script>
+  <script src="js/main.js?v=shop18"></script>
   <script>
   (function () {
     var lb = { scale: 1, x: 0, y: 0, dragging: false, lx: 0, ly: 0, pinchDist: 0, lastTap: 0 };
