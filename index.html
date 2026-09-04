@@ -31,7 +31,7 @@
   <script src="https://s3.amazonaws.com/widgets.addi.com/bundle.min.js" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=shop12"/>
+  <link rel="stylesheet" href="css/style.css?v=shop13"/>
   <style>
     /* ===== BARRA PROMO ===== */
     .promo-bar {
@@ -151,7 +151,18 @@
     <div class="nav-inner">
       <div class="nav-logo">CKR <span>Boutique</span></div>
       <ul class="nav-links">
-        <li><a href="#sale" style="color:#cc0000;font-weight:700">🔥 SALE</a></li>
+        <li class="nav-dropdown">
+          <a href="#sale" style="color:#cc0000;font-weight:700">🔥 SALE ▾</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="#sale-vestidos">Vestidos</a></li>
+            <li><a href="#sale-jumpers">Jumpers</a></li>
+            <li><a href="#sale-sets">Sets</a></li>
+            <li><a href="#sale-blusas">Blusas y Tops</a></li>
+            <li><a href="#sale-faldas">Faldas</a></li>
+            <li><a href="#sale-pantalones">Pantalones y Shorts</a></li>
+            <li><a href="#sale-batas">Batas</a></li>
+          </ul>
+        </li>
         <li class="nav-dropdown">
           <a href="#vestidos">Mujeres ▾</a>
           <ul class="nav-dropdown-menu">
@@ -188,7 +199,18 @@
             <li><a href="#acc-interiores">Interiores</a></li>
           </ul>
         </li>
-        <li><a href="#tallas-plus">Tallas Plus</a></li>
+        <li class="nav-dropdown">
+          <a href="#tallas-plus">Tallas Plus ▾</a>
+          <ul class="nav-dropdown-menu">
+            <li><a href="#plus-blusones">Blusones</a></li>
+            <li><a href="#plus-vestidos">Vestidos</a></li>
+            <li><a href="#plus-blusas">Blusas y Tops</a></li>
+            <li><a href="#plus-pantalones">Pantalones y Jeans</a></li>
+            <li><a href="#plus-faldas">Faldas</a></li>
+            <li><a href="#plus-sets">Sets</a></li>
+            <li><a href="#plus-enterizos">Enterizos</a></li>
+          </ul>
+        </li>
         <li><a href="#contacto">Contacto</a></li>
       </ul>
       <button class="cart-icon-btn" onclick="openCart()" aria-label="Ver carrito">
@@ -199,7 +221,14 @@
       <div class="hamburger" onclick="toggleMenu()">☰</div>
     </div>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="#sale" onclick="toggleMenu()" style="color:#ff6666;font-weight:700">🔥 SALE</a>
+      <span class="mobile-menu-label" style="color:#ff6666">🔥 SALE</span>
+      <a href="#sale-vestidos" onclick="toggleMenu()">Vestidos</a>
+      <a href="#sale-jumpers" onclick="toggleMenu()">Jumpers</a>
+      <a href="#sale-sets" onclick="toggleMenu()">Sets</a>
+      <a href="#sale-blusas" onclick="toggleMenu()">Blusas y Tops</a>
+      <a href="#sale-faldas" onclick="toggleMenu()">Faldas</a>
+      <a href="#sale-pantalones" onclick="toggleMenu()">Pantalones y Shorts</a>
+      <a href="#sale-batas" onclick="toggleMenu()">Batas</a>
       <span class="mobile-menu-label">Mujeres</span>
       <a href="#vestidos" onclick="toggleMenu()">Vestidos</a>
       <a href="#jumpers" onclick="toggleMenu()">Jumpers y Jumpsuits</a>
@@ -224,8 +253,15 @@
       <a href="#acc-zapatos" onclick="toggleMenu()">Zapatos</a>
       <a href="#acc-gorras" onclick="toggleMenu()">Gorras</a>
       <a href="#acc-interiores" onclick="toggleMenu()">Interiores</a>
-      <span class="mobile-menu-label">Más categorías</span>
-      <a href="#tallas-plus" onclick="toggleMenu()">Tallas Plus</a>
+      <span class="mobile-menu-label">Tallas Plus</span>
+      <a href="#plus-blusones" onclick="toggleMenu()">Blusones</a>
+      <a href="#plus-vestidos" onclick="toggleMenu()">Vestidos</a>
+      <a href="#plus-blusas" onclick="toggleMenu()">Blusas y Tops</a>
+      <a href="#plus-pantalones" onclick="toggleMenu()">Pantalones y Jeans</a>
+      <a href="#plus-faldas" onclick="toggleMenu()">Faldas</a>
+      <a href="#plus-sets" onclick="toggleMenu()">Sets</a>
+      <a href="#plus-enterizos" onclick="toggleMenu()">Enterizos</a>
+      <span class="mobile-menu-label">Más</span>
       <a href="#contacto" onclick="toggleMenu()">Contacto</a>
       <a href="https://wa.me/573017604292" target="_blank">📲 WhatsApp</a>
     </div>
@@ -258,7 +294,10 @@
       <h2>SALE — 50% OFF</h2>
       <p class="section-desc">Prendas seleccionadas con <strong>50% de descuento</strong>. Stock limitado, precio final. Código CKR10 no aplica sobre precios de liquidación.</p>
     </div>
-    <div class="products-grid">
+
+    <div class="acc-subsection" id="sale-vestidos">
+      <p class="acc-sub-title">Vestidos</p>
+      <div class="products-grid">
 
       <div class="product-card" id="prod-vestido-en-seda-fucsia-drapeado">
         <div class="product-img-wrap">
@@ -308,6 +347,148 @@
         </div>
       </div>
 
+      <div class="product-card" id="prod-vestido-blanco-corto-cut-out">
+        <div class="product-img-wrap">
+          <img src="images/productos/1H2ptTxKhxPYKf03sQFjjv46TSWc_CsHv.jpg" alt="Vestido Blanco Corto Cut Out" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Vestido Blanco Corto Cut Out</h3>
+          <p class="product-price-original">Antes: $280.000</p>
+          <p class="product-price sale-price">Hoy: $140.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="addToCart('Vestido Blanco Corto Cut Out (SALE)', 140000, 'S', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Blanco%20Corto%20Cut%20Out%20(SALE)%20%24140.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-vestido-amarillo-con-arandelas">
+        <div class="product-img-wrap">
+          <img src="images/productos/10IC2ns_gEKEyZ6zm6C9eNvv-JZwY9njj.jpg" alt="Vestido Amarillo con Arandelas" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Vestido Amarillo con Arandelas</h3>
+          <p class="product-price-original">Antes: $280.000</p>
+          <p class="product-price sale-price">Hoy: $140.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="addToCart('Vestido Amarillo con Arandelas (SALE)', 140000, 'S', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Amarillo%20con%20Arandelas%20(SALE)%20%24140.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-vestido-en-seda-beige">
+        <div class="product-img-wrap">
+          <img src="images/productos/12ejy0-pdn7vavx3aRWJ8-Tb0KaJLelPP.jpg" alt="Vestido en Seda Beige" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Vestido en Seda Beige</h3>
+          <p class="product-price-original">Antes: $280.000</p>
+          <p class="product-price sale-price">Hoy: $140.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="addToCart('Vestido en Seda Beige (SALE)', 140000, 'S', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20en%20Seda%20Beige%20(SALE)%20%24140.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-vestido-blanco-largo-cut-out">
+        <div class="product-img-wrap">
+          <img src="images/productos/1GCkB-yG3QBc3yaH6Wj8XUEJ6UNc7WSeE.jpg" alt="Vestido Blanco Largo Cut Out" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Vestido Blanco Largo Cut Out</h3>
+          <p class="product-price-original">Antes: $280.000</p>
+          <p class="product-price sale-price">Hoy: $140.000 COP</p>
+          <p class="product-sizes">Talla: L</p>
+          <button class="btn-agregar" onclick="addToCart('Vestido Blanco Largo Cut Out (SALE)', 140000, 'L', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Blanco%20Largo%20Cut%20Out%20(SALE)%20%24140.000%20Talla%20L" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+    <div class="acc-subsection" id="sale-jumpers">
+      <p class="acc-sub-title">Jumpers</p>
+      <div class="products-grid">
+
+      <div class="product-card" id="prod-jumper-estampado-floral-cut-out">
+        <div class="product-img-wrap">
+          <img src="images/productos/1eahYCAAtJKIAogUI18JWQjfJyIJ3jHzE.jpg" alt="Jumper Estampado Floral Cut Out" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Jumper Estampado Floral Cut Out</h3>
+          <p class="product-price-original">Antes: $280.000</p>
+          <p class="product-price sale-price">Hoy: $140.000 COP</p>
+          <p class="product-sizes">Talla: M</p>
+          <button class="btn-agregar" onclick="addToCart('Jumper Estampado Floral Cut Out (SALE)', 140000, 'M', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumper%20Estampado%20Floral%20Cut%20Out%20(SALE)%20%24140.000%20Talla%20M" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-jumper-blanco">
+        <div class="product-img-wrap">
+          <img src="images/productos/17MpBvGlo2tkN5TDWuEzq-mBoGr7tE2Aq.jpg" alt="Jumper Blanco" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Jumper Blanco</h3>
+          <p class="product-price-original">Antes: $280.000</p>
+          <p class="product-price sale-price">Hoy: $140.000 COP</p>
+          <p class="product-sizes">Talla: L</p>
+          <button class="btn-agregar" onclick="addToCart('Jumper Blanco (SALE)', 140000, 'L', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumper%20Blanco%20(SALE)%20%24140.000%20Talla%20L" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-jumper-corto-rojo">
+        <div class="product-img-wrap">
+          <img src="images/productos/1FQBGjU_xuRARQjEid62qm0w9UOlhdCNo.jpg" alt="Jumper Corto Rojo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Jumper Corto Rojo</h3>
+          <p class="product-price-original">Antes: $180.000</p>
+          <p class="product-price sale-price">Hoy: $90.000 COP</p>
+          <p class="product-sizes">Talla: &Uacute;nica</p>
+          <button class="btn-agregar" onclick="addToCart('Jumper Corto Rojo (SALE)', 90000, 'Única', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumper%20Corto%20Rojo%20(SALE)%20%2490.000%20Talla%20%C3%9Anica" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-jumper-de-listas-rojo">
+        <div class="product-img-wrap">
+          <img src="images/productos/1uzLNR5adTRMUYq41r-dH30Fng4xgz_Co.jpg" alt="Jumper de Listas Rojo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Jumper de Listas Rojo</h3>
+          <p class="product-price-original">Antes: $280.000</p>
+          <p class="product-price sale-price">Hoy: $140.000 COP</p>
+          <p class="product-sizes">Talla: M</p>
+          <button class="btn-agregar" onclick="addToCart('Jumper de Listas Rojo (SALE)', 140000, 'M', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumper%20de%20Listas%20Rojo%20(SALE)%20%24140.000%20Talla%20M" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+    <div class="acc-subsection" id="sale-sets">
+      <p class="acc-sub-title">Sets</p>
+      <div class="products-grid">
+
       <div class="product-card" id="prod-set-pantalon-y-top-verde-menta">
         <div class="product-img-wrap">
           <img src="images/productos/1DzZUtjaTOY1U5U1V-R6nXvWPxacepM6J.jpg" alt="Set Pantalón y Top Verde Menta" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
@@ -356,6 +537,68 @@
         </div>
       </div>
 
+      </div>
+    </div>
+
+    <div class="acc-subsection" id="sale-blusas">
+      <p class="acc-sub-title">Blusas y Tops</p>
+      <div class="products-grid">
+
+      <div class="product-card" id="prod-blusa-drapeada-naranja">
+        <div class="product-img-wrap">
+          <img src="images/productos/1Djcyw85peEs9iYXNC1ERTp8tAjusaDIC.jpg" alt="Blusa Drapeada Naranja" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Blusa Drapeada Naranja</h3>
+          <p class="product-price-original">Antes: $160.000</p>
+          <p class="product-price sale-price">Hoy: $80.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="addToCart('Blusa Drapeada Naranja (SALE)', 80000, 'S', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20Drapeada%20Naranja%20(SALE)%20%2480.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-top-naranja">
+        <div class="product-img-wrap">
+          <img src="images/productos/1BebdtBqKZkoSti1Mj9pN6DlHyI_s1eRi.jpg" alt="Top Naranja" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Top Naranja</h3>
+          <p class="product-price-original">Antes: $140.000</p>
+          <p class="product-price sale-price">Hoy: $70.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="addToCart('Top Naranja (SALE)', 70000, 'S', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Top%20Naranja%20(SALE)%20%2470.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-blusa-verde-en-ojalillo">
+        <div class="product-img-wrap">
+          <img src="images/productos/1LDWdWYyirm0he1nPyUxEeBgfcl_rHFPm.jpg" alt="Blusa Verde en Ojalillo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge sale-badge">50% OFF</div>
+        </div>
+        <div class="product-info">
+          <h3>Blusa Verde en Ojalillo</h3>
+          <p class="product-price-original">Antes: $160.000</p>
+          <p class="product-price sale-price">Hoy: $80.000 COP</p>
+          <p class="product-sizes">Talla: S</p>
+          <button class="btn-agregar" onclick="addToCart('Blusa Verde en Ojalillo (SALE)', 80000, 'S', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20Verde%20en%20Ojalillo%20(SALE)%20%2480.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+    <div class="acc-subsection" id="sale-faldas">
+      <p class="acc-sub-title">Faldas</p>
+      <div class="products-grid">
+
       <div class="product-card" id="prod-falda-lapiz-con-abertura-azul-rey">
         <div class="product-img-wrap">
           <img src="images/productos/1vVM67SYoYGjMfr1HrE1mEGRdGiQRJHQ3.jpg" alt="Falda Lápiz con Abertura Azul Rey" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
@@ -387,6 +630,13 @@
           <p class="sale-no-code">⚠️ Precio SALE · código CKR10 no aplica</p>
         </div>
       </div>
+
+      </div>
+    </div>
+
+    <div class="acc-subsection" id="sale-pantalones">
+      <p class="acc-sub-title">Pantalones y Shorts</p>
+      <div class="products-grid">
 
       <div class="product-card" id="prod-pantalon-rojo-tiro-medio">
         <div class="product-img-wrap">
@@ -420,166 +670,12 @@
         </div>
       </div>
 
-
-      <div class="product-card" id="prod-jumper-estampado-floral-cut-out">
-        <div class="product-img-wrap">
-          <img src="images/productos/1eahYCAAtJKIAogUI18JWQjfJyIJ3jHzE.jpg" alt="Jumper Estampado Floral Cut Out" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge sale-badge">50% OFF</div>
-        </div>
-        <div class="product-info">
-          <h3>Jumper Estampado Floral Cut Out</h3>
-          <p class="product-price-original">Antes: $280.000</p>
-          <p class="product-price sale-price">Hoy: $140.000 COP</p>
-          <p class="product-sizes">Talla: M</p>
-          <button class="btn-agregar" onclick="addToCart('Jumper Estampado Floral Cut Out (SALE)', 140000, 'M', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumper%20Estampado%20Floral%20Cut%20Out%20(SALE)%20%24140.000%20Talla%20M" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
-        </div>
       </div>
+    </div>
 
-      <div class="product-card" id="prod-vestido-blanco-corto-cut-out">
-        <div class="product-img-wrap">
-          <img src="images/productos/1H2ptTxKhxPYKf03sQFjjv46TSWc_CsHv.jpg" alt="Vestido Blanco Corto Cut Out" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge sale-badge">50% OFF</div>
-        </div>
-        <div class="product-info">
-          <h3>Vestido Blanco Corto Cut Out</h3>
-          <p class="product-price-original">Antes: $280.000</p>
-          <p class="product-price sale-price">Hoy: $140.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="addToCart('Vestido Blanco Corto Cut Out (SALE)', 140000, 'S', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Blanco%20Corto%20Cut%20Out%20(SALE)%20%24140.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-blusa-drapeada-naranja">
-        <div class="product-img-wrap">
-          <img src="images/productos/1Djcyw85peEs9iYXNC1ERTp8tAjusaDIC.jpg" alt="Blusa Drapeada Naranja" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge sale-badge">50% OFF</div>
-        </div>
-        <div class="product-info">
-          <h3>Blusa Drapeada Naranja</h3>
-          <p class="product-price-original">Antes: $160.000</p>
-          <p class="product-price sale-price">Hoy: $80.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="addToCart('Blusa Drapeada Naranja (SALE)', 80000, 'S', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20Drapeada%20Naranja%20(SALE)%20%2480.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-vestido-amarillo-con-arandelas">
-        <div class="product-img-wrap">
-          <img src="images/productos/10IC2ns_gEKEyZ6zm6C9eNvv-JZwY9njj.jpg" alt="Vestido Amarillo con Arandelas" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge sale-badge">50% OFF</div>
-        </div>
-        <div class="product-info">
-          <h3>Vestido Amarillo con Arandelas</h3>
-          <p class="product-price-original">Antes: $280.000</p>
-          <p class="product-price sale-price">Hoy: $140.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="addToCart('Vestido Amarillo con Arandelas (SALE)', 140000, 'S', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Amarillo%20con%20Arandelas%20(SALE)%20%24140.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-vestido-en-seda-beige">
-        <div class="product-img-wrap">
-          <img src="images/productos/12ejy0-pdn7vavx3aRWJ8-Tb0KaJLelPP.jpg" alt="Vestido en Seda Beige" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge sale-badge">50% OFF</div>
-        </div>
-        <div class="product-info">
-          <h3>Vestido en Seda Beige</h3>
-          <p class="product-price-original">Antes: $280.000</p>
-          <p class="product-price sale-price">Hoy: $140.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="addToCart('Vestido en Seda Beige (SALE)', 140000, 'S', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20en%20Seda%20Beige%20(SALE)%20%24140.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-top-naranja">
-        <div class="product-img-wrap">
-          <img src="images/productos/1BebdtBqKZkoSti1Mj9pN6DlHyI_s1eRi.jpg" alt="Top Naranja" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge sale-badge">50% OFF</div>
-        </div>
-        <div class="product-info">
-          <h3>Top Naranja</h3>
-          <p class="product-price-original">Antes: $140.000</p>
-          <p class="product-price sale-price">Hoy: $70.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="addToCart('Top Naranja (SALE)', 70000, 'S', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Top%20Naranja%20(SALE)%20%2470.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-vestido-blanco-largo-cut-out">
-        <div class="product-img-wrap">
-          <img src="images/productos/1GCkB-yG3QBc3yaH6Wj8XUEJ6UNc7WSeE.jpg" alt="Vestido Blanco Largo Cut Out" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge sale-badge">50% OFF</div>
-        </div>
-        <div class="product-info">
-          <h3>Vestido Blanco Largo Cut Out</h3>
-          <p class="product-price-original">Antes: $280.000</p>
-          <p class="product-price sale-price">Hoy: $140.000 COP</p>
-          <p class="product-sizes">Talla: L</p>
-          <button class="btn-agregar" onclick="addToCart('Vestido Blanco Largo Cut Out (SALE)', 140000, 'L', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Blanco%20Largo%20Cut%20Out%20(SALE)%20%24140.000%20Talla%20L" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-jumper-blanco">
-        <div class="product-img-wrap">
-          <img src="images/productos/17MpBvGlo2tkN5TDWuEzq-mBoGr7tE2Aq.jpg" alt="Jumper Blanco" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge sale-badge">50% OFF</div>
-        </div>
-        <div class="product-info">
-          <h3>Jumper Blanco</h3>
-          <p class="product-price-original">Antes: $280.000</p>
-          <p class="product-price sale-price">Hoy: $140.000 COP</p>
-          <p class="product-sizes">Talla: L</p>
-          <button class="btn-agregar" onclick="addToCart('Jumper Blanco (SALE)', 140000, 'L', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumper%20Blanco%20(SALE)%20%24140.000%20Talla%20L" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-blusa-verde-en-ojalillo">
-        <div class="product-img-wrap">
-          <img src="images/productos/1LDWdWYyirm0he1nPyUxEeBgfcl_rHFPm.jpg" alt="Blusa Verde en Ojalillo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge sale-badge">50% OFF</div>
-        </div>
-        <div class="product-info">
-          <h3>Blusa Verde en Ojalillo</h3>
-          <p class="product-price-original">Antes: $160.000</p>
-          <p class="product-price sale-price">Hoy: $80.000 COP</p>
-          <p class="product-sizes">Talla: S</p>
-          <button class="btn-agregar" onclick="addToCart('Blusa Verde en Ojalillo (SALE)', 80000, 'S', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20Verde%20en%20Ojalillo%20(SALE)%20%2480.000%20Talla%20S" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-jumper-corto-rojo">
-        <div class="product-img-wrap">
-          <img src="images/productos/1FQBGjU_xuRARQjEid62qm0w9UOlhdCNo.jpg" alt="Jumper Corto Rojo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge sale-badge">50% OFF</div>
-        </div>
-        <div class="product-info">
-          <h3>Jumper Corto Rojo</h3>
-          <p class="product-price-original">Antes: $180.000</p>
-          <p class="product-price sale-price">Hoy: $90.000 COP</p>
-          <p class="product-sizes">Talla: &Uacute;nica</p>
-          <button class="btn-agregar" onclick="addToCart('Jumper Corto Rojo (SALE)', 90000, 'Única', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumper%20Corto%20Rojo%20(SALE)%20%2490.000%20Talla%20%C3%9Anica" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
-        </div>
-      </div>
+    <div class="acc-subsection" id="sale-batas">
+      <p class="acc-sub-title">Batas</p>
+      <div class="products-grid">
 
       <div class="product-card" id="prod-bata-rosa-estampada-floral">
         <div class="product-img-wrap">
@@ -597,22 +693,9 @@
         </div>
       </div>
 
-      <div class="product-card" id="prod-jumper-de-listas-rojo">
-        <div class="product-img-wrap">
-          <img src="images/productos/1uzLNR5adTRMUYq41r-dH30Fng4xgz_Co.jpg" alt="Jumper de Listas Rojo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge sale-badge">50% OFF</div>
-        </div>
-        <div class="product-info">
-          <h3>Jumper de Listas Rojo</h3>
-          <p class="product-price-original">Antes: $280.000</p>
-          <p class="product-price sale-price">Hoy: $140.000 COP</p>
-          <p class="product-sizes">Talla: M</p>
-          <button class="btn-agregar" onclick="addToCart('Jumper de Listas Rojo (SALE)', 140000, 'M', true); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Jumper%20de%20Listas%20Rojo%20(SALE)%20%24140.000%20Talla%20M" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-          <p class="sale-no-code">&#x26A0;&#xFE0F; Precio SALE &middot; c&oacute;digo CKR10 no aplica</p>
-        </div>
       </div>
     </div>
+
   </section>
 
   <!-- ===== VESTIDOS ===== -->
@@ -4635,173 +4718,22 @@
       <h2>Tallas Plus</h2>
       <p class="section-desc">Moda exclusiva en tallas XL, 2XL y 3XL — porque la elegancia no tiene talla.</p>
     </div>
-    <div class="products-grid">
 
-      <div class="product-card" id="prod-bluson-troquelado-geometrico-rosa-pink-2">
+    <div class="acc-subsection" id="plus-blusones">
+      <p class="acc-sub-title">Blusones</p>
+      <div class="products-grid">
+
+      <div class="product-card" id="prod-bluson-baby-blue">
         <div class="product-img-wrap">
-          <img src="images/productos/1HaNh5jBf67rOCo8i9Zzh7ViHk20lFEZx.jpg" alt="Blusón Troquelado Geométrico Rosa Pink" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <img src="images/productos/1k-Yqa35RMzvN9SMBL0eAHthGUMmvbYV4.jpg" alt="Blusón Baby Blue" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Plus</div>
         </div>
         <div class="product-info">
-          <h3>Blusón Troquelado Geométrico Rosa Pink</h3>
-          <p class="product-price">$180.000 COP</p>
-          <p class="product-sizes">Talla: L-XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Blusón Troquelado Geométrico Rosa Pink', 180000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Troquelado%20Geométrico%20Rosa%20Pink%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-bluson-en-encaje-palo-de-rosa-2">
-        <div class="product-img-wrap">
-          <img src="images/productos/1DYk6QDT9gactOTr_nKtTPYPl4b4U4481.jpg" alt="Blusón en Encaje Palo de Rosa" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Blusón en Encaje Palo de Rosa</h3>
-          <p class="product-price">$180.000 COP</p>
-          <p class="product-sizes">Talla: L-XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Blusón en Encaje Palo de Rosa', 180000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20en%20Encaje%20Palo%20de%20Rosa%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-bluson-fucsia-troquelado-geometrico-2">
-        <div class="product-img-wrap">
-          <img src="images/productos/1U2UPtZtC6AcHBiUZ2bndkRAETQsPatZr.jpg" alt="Blusón Fucsia Troquelado Geométrico" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Blusón Fucsia Troquelado Geométrico</h3>
-          <p class="product-price">$180.000 COP</p>
-          <p class="product-sizes">Talla: L-XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Blusón Fucsia Troquelado Geométrico', 180000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Fucsia%20Troquelado%20Geométrico%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-bluson-en-seda-magenta-animal-print">
-        <div class="product-img-wrap">
-          <img src="images/productos/1o4X-3l3dm0UEaTCT-mJWa8nYqwTKJLd4.jpg" alt="Blusón en Seda Magenta Animal Print" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Blusón en Seda Magenta Animal Print</h3>
-          <p class="product-price">$180.000 COP</p>
+          <h3>Blusón Baby Blue</h3>
+          <p class="product-price">$130.000 COP</p>
           <p class="product-sizes">Talla: XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Blusón en Seda Magenta Animal Print', 180000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Seda%20Magenta%20Animal%20Print%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-set-de-falda-y-top-amarillo-estampado-floral">
-        <div class="product-img-wrap">
-          <img src="images/productos/1ISL0m6n7O9XZgzilEWMS7j7TOuAWZCAu.jpg" alt="Set de Falda y Top Amarillo Estampado Floral" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Set de Falda y Top Amarillo Estampado Floral</h3>
-          <p class="product-price">$320.000 COP</p>
-          <p class="product-sizes">Talla: XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set de Falda y Top Amarillo Estampado Floral', 320000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Falda%20Top%20Amarillo%20Floral%20%24320.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-vestido-largo-blanco-2">
-        <div class="product-img-wrap">
-          <img src="images/productos/1M0iAjhJ18bHTyGXAVP2hBP6PyWIUKpco.jpg" alt="Vestido Largo Blanco" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Vestido Largo Blanco</h3>
-          <p class="product-price">$320.000 COP</p>
-          <p class="product-sizes">Talla: 3XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Vestido Largo Blanco', 320000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Largo%20Blanco%20%24320.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-bluson-negro-2">
-        <div class="product-img-wrap">
-          <img src="images/productos/1ayQkyU7gJTwFvOvLwV3Gl_k1W_9XBKcu.jpg" alt="Blusón Negro" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Blusón Negro</h3>
-          <p class="product-price">$150.000 COP</p>
-          <p class="product-sizes">Talla: ÚNICA</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Blusón Negro', 150000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Negro%20%24150.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-blusa-en-arandelas-fucsia-estampada">
-        <div class="product-img-wrap">
-          <img src="images/productos/1sSe-mGAhQvAoO4LNtL9htf9OIlXaLc7Y.jpg" alt="Blusa en Arandelas Fucsia Estampada" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Blusa en Arandelas Fucsia Estampada</h3>
-          <p class="product-price">$180.000 COP</p>
-          <p class="product-sizes">Talla: XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Blusa en Arandelas Fucsia Estampada', 180000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20Arandelas%20Fucsia%20Estampada%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-vestido-en-lino-europeo-estampado-tie-dye">
-        <div class="product-img-wrap">
-          <img src="images/productos/13-zKFETt2O-XrTaWAia7f2Sn1DOlvcKm.jpg" alt="Vestido en Lino Europeo Estampado Tie Dye" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Vestido en Lino Europeo Estampado Tie Dye</h3>
-          <p class="product-price">$380.000 COP</p>
-          <p class="product-sizes">Talla: ÚNICA</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Vestido en Lino Europeo Estampado Tie Dye', 380000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Lino%20Europeo%20Tie%20Dye%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-pantalon-fucsia">
-        <div class="product-img-wrap">
-          <img src="images/productos/12I2bVRc86BGIaM_dGVmv88YptB6-5I99.jpg" alt="Pantalón Fucsia" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Pantalón Fucsia</h3>
-          <p class="product-price">$150.000 COP</p>
-          <p class="product-sizes">Talla: 1XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Pantalón Fucsia', 150000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20Fucsia%20%24150.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-set-en-lino-europeo-cafe-moca-estampado">
-        <div class="product-img-wrap">
-          <img src="images/productos/1DuQrkVMrY0Ng8StCUtG-xwIL30rkr6YG.jpg" alt="Set en Lino Europeo Café Moca Estampado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Set en Lino Europeo Café Moca Estampado</h3>
-          <p class="product-price">$480.000 COP</p>
-          <p class="product-sizes">Talla: ÚNICA</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set en Lino Europeo Café Moca Estampado', 480000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Lino%20Café%20Moca%20%24480.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-bluson-en-seda-estampado">
-        <div class="product-img-wrap">
-          <img src="images/productos/1kgb-sL1kynTe24y5pSZH7boHL7U1aQMo.jpg" alt="Blusón en Seda Estampado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Blusón en Seda Estampado</h3>
-          <p class="product-price">$180.000 COP</p>
-          <p class="product-sizes">Talla: 1XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Blusón en Seda Estampado', 180000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Seda%20Estampado%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <button class="btn-agregar" onclick="showSizeSelector('Blusón Baby Blue', 130000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Baby%20Blue%20%24130.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
@@ -4819,143 +4751,59 @@
         </div>
       </div>
 
-      <div class="product-card" id="prod-jeans-azul-alto-tiro">
+      <div class="product-card" id="prod-bluson-en-encaje-palo-de-rosa-2">
         <div class="product-img-wrap">
-          <img src="images/productos/1UuihqnIK0OJPfU4fP2aCwdk_9ONYab3p.jpg" alt="Jeans Azul Alto Tiro" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <img src="images/productos/1DYk6QDT9gactOTr_nKtTPYPl4b4U4481.jpg" alt="Blusón en Encaje Palo de Rosa" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Plus</div>
         </div>
         <div class="product-info">
-          <h3>Jeans Azul Alto Tiro</h3>
-          <p class="product-price">$220.000 COP</p>
-          <p class="product-sizes">Talla: 14</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Jeans Azul Alto Tiro', 220000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20los%20Jeans%20Azul%20Alto%20Tiro%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-pantalon-en-lino-beige">
-        <div class="product-img-wrap">
-          <img src="images/productos/1-X_EBoDUY3-T95kyy79zrc-eUggwDF1T.jpg" alt="Pantalón en Lino Beige" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Pantalón en Lino Beige</h3>
+          <h3>Blusón en Encaje Palo de Rosa</h3>
           <p class="product-price">$180.000 COP</p>
-          <p class="product-sizes">Talla: 2XL / 1XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Pantalón en Lino Beige', 180000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20Lino%20Beige%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="product-sizes">Talla: L-XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Blusón en Encaje Palo de Rosa', 180000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20en%20Encaje%20Palo%20de%20Rosa%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
-      <div class="product-card" id="prod-set-de-short-y-camisa">
+      <div class="product-card" id="prod-bluson-en-lino-bordado">
         <div class="product-img-wrap">
-          <img src="images/productos/1pCnzvyhG6ch8syHCseg-gYQeI7J_r3dr.jpg" alt="Set de Short y Camisa" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Plus</div>
+          <img src="images/productos/1Wnma5t8xWFI-4LUR_ICdnj27V0E1KZ-J.jpg" alt="Blusón en Lino Bordado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
         </div>
         <div class="product-info">
-          <h3>Set de Short y Camisa</h3>
-          <p class="product-price">$220.000 COP</p>
-          <p class="product-sizes">Talla: XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set de Short y Camisa', 220000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20de%20Short%20y%20Camisa%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-vestido-largo-terracota">
-        <div class="product-img-wrap">
-          <img src="images/productos/1bBu_0Fde-gOO9yv91eAhfmKh6ESNMSzb.jpg" alt="Vestido Largo Terracota" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Vestido Largo Terracota</h3>
-          <p class="product-price">$380.000 COP</p>
-          <p class="product-sizes">Talla: ÚNICA</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Vestido Largo Terracota', 380000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Largo%20Terracota%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-pantalon-estampado-vichy-negro-y-blanco">
-        <div class="product-img-wrap">
-          <img src="images/productos/1rowcsY3T969uOqairi-LYIWHTxaEk7h1.jpg" alt="Pantalón Estampado Vichy Negro y Blanco" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Pantalón Estampado Vichy Negro y Blanco</h3>
-          <p class="product-price">$280.000 COP</p>
-          <p class="product-sizes">Talla: XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Pantalón Estampado Vichy Negro y Blanco', 280000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20Vichy%20Negro%20y%20Blanco%20%24280.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-bluson-baby-blue">
-        <div class="product-img-wrap">
-          <img src="images/productos/1k-Yqa35RMzvN9SMBL0eAHthGUMmvbYV4.jpg" alt="Blusón Baby Blue" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Blusón Baby Blue</h3>
-          <p class="product-price">$130.000 COP</p>
-          <p class="product-sizes">Talla: XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Blusón Baby Blue', 130000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Baby%20Blue%20%24130.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-enterizo-verde-en-lino-europeo">
-        <div class="product-img-wrap">
-          <img src="images/productos/1W1BqZq3yBAW8-W5AilyAzqAWUZEtKCHJ.jpg" alt="Enterizo Verde en Lino Europeo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Enterizo Verde en Lino Europeo</h3>
-          <p class="product-price">$380.000 COP</p>
-          <p class="product-sizes">Talla: ÚNICA</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Enterizo Verde en Lino Europeo', 380000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Enterizo%20Verde%20Lino%20Europeo%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-enterizo-gris-en-lino-europeo">
-        <div class="product-img-wrap">
-          <img src="images/productos/11osyvUvkjx27kt4ZQu7vlM27QpJtr5py.jpg" alt="Enterizo Gris en Lino Europeo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Enterizo Gris en Lino Europeo</h3>
-          <p class="product-price">$380.000 COP</p>
-          <p class="product-sizes">Talla: ÚNICA</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Enterizo Gris en Lino Europeo', 380000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Enterizo%20Gris%20Lino%20Europeo%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-set-de-pantalon-y-bluson-palo-de-rosa-en-lino-europeo">
-        <div class="product-img-wrap">
-          <img src="images/productos/1zthpgFtpUOgb9F0CMKqI_da1jb_QsJpe.jpg" alt="Set de Pantalón y Blusón Palo de Rosa en Lino Europeo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Set de Pantalón y Blusón Palo de Rosa en Lino Europeo</h3>
-          <p class="product-price">$480.000 COP</p>
-          <p class="product-sizes">Talla: ÚNICA</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Set de Pantalón y Blusón Palo de Rosa en Lino Europeo', 480000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Pantalón%20Blusón%20Palo%20Rosa%20Lino%20%24480.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-pantalon-en-seda-verde-estampado">
-        <div class="product-img-wrap">
-          <img src="images/productos/1H68rAe6AAYmjtz1RpxKvcZJmI-H5mQjJ.jpg" alt="Pantalón en Seda Verde Estampado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Pantalón en Seda Verde Estampado</h3>
-          <p class="product-price">$180.000 COP</p>
+          <h3>Blusón en Lino Bordado</h3>
+          <p class="product-price">$160.000 COP</p>
           <p class="product-sizes">Talla: 2XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Pantalón en Seda Verde Estampado', 180000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20Seda%20Verde%20Estampado%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <button class="btn-agregar" onclick="addToCart('Blusón en Lino Bordado', 160000, '2XL'); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blus%C3%B3n%20en%20Lino%20Bordado%20%24160.000%20Talla%202XL" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-bluson-en-seda-estampado">
+        <div class="product-img-wrap">
+          <img src="images/productos/1kgb-sL1kynTe24y5pSZH7boHL7U1aQMo.jpg" alt="Blusón en Seda Estampado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Blusón en Seda Estampado</h3>
+          <p class="product-price">$180.000 COP</p>
+          <p class="product-sizes">Talla: 1XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Blusón en Seda Estampado', 180000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Seda%20Estampado%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-bluson-en-seda-magenta-animal-print">
+        <div class="product-img-wrap">
+          <img src="images/productos/1o4X-3l3dm0UEaTCT-mJWa8nYqwTKJLd4.jpg" alt="Blusón en Seda Magenta Animal Print" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Blusón en Seda Magenta Animal Print</h3>
+          <p class="product-price">$180.000 COP</p>
+          <p class="product-sizes">Talla: XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Blusón en Seda Magenta Animal Print', 180000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Seda%20Magenta%20Animal%20Print%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
@@ -4973,17 +4821,108 @@
         </div>
       </div>
 
-      <div class="product-card" id="prod-falda-larga-blanca-en-ojalillo-2">
+      <div class="product-card" id="prod-bluson-fucsia-troquelado-geometrico-2">
         <div class="product-img-wrap">
-          <img src="images/productos/1pDW__sGIYZFwHUFJf6GkK64DnsMsyVGn.jpg" alt="Falda Larga Blanca en Ojalillo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <img src="images/productos/1U2UPtZtC6AcHBiUZ2bndkRAETQsPatZr.jpg" alt="Blusón Fucsia Troquelado Geométrico" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Plus</div>
         </div>
         <div class="product-info">
-          <h3>Falda Larga Blanca en Ojalillo</h3>
-          <p class="product-price">$220.000 COP</p>
+          <h3>Blusón Fucsia Troquelado Geométrico</h3>
+          <p class="product-price">$180.000 COP</p>
+          <p class="product-sizes">Talla: L-XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Blusón Fucsia Troquelado Geométrico', 180000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Fucsia%20Troquelado%20Geométrico%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-bluson-negro-2">
+        <div class="product-img-wrap">
+          <img src="images/productos/1ayQkyU7gJTwFvOvLwV3Gl_k1W_9XBKcu.jpg" alt="Blusón Negro" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Blusón Negro</h3>
+          <p class="product-price">$150.000 COP</p>
           <p class="product-sizes">Talla: ÚNICA</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Falda Larga Blanca en Ojalillo', 220000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Falda%20Larga%20Blanca%20Ojalillo%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <button class="btn-agregar" onclick="showSizeSelector('Blusón Negro', 150000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Negro%20%24150.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-bluson-troquelado-geometrico-rosa-pink-2">
+        <div class="product-img-wrap">
+          <img src="images/productos/1HaNh5jBf67rOCo8i9Zzh7ViHk20lFEZx.jpg" alt="Blusón Troquelado Geométrico Rosa Pink" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Blusón Troquelado Geométrico Rosa Pink</h3>
+          <p class="product-price">$180.000 COP</p>
+          <p class="product-sizes">Talla: L-XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Blusón Troquelado Geométrico Rosa Pink', 180000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blusón%20Troquelado%20Geométrico%20Rosa%20Pink%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+    <div class="acc-subsection" id="plus-vestidos">
+      <p class="acc-sub-title">Vestidos</p>
+      <div class="products-grid">
+
+      <div class="product-card" id="prod-vestido-azul-estampado-floral">
+        <div class="product-img-wrap">
+          <div class="product-badge">Plus</div>
+          <img src="images/productos/1MePExAwu2OQmlt1aCwGTpCCkQ0GFF_pz.jpg" alt="Vestido Azul Estampado Floral" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+        </div>
+        <div class="product-info">
+          <h3>Vestido Azul Estampado Floral</h3>
+          <p class="product-price">$180.000 COP</p>
+          <p class="product-sizes">Talla: XL</p>
+          <button class="btn-agregar" onclick="addToCart('Vestido Azul Estampado Floral', 180000, 'XL'); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Azul%20Estampado%20Floral%20%24180.000%20Talla%20XL" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-vestido-corto-en-seda-borgona">
+        <div class="product-img-wrap">
+          <img src="images/productos/1RovCkbgajjPaznZZmkUE-ejZXg-Oz37Q.jpg" alt="Vestido Corto en Seda Borgoña" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Vestido Corto en Seda Borgoña</h3>
+          <p class="product-price">$220.000 COP</p>
+          <p class="product-sizes">Talla: XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Vestido Corto en Seda Borgoña', 220000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Corto%20en%20Seda%20Borgo%C3%B1a%20%24220.000%20Talla%20XL" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-vestido-en-lino-europeo-estampado-tie-dye">
+        <div class="product-img-wrap">
+          <img src="images/productos/13-zKFETt2O-XrTaWAia7f2Sn1DOlvcKm.jpg" alt="Vestido en Lino Europeo Estampado Tie Dye" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Vestido en Lino Europeo Estampado Tie Dye</h3>
+          <p class="product-price">$380.000 COP</p>
+          <p class="product-sizes">Talla: ÚNICA</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Vestido en Lino Europeo Estampado Tie Dye', 380000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Lino%20Europeo%20Tie%20Dye%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-vestido-largo-blanco-2">
+        <div class="product-img-wrap">
+          <img src="images/productos/1M0iAjhJ18bHTyGXAVP2hBP6PyWIUKpco.jpg" alt="Vestido Largo Blanco" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Vestido Largo Blanco</h3>
+          <p class="product-price">$320.000 COP</p>
+          <p class="product-sizes">Talla: 3XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Vestido Largo Blanco', 320000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Largo%20Blanco%20%24320.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
@@ -5001,45 +4940,52 @@
         </div>
       </div>
 
-      <div class="product-card" id="prod-pantalon-de-listas-azul-2">
+      <div class="product-card" id="prod-vestido-largo-terracota">
         <div class="product-img-wrap">
-          <img src="images/productos/1mzLPtw4FCUKzk1b-4L0q4oC2Zp_xyc05.jpg" alt="Pantalón de Listas Azul" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <img src="images/productos/1bBu_0Fde-gOO9yv91eAhfmKh6ESNMSzb.jpg" alt="Vestido Largo Terracota" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Plus</div>
         </div>
         <div class="product-info">
-          <h3>Pantalón de Listas Azul</h3>
-          <p class="product-price">$220.000 COP</p>
-          <p class="product-sizes">Talla: XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Pantalón de Listas Azul', 220000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20de%20Listas%20Azul%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
-      </div>
-
-      <div class="product-card" id="prod-falda-blanca-larga-con-encaje-2">
-        <div class="product-img-wrap">
-          <img src="images/productos/1Xvh4bEKCUddHjbkLfaa67fURiAA4bSRC.jpg" alt="Falda Blanca Larga con Encaje" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-          <div class="product-badge">Plus</div>
-        </div>
-        <div class="product-info">
-          <h3>Falda Blanca Larga con Encaje</h3>
-          <p class="product-price">$220.000 COP</p>
+          <h3>Vestido Largo Terracota</h3>
+          <p class="product-price">$380.000 COP</p>
           <p class="product-sizes">Talla: ÚNICA</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Falda Blanca Larga con Encaje', 220000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Falda%20Blanca%20Larga%20con%20Encaje%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <button class="btn-agregar" onclick="showSizeSelector('Vestido Largo Terracota', 380000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Largo%20Terracota%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
-      <div class="product-card" id="prod-enterizo-rosado">
+      <div class="product-card" id="prod-vestido-midi-mostaza">
         <div class="product-img-wrap">
-          <img src="images/productos/1OdnUPk_3hLeeY4aI9n2W9H9oE0yDLLAH.jpg" alt="Enterizo Rosado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+          <img src="images/productos/1p6PJ4ip98Bvi37ygAes5a_cgetEiWIgt.jpg" alt="Vestido Midi Mostaza" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+        </div>
+        <div class="product-info">
+          <h3>Vestido Midi Mostaza</h3>
+          <p class="product-price">$280.000 COP</p>
+          <p class="product-sizes">Talla: 14</p>
+          <button class="btn-agregar" onclick="addToCart('Vestido Midi Mostaza', 280000, '14'); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Midi%20Mostaza%20%24280.000%20Talla%2014" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+    <div class="acc-subsection" id="plus-blusas">
+      <p class="acc-sub-title">Blusas y Tops</p>
+      <div class="products-grid">
+
+      <div class="product-card" id="prod-blusa-en-arandelas-fucsia-estampada">
+        <div class="product-img-wrap">
+          <img src="images/productos/1sSe-mGAhQvAoO4LNtL9htf9OIlXaLc7Y.jpg" alt="Blusa en Arandelas Fucsia Estampada" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Plus</div>
         </div>
         <div class="product-info">
-          <h3>Enterizo Rosado</h3>
+          <h3>Blusa en Arandelas Fucsia Estampada</h3>
           <p class="product-price">$180.000 COP</p>
-          <p class="product-sizes">Talla: 2XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Enterizo Rosado', 180000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Enterizo%20Rosado%20%24180.000%20Talla%202XL" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="product-sizes">Talla: XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Blusa en Arandelas Fucsia Estampada', 180000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20Arandelas%20Fucsia%20Estampada%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
@@ -5071,6 +5017,20 @@
         </div>
       </div>
 
+      <div class="product-card" id="prod-blusa-estampada-floral-2">
+        <div class="product-img-wrap">
+          <div class="product-badge">Plus</div>
+          <img src="images/productos/1gCDjpau2_SfGl-N4wNJAchDIA0XMPLLk.jpg" alt="Blusa Estampada Floral" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+        </div>
+        <div class="product-info">
+          <h3>Blusa Estampada Floral</h3>
+          <p class="product-price">$130.000 COP</p>
+          <p class="product-sizes">Talla: XL</p>
+          <button class="btn-agregar" onclick="addToCart('Blusa Estampada Floral', 130000, 'XL'); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20Estampada%20Floral%20%24130.000%20Talla%20XL" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
       <div class="product-card" id="prod-top-en-seda-palo-de-rosa">
         <div class="product-img-wrap">
           <img src="images/productos/1IDjR2mXT0SOaIjjOA2eM_JRduDIuoHCZ.jpg" alt="Top en Seda Palo de Rosa" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
@@ -5085,43 +5045,115 @@
         </div>
       </div>
 
-      <div class="product-card" id="prod-vestido-corto-en-seda-borgona">
+      </div>
+    </div>
+
+    <div class="acc-subsection" id="plus-pantalones">
+      <p class="acc-sub-title">Pantalones y Jeans</p>
+      <div class="products-grid">
+
+      <div class="product-card" id="prod-jeans-azul-alto-tiro">
         <div class="product-img-wrap">
-          <img src="images/productos/1RovCkbgajjPaznZZmkUE-ejZXg-Oz37Q.jpg" alt="Vestido Corto en Seda Borgoña" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <img src="images/productos/1UuihqnIK0OJPfU4fP2aCwdk_9ONYab3p.jpg" alt="Jeans Azul Alto Tiro" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Plus</div>
         </div>
         <div class="product-info">
-          <h3>Vestido Corto en Seda Borgoña</h3>
+          <h3>Jeans Azul Alto Tiro</h3>
+          <p class="product-price">$220.000 COP</p>
+          <p class="product-sizes">Talla: 14</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Jeans Azul Alto Tiro', 220000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20los%20Jeans%20Azul%20Alto%20Tiro%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-pantalon-de-listas-azul-2">
+        <div class="product-img-wrap">
+          <img src="images/productos/1mzLPtw4FCUKzk1b-4L0q4oC2Zp_xyc05.jpg" alt="Pantalón de Listas Azul" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Pantalón de Listas Azul</h3>
           <p class="product-price">$220.000 COP</p>
           <p class="product-sizes">Talla: XL</p>
-          <button class="btn-agregar" onclick="showSizeSelector('Vestido Corto en Seda Borgoña', 220000)">🛍️ Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Corto%20en%20Seda%20Borgo%C3%B1a%20%24220.000%20Talla%20XL" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <button class="btn-agregar" onclick="showSizeSelector('Pantalón de Listas Azul', 220000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20de%20Listas%20Azul%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
-      <div class="product-card" id="prod-vestido-midi-mostaza">
+
+      <div class="product-card" id="prod-pantalon-en-lino-beige">
         <div class="product-img-wrap">
+          <img src="images/productos/1-X_EBoDUY3-T95kyy79zrc-eUggwDF1T.jpg" alt="Pantalón en Lino Beige" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Plus</div>
-          <img src="images/productos/1p6PJ4ip98Bvi37ygAes5a_cgetEiWIgt.jpg" alt="Vestido Midi Mostaza" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
         </div>
         <div class="product-info">
-          <h3>Vestido Midi Mostaza</h3>
+          <h3>Pantalón en Lino Beige</h3>
+          <p class="product-price">$180.000 COP</p>
+          <p class="product-sizes">Talla: 2XL / 1XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Pantalón en Lino Beige', 180000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20Lino%20Beige%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-pantalon-en-seda-verde-estampado">
+        <div class="product-img-wrap">
+          <img src="images/productos/1H68rAe6AAYmjtz1RpxKvcZJmI-H5mQjJ.jpg" alt="Pantalón en Seda Verde Estampado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Pantalón en Seda Verde Estampado</h3>
+          <p class="product-price">$180.000 COP</p>
+          <p class="product-sizes">Talla: 2XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Pantalón en Seda Verde Estampado', 180000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20Seda%20Verde%20Estampado%20%24180.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-pantalon-estampado-vichy-negro-y-blanco">
+        <div class="product-img-wrap">
+          <img src="images/productos/1rowcsY3T969uOqairi-LYIWHTxaEk7h1.jpg" alt="Pantalón Estampado Vichy Negro y Blanco" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Pantalón Estampado Vichy Negro y Blanco</h3>
           <p class="product-price">$280.000 COP</p>
-          <p class="product-sizes">Talla: 14</p>
-          <button class="btn-agregar" onclick="addToCart('Vestido Midi Mostaza', 280000, '14'); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Midi%20Mostaza%20%24280.000%20Talla%2014" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <p class="product-sizes">Talla: XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Pantalón Estampado Vichy Negro y Blanco', 280000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20Vichy%20Negro%20y%20Blanco%20%24280.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
-      <div class="product-card" id="prod-blusa-estampada-floral-2">
+
+      <div class="product-card" id="prod-pantalon-fucsia">
         <div class="product-img-wrap">
+          <img src="images/productos/12I2bVRc86BGIaM_dGVmv88YptB6-5I99.jpg" alt="Pantalón Fucsia" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Plus</div>
-          <img src="images/productos/1gCDjpau2_SfGl-N4wNJAchDIA0XMPLLk.jpg" alt="Blusa Estampada Floral" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
         </div>
         <div class="product-info">
-          <h3>Blusa Estampada Floral</h3>
-          <p class="product-price">$130.000 COP</p>
-          <p class="product-sizes">Talla: XL</p>
-          <button class="btn-agregar" onclick="addToCart('Blusa Estampada Floral', 130000, 'XL'); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Blusa%20Estampada%20Floral%20%24130.000%20Talla%20XL" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <h3>Pantalón Fucsia</h3>
+          <p class="product-price">$150.000 COP</p>
+          <p class="product-sizes">Talla: 1XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Pantalón Fucsia', 150000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Pantalón%20Fucsia%20%24150.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+    <div class="acc-subsection" id="plus-faldas">
+      <p class="acc-sub-title">Faldas</p>
+      <div class="products-grid">
+
+      <div class="product-card" id="prod-falda-blanca-larga-con-encaje-2">
+        <div class="product-img-wrap">
+          <img src="images/productos/1Xvh4bEKCUddHjbkLfaa67fURiAA4bSRC.jpg" alt="Falda Blanca Larga con Encaje" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Falda Blanca Larga con Encaje</h3>
+          <p class="product-price">$220.000 COP</p>
+          <p class="product-sizes">Talla: ÚNICA</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Falda Blanca Larga con Encaje', 220000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Falda%20Blanca%20Larga%20con%20Encaje%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
@@ -5139,35 +5171,135 @@
         </div>
       </div>
 
-      <div class="product-card" id="prod-vestido-azul-estampado-floral">
+      <div class="product-card" id="prod-falda-larga-blanca-en-ojalillo-2">
         <div class="product-img-wrap">
+          <img src="images/productos/1pDW__sGIYZFwHUFJf6GkK64DnsMsyVGn.jpg" alt="Falda Larga Blanca en Ojalillo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
           <div class="product-badge">Plus</div>
-          <img src="images/productos/1MePExAwu2OQmlt1aCwGTpCCkQ0GFF_pz.jpg" alt="Vestido Azul Estampado Floral" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
         </div>
         <div class="product-info">
-          <h3>Vestido Azul Estampado Floral</h3>
-          <p class="product-price">$180.000 COP</p>
-          <p class="product-sizes">Talla: XL</p>
-          <button class="btn-agregar" onclick="addToCart('Vestido Azul Estampado Floral', 180000, 'XL'); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Vestido%20Azul%20Estampado%20Floral%20%24180.000%20Talla%20XL" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+          <h3>Falda Larga Blanca en Ojalillo</h3>
+          <p class="product-price">$220.000 COP</p>
+          <p class="product-sizes">Talla: ÚNICA</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Falda Larga Blanca en Ojalillo', 220000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20la%20Falda%20Larga%20Blanca%20Ojalillo%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
         </div>
       </div>
 
-      <div class="product-card" id="prod-bluson-en-lino-bordado">
-        <div class="product-img-wrap">
-          <div class="product-badge">Plus</div>
-          <img src="images/productos/1Wnma5t8xWFI-4LUR_ICdnj27V0E1KZ-J.jpg" alt="Blusón en Lino Bordado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
-        </div>
-        <div class="product-info">
-          <h3>Blusón en Lino Bordado</h3>
-          <p class="product-price">$160.000 COP</p>
-          <p class="product-sizes">Talla: 2XL</p>
-          <button class="btn-agregar" onclick="addToCart('Blusón en Lino Bordado', 160000, '2XL'); openCart();">&#x1F6CD;&#xFE0F; Agregar al Carrito</button>
-          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Blus%C3%B3n%20en%20Lino%20Bordado%20%24160.000%20Talla%202XL" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
-        </div>
       </div>
-
     </div>
+
+    <div class="acc-subsection" id="plus-sets">
+      <p class="acc-sub-title">Sets</p>
+      <div class="products-grid">
+
+      <div class="product-card" id="prod-set-de-falda-y-top-amarillo-estampado-floral">
+        <div class="product-img-wrap">
+          <img src="images/productos/1ISL0m6n7O9XZgzilEWMS7j7TOuAWZCAu.jpg" alt="Set de Falda y Top Amarillo Estampado Floral" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Set de Falda y Top Amarillo Estampado Floral</h3>
+          <p class="product-price">$320.000 COP</p>
+          <p class="product-sizes">Talla: XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set de Falda y Top Amarillo Estampado Floral', 320000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Falda%20Top%20Amarillo%20Floral%20%24320.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-set-de-pantalon-y-bluson-palo-de-rosa-en-lino-europeo">
+        <div class="product-img-wrap">
+          <img src="images/productos/1zthpgFtpUOgb9F0CMKqI_da1jb_QsJpe.jpg" alt="Set de Pantalón y Blusón Palo de Rosa en Lino Europeo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Set de Pantalón y Blusón Palo de Rosa en Lino Europeo</h3>
+          <p class="product-price">$480.000 COP</p>
+          <p class="product-sizes">Talla: ÚNICA</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set de Pantalón y Blusón Palo de Rosa en Lino Europeo', 480000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Pantalón%20Blusón%20Palo%20Rosa%20Lino%20%24480.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-set-de-short-y-camisa">
+        <div class="product-img-wrap">
+          <img src="images/productos/1pCnzvyhG6ch8syHCseg-gYQeI7J_r3dr.jpg" alt="Set de Short y Camisa" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Set de Short y Camisa</h3>
+          <p class="product-price">$220.000 COP</p>
+          <p class="product-sizes">Talla: XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set de Short y Camisa', 220000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20de%20Short%20y%20Camisa%20%24220.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-set-en-lino-europeo-cafe-moca-estampado">
+        <div class="product-img-wrap">
+          <img src="images/productos/1DuQrkVMrY0Ng8StCUtG-xwIL30rkr6YG.jpg" alt="Set en Lino Europeo Café Moca Estampado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Set en Lino Europeo Café Moca Estampado</h3>
+          <p class="product-price">$480.000 COP</p>
+          <p class="product-sizes">Talla: ÚNICA</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Set en Lino Europeo Café Moca Estampado', 480000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Set%20Lino%20Café%20Moca%20%24480.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+    <div class="acc-subsection" id="plus-enterizos">
+      <p class="acc-sub-title">Enterizos</p>
+      <div class="products-grid">
+
+      <div class="product-card" id="prod-enterizo-gris-en-lino-europeo">
+        <div class="product-img-wrap">
+          <img src="images/productos/11osyvUvkjx27kt4ZQu7vlM27QpJtr5py.jpg" alt="Enterizo Gris en Lino Europeo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Enterizo Gris en Lino Europeo</h3>
+          <p class="product-price">$380.000 COP</p>
+          <p class="product-sizes">Talla: ÚNICA</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Enterizo Gris en Lino Europeo', 380000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Enterizo%20Gris%20Lino%20Europeo%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-enterizo-rosado">
+        <div class="product-img-wrap">
+          <img src="images/productos/1OdnUPk_3hLeeY4aI9n2W9H9oE0yDLLAH.jpg" alt="Enterizo Rosado" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Enterizo Rosado</h3>
+          <p class="product-price">$180.000 COP</p>
+          <p class="product-sizes">Talla: 2XL</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Enterizo Rosado', 180000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Enterizo%20Rosado%20%24180.000%20Talla%202XL" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="product-card" id="prod-enterizo-verde-en-lino-europeo">
+        <div class="product-img-wrap">
+          <img src="images/productos/1W1BqZq3yBAW8-W5AilyAzqAWUZEtKCHJ.jpg" alt="Enterizo Verde en Lino Europeo" loading="lazy" onclick="openLightbox(this.src, this.alt)"/>
+          <div class="product-badge">Plus</div>
+        </div>
+        <div class="product-info">
+          <h3>Enterizo Verde en Lino Europeo</h3>
+          <p class="product-price">$380.000 COP</p>
+          <p class="product-sizes">Talla: ÚNICA</p>
+          <button class="btn-agregar" onclick="showSizeSelector('Enterizo Verde en Lino Europeo', 380000)">🛍️ Agregar al Carrito</button>
+          <a href="https://wa.me/573017604292?text=Hola%2C%20quiero%20el%20Enterizo%20Verde%20Lino%20Europeo%20%24380.000" target="_blank" class="btn-whatsapp">o comprar por WhatsApp</a>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
   </section>
 
   <!-- ===== HOMBRES ===== -->
@@ -6186,7 +6318,7 @@
   </div>
 
   <script src="https://checkout.wompi.co/widget.js"></script>
-  <script src="js/main.js?v=shop12"></script>
+  <script src="js/main.js?v=shop13"></script>
   <script>
   (function () {
     var lb = { scale: 1, x: 0, y: 0, dragging: false, lx: 0, ly: 0, pinchDist: 0, lastTap: 0 };
