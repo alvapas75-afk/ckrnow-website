@@ -613,7 +613,14 @@ function scrollToProductFromHash() {
   const offset = (navbar ? navbar.offsetHeight : 0) + (promoBar ? promoBar.offsetHeight : 0) + 16;
 
   const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
-  window.scrollTo({ top, behavior: 'smooth' });
+  // behavior:'smooth' combinado con "html{scroll-behavior:smooth}" del CSS
+  // se queda pegado sin moverse en algunos navegadores (verificado) — se
+  // fuerza el salto instantaneo apagando el scroll-behavior un instante.
+  const htmlEl = document.documentElement;
+  const prevBehavior = htmlEl.style.scrollBehavior;
+  htmlEl.style.scrollBehavior = 'auto';
+  window.scrollTo({ top, behavior: 'auto' });
+  htmlEl.style.scrollBehavior = prevBehavior;
 
   el.classList.add('product-highlight');
   setTimeout(() => el.classList.remove('product-highlight'), 2600);
@@ -627,4 +634,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 600);
   setTimeout(scrollToProductFromHash, 500);
 });
+// El sitio tiene cientos de imagenes — a los 500ms de DOMContentLoaded
+// muchas todavia no han cargado, asi que la pagina no tiene su altura
+// final y el calculo de scroll queda corto (se ve "a mitad de camino").
+// Recalculamos otra vez cuando TODO (imagenes incluidas) ya cargo.
+window.addEventListener('load', () => setTimeout(scrollToProductFromHash, 300));
 window.addEventListener('hashchange', scrollToProductFromHash);
