@@ -1859,6 +1859,15 @@ function pageContabilidad() {
   });
   var totV=vFil.reduce(function(s,v){return s+v.total;},0);
   var totA=aFil.reduce(function(s,a){return s+a.monto;},0);
+  // Las ventas a Crédito se cuentan en "totV" (Ventas) por su valor total desde
+  // el momento de la venta, pero el dinero real solo entra despues, en abonos
+  // (totA). Sumar totV+totA como "Ingresos Totales" contaba esa misma plata
+  // dos veces: una al registrar la venta a credito, otra cuando el cliente
+  // abonaba. "ingresosReales" resta el valor de las ventas a credito de totV
+  // (plata que TODAVIA no ha entrado) y le suma los abonos (plata que SI
+  // entro), asi el KPI de ingresos refleja caja real, no ventas en papel.
+  var totVCredito=vFil.reduce(function(s,v){return s+(v.metodo==='Crédito'?v.total:0);},0);
+  var ingresosReales=(totV-totVCredito)+totA;
   var totGNeg=gFilNegocio.reduce(function(s,g){return s+g.monto;},0);
   var totGPer=gFilPersonal.reduce(function(s,g){return s+g.monto;},0);
   var costo=vFil.reduce(function(s,v){
@@ -1905,7 +1914,7 @@ function pageContabilidad() {
     '</div>'+
     '<div class="period-tabs">'+tabs+'</div>'+
     '<div class="kpis">'+
-      '<div class="kpi"><div class="kpi-l">Ingresos Totales</div><div class="kpi-v g">'+mon(totV+totA)+'</div></div>'+
+      '<div class="kpi"><div class="kpi-l">Ingresos Reales (caja)</div><div class="kpi-v g">'+mon(ingresosReales)+'</div></div>'+
       '<div class="kpi"><div class="kpi-l">Ventas ('+vFil.length+')</div><div class="kpi-v g">'+mon(totV)+'</div></div>'+
       '<div class="kpi"><div class="kpi-l">Abonos cobrados ('+aFil.length+')</div><div class="kpi-v g">'+mon(totA)+'</div></div>'+
       '<div class="kpi"><div class="kpi-l">Utilidad Negocio</div><div class="kpi-v o">'+mon(util)+'</div></div>'+
