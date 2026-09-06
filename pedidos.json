@@ -3,37 +3,6 @@
     {
       "cliente": {
         "nombre": "Berta Pastrana",
-        "email": "bertatulia75@gmail.com",
-        "tel": "3015574398",
-        "dir": "K 9 12 26",
-        "ciudad": "Chinu",
-        "depto": "cordoba",
-        "cp": "B TURBO",
-        "metodo": "addi"
-      },
-      "items": [
-        {
-          "nombre": "Set Halter de Encaje Negro con Falda",
-          "talla": "M",
-          "qty": 1,
-          "precio": 345000
-        },
-        {
-          "nombre": "Top Blanco en Ojalillo",
-          "talla": "M",
-          "qty": 1,
-          "precio": 60000
-        }
-      ],
-      "total": 405000,
-      "metodo": "addi",
-      "id": "59ae1256-93dd-470c-b3b6-517bac98cb9d",
-      "fecha": "2026-09-04T01:32:12.747Z",
-      "estado": "pendiente_guia"
-    },
-    {
-      "cliente": {
-        "nombre": "Berta Pastrana",
         "cedula": "25909455",
         "email": "bertatulia75@gmail.com",
         "tel": "3015574398",
