@@ -619,7 +619,20 @@ function pageInventario() {
   var filHtml=cats.map(function(c){
     return '<button class="fil-btn'+(filtroInv===c?' active':'')+'" onclick="setFil(\''+c+'\')">'+c+'</button>';
   }).join('');
-  var listHtml=prods.length ? prods.map(function(p){
+
+  return '<div class="sec-title">Inventario ('+d.inventario.length+')</div>'+
+    '<div style="display:flex;gap:8px;margin-bottom:13px;flex-wrap:wrap">'+
+      '<button class="btn btn-p btn-sm" onclick="modalProd()">+ Nuevo Producto</button>'+
+      '<button class="btn btn-s btn-sm" onclick="imprimirTodas()">🏷 Todas las etiquetas</button>'+
+      '<button class="btn btn-s btn-sm" onclick="importarSitio()">⬇ Importar del sitio</button>'+
+    '</div>'+
+    '<div class="f"><input type="text" id="buscaInv" placeholder="🔍 Buscar producto por nombre..." oninput="filtrarInv(this.value)" autocomplete="off"/></div>'+
+    '<div class="filtros">'+filHtml+'</div>'+
+    '<div id="invListWrap">'+renderInvList(prods)+'</div>';
+}
+
+function renderInvList(prods) {
+  return prods.length ? prods.map(function(p){
     var bClass=p.stock>0?'badge-ok':'badge-no';
     var bTxt=p.stock>0?p.stock+' uds.':'Agotado';
     var img=imgFor(p.nombre);
@@ -633,18 +646,19 @@ function pageInventario() {
     '</div>';
   }).join('') :
   '<div class="empty"><div class="empty-icon">📦</div><p>No hay productos aquí.</p></div>';
-
-  return '<div class="sec-title">Inventario ('+d.inventario.length+')</div>'+
-    '<div style="display:flex;gap:8px;margin-bottom:13px;flex-wrap:wrap">'+
-      '<button class="btn btn-p btn-sm" onclick="modalProd()">+ Nuevo Producto</button>'+
-      '<button class="btn btn-s btn-sm" onclick="imprimirTodas()">🏷 Todas las etiquetas</button>'+
-      '<button class="btn btn-s btn-sm" onclick="importarSitio()">⬇ Importar del sitio</button>'+
-    '</div>'+
-    '<div class="filtros">'+filHtml+'</div>'+
-    listHtml;
 }
 
 function setFil(c){filtroInv=c;ir('inventario');}
+
+function filtrarInv(q) {
+  var d=db();
+  q=(q||'').trim().toLowerCase();
+  var prods=d.inventario.filter(function(p){return filtroInv==='Todos'||p.categoria===filtroInv;});
+  if(q){
+    prods=prods.filter(function(p){return (p.nombre||'').toLowerCase().includes(q);});
+  }
+  document.getElementById('invListWrap').innerHTML=renderInvList(prods);
+}
 
 function modalProd(id) {
   var d=db();
