@@ -493,7 +493,10 @@ function pageVenta() {
         '<div class="empty"><div class="empty-icon">🛍️</div><p>Busca un producto arriba y tócalo para agregarlo a la venta.</p></div>' :
         '<div class="card"><div class="sale-list">'+filas+'</div>'+
         '<div class="total-bar"><div><div class="total-lbl">Total de la venta</div></div><div class="total-val">'+mon(total)+'</div></div>'+
-        '<div class="f"><label>Cliente (opcional)</label><select id="vCli">'+cliOpts+'</select></div>'+
+        '<div class="f"><label>Cliente (opcional)</label>'+
+          '<div style="display:flex;gap:8px"><select id="vCli" style="flex:1">'+cliOpts+'</select>'+
+          '<button type="button" class="btn btn-s btn-sm" onclick="modalClienteRapido()" style="white-space:nowrap">+ Nuevo</button></div>'+
+        '</div>'+
         '<div class="f"><label>Método de pago</label><select id="vMet">'+
           '<option>Efectivo</option><option>Transferencia / Nequi</option><option>Tarjeta</option><option>Wompi</option><option>Crédito</option><option>Addi</option>'+
         '</select></div>'+
@@ -502,6 +505,41 @@ function pageVenta() {
           '<button class="btn btn-s btn-sm" onclick="ventaCarrito=[];ir(\'venta\')">Cancelar</button>'+
           '<button class="btn btn-p" onclick="registrarVenta()">✅ Registrar Venta</button>'+
         '</div></div>');
+}
+
+// Cliente nuevo desde la propia pantalla de Venta (2026-09-09): antes solo
+// se podia elegir un cliente ya existente — si era alguien nuevo, la
+// propietaria tenia que ir a Clientes, crearlo, y volver a armar la venta
+// desde cero (perdiendo el carrito). Ahora se guardan las notas/metodo ya
+// escritos antes de re-renderizar la pantalla, y se deja el cliente nuevo
+// ya seleccionado.
+function modalClienteRapido() {
+  abrirModal(
+    '<div class="modal-hd">Nuevo Cliente<button class="modal-x" onclick="cerrarModal()">×</button></div>'+
+    '<div class="f"><label>Nombre completo *</label><input id="qcNom" placeholder="Nombre y apellido"/></div>'+
+    '<div class="f"><label>Teléfono / WhatsApp</label><input id="qcTel" type="tel" placeholder="+57 300 000 0000"/></div>'+
+    '<button class="btn btn-p" onclick="guardarClienteRapido()">Registrar y usar en esta venta</button>'
+  );
+  setTimeout(function(){ var i=document.getElementById('qcNom'); if(i) i.focus(); },50);
+}
+
+function guardarClienteRapido() {
+  var nom=(document.getElementById('qcNom').value||'').trim();
+  if(!nom){toast('El nombre es obligatorio',true);return;}
+  var tel=(document.getElementById('qcTel').value||'').trim();
+  var d=db();
+  var nuevo={id:uid('CLI'),nombre:nom,telefono:tel,ciudad:'',email:'',notas:'',saldoPendiente:0,numCompras:0,totalComprado:0,fechaRegistro:hoy()};
+  d.clientes.push(nuevo);
+  guardar(d);
+  cerrarModal();
+  var metPrevio=document.getElementById('vMet')?document.getElementById('vMet').value:null;
+  var notasPrevias=document.getElementById('vNotas')?document.getElementById('vNotas').value:null;
+  ir('venta');
+  var sel=document.getElementById('vCli');
+  if(sel) sel.value=nuevo.id;
+  if(metPrevio && document.getElementById('vMet')) document.getElementById('vMet').value=metPrevio;
+  if(notasPrevias && document.getElementById('vNotas')) document.getElementById('vNotas').value=notasPrevias;
+  toast('✅ Cliente registrado y seleccionado');
 }
 
 // Lector fisico USB/Bluetooth (2026-07-20): estos lectores funcionan como
