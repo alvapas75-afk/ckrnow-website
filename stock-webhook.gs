@@ -49,6 +49,29 @@ var QUERIES_BASE     = 'https://queries.envia.com';
 var OWNER_EMAIL      = 'alvapas75@gmail.com';
 var GESTION_BACKUP_FILE = 'ckr_gestion_backup.json';
 
+// Tiendas que comparten este mismo backend (Apps Script) para el checkout de
+// Addi. Cada una tiene su propio repo de GitHub (su propio pedidos.json) y su
+// propia pagina de resultado. CKR Finds es dropshipping — no hay guia
+// automatica de Envia porque el envio lo hace el proveedor, no CKR desde su
+// bodega, asi que ese pedido se avisa por correo para hacerlo manual.
+var TIENDAS = {
+  ckrnow: {
+    repo: 'alvapas75-afk/ckrnow-website',
+    pedidosFile: 'pedidos.json',
+    redirectBase: 'https://ckrnow.com/addi-resultado.html',
+    brand: 'CKR Boutique',
+    envioAutomatico: true
+  },
+  ckrfinds: {
+    repo: 'alvapas75-afk/ckrfinds',
+    pedidosFile: 'pedidos.json',
+    redirectBase: 'https://ckrfinds.ckrnow.com/addi-resultado.html',
+    brand: 'CKR Finds',
+    envioAutomatico: false
+  }
+};
+function tiendaConfig(nombre) { return TIENDAS[nombre] || TIENDAS.ckrnow; }
+
 function doPost(e) {
   // Addi llama esta URL directamente (no via e.parameter.accion normal) para
   // avisar el resultado final de una transaccion. Se maneja aparte porque
@@ -116,24 +139,26 @@ function marcarAgotados(nombres) {
 // ============================================================
 // PEDIDOS PENDIENTES (Addi / WhatsApp — confirmacion manual)
 // ============================================================
-function registrarPedido(pedido) {
-  var r = leerJsonGitHub(PEDIDOS_FILE);
+function registrarPedido(pedido, tienda) {
+  var cfg = tiendaConfig(tienda);
+  var r = leerJsonGitHub(cfg.pedidosFile, cfg.repo);
   var data = r.contenido;
   pedido.id = Utilities.getUuid();
   pedido.fecha = new Date().toISOString();
   pedido.estado = 'pendiente_guia';
   data.pedidos.push(pedido);
-  escribirJsonGitHub(PEDIDOS_FILE, data, 'Pedido registrado (' + pedido.metodo + '): ' + pedido.cliente.nombre, r.sha);
+  escribirJsonGitHub(cfg.pedidosFile, data, 'Pedido registrado (' + pedido.metodo + '): ' + pedido.cliente.nombre, r.sha, cfg.repo);
 }
 
-function actualizarPedido(pedidoId, cambios) {
+function actualizarPedido(pedidoId, cambios, tienda) {
   if (!pedidoId) return; // pedidos de Wompi no quedan pre-registrados, no hay nada que actualizar
-  var r = leerJsonGitHub(PEDIDOS_FILE);
+  var cfg = tiendaConfig(tienda);
+  var r = leerJsonGitHub(cfg.pedidosFile, cfg.repo);
   var data = r.contenido;
   var p = data.pedidos.find(function(x){ return x.id === pedidoId; });
   if (!p) return;
   Object.keys(cambios).forEach(function(k){ p[k] = cambios[k]; });
-  escribirJsonGitHub(PEDIDOS_FILE, data, 'Pedido actualizado: ' + p.cliente.nombre, r.sha);
+  escribirJsonGitHub(cfg.pedidosFile, data, 'Pedido actualizado: ' + p.cliente.nombre, r.sha, cfg.repo);
 }
 
 // ============================================================
@@ -407,6 +432,9 @@ function addiCrearTransaccion(params) {
     return { ok: false, error: 'Falta el numero de cedula para pagar con Addi.' };
   }
 
+  var tienda = pedido.tienda || 'ckrnow';
+  var cfg = tiendaConfig(tienda);
+
   var allySlug = PropertiesService.getScriptProperties().getProperty('ADDI_ALLY_SLUG') || 'ckrboutique-ecommerce';
   var webhookBase = ScriptApp.getService().getUrl();
   var orderId = Utilities.getUuid();
@@ -423,7 +451,7 @@ function addiCrearTransaccion(params) {
       unitPrice: Number(it.precio) || 0,
       tax: 0,
       category: 'moda',
-      brand: 'CKR Boutique'
+      brand: cfg.brand
     };
   });
 
@@ -449,8 +477,8 @@ function addiCrearTransaccion(params) {
     shippingAddress: direccion,
     billingAddress: direccion,
     allyUrlRedirection: {
-      callbackUrl: webhookBase + '?accion=addi_webhook',
-      redirectionUrl: 'https://ckrnow.com/addi-resultado.html?orderId=' + orderId
+      callbackUrl: webhookBase + '?accion=addi_webhook&tienda=' + tienda,
+      redirectionUrl: cfg.redirectBase + '?orderId=' + orderId
     }
   };
 
@@ -481,7 +509,7 @@ function addiCrearTransaccion(params) {
       metodo: 'addi',
       addiOrderId: orderId
     };
-    registrarPedido(pedidoParaRegistrar);
+    registrarPedido(pedidoParaRegistrar, tienda);
     return { ok: true, redirectUrl: location };
   }
 
@@ -500,7 +528,9 @@ function addiCrearTransaccion(params) {
 function addiProcesarWebhook(e) {
   try {
     var body = JSON.parse(e.postData.contents);
-    var r = leerJsonGitHub(PEDIDOS_FILE);
+    var tienda = (e.parameter && e.parameter.tienda) || 'ckrnow';
+    var cfg = tiendaConfig(tienda);
+    var r = leerJsonGitHub(cfg.pedidosFile, cfg.repo);
     var data = r.contenido;
     var p = data.pedidos.find(function (x) { return x.addiOrderId === body.orderId; });
     if (p) {
@@ -508,10 +538,17 @@ function addiProcesarWebhook(e) {
       p.estado = 'addi_' + estadoAddi.toLowerCase();
       p.addiApplicationId = body.applicationId;
       p.addiApprovedAmount = body.approvedAmount;
-      escribirJsonGitHub(PEDIDOS_FILE, data, 'Addi ' + estadoAddi + ': ' + p.cliente.nombre, r.sha);
+      escribirJsonGitHub(cfg.pedidosFile, data, 'Addi ' + estadoAddi + ': ' + p.cliente.nombre, r.sha, cfg.repo);
       if (estadoAddi === 'APPROVED') {
-        crearGuia(p, p.id);
-        avisarPropietariaVentaAddi(p);
+        if (cfg.envioAutomatico) {
+          crearGuia(p, p.id);
+          avisarPropietariaVentaAddi(p, cfg);
+        } else {
+          // Dropshipping (CKR Finds): no hay bodega propia, el pedido se hace
+          // manualmente al proveedor — no se genera guia automatica de Envia.
+          avisarPropietariaVentaAddiManual(p, cfg);
+          avisarClienteConfirmacionManual(p, cfg);
+        }
       }
     } else {
       Logger.log('Webhook de Addi con orderId desconocido: ' + body.orderId);
@@ -525,22 +562,52 @@ function addiProcesarWebhook(e) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-function avisarPropietariaVentaAddi(pedido) {
+function avisarPropietariaVentaAddi(pedido, cfg) {
   try {
-    var cuerpo = '¡Nueva venta aprobada con Addi! 🎉\n\n' +
+    var marca = (cfg && cfg.brand) || 'CKR Boutique';
+    var cuerpo = '¡Nueva venta aprobada con Addi! 🎉 (' + marca + ')\n\n' +
       'Cliente: ' + pedido.cliente.nombre + ' · ' + pedido.cliente.tel + ' · ' + pedido.cliente.email + '\n' +
       'Total: ' + pedido.total + '\n\n' +
       'La guia de envio se esta creando automaticamente (revisa el correo de confirmacion al cliente).';
-    MailApp.sendEmail(OWNER_EMAIL, '✅ Venta aprobada con Addi', cuerpo);
+    MailApp.sendEmail(OWNER_EMAIL, '✅ Venta aprobada con Addi — ' + marca, cuerpo);
   } catch (e) { Logger.log('No se pudo avisar la venta Addi: ' + e); }
+}
+
+// CKR Finds: sin bodega propia, hay que hacer el pedido manual al proveedor.
+function avisarPropietariaVentaAddiManual(pedido, cfg) {
+  try {
+    var marca = (cfg && cfg.brand) || 'CKR Finds';
+    var detalle = (pedido.items || []).map(function (it) {
+      return '- ' + it.nombre + ' x' + (it.qty || 1) + ' — $' + it.precio;
+    }).join('\n');
+    var cuerpo = '¡Nueva venta aprobada con Addi en ' + marca + '! 🎉\n\n' +
+      'Este pedido es de dropshipping — NO se genera guia automatica, hay que hacer el pedido manual al proveedor.\n\n' +
+      'Productos:\n' + detalle + '\n\n' +
+      'Cliente: ' + pedido.cliente.nombre + ' · ' + pedido.cliente.tel + ' · ' + pedido.cliente.email + '\n' +
+      'Direccion: ' + pedido.cliente.dir + ', ' + pedido.cliente.ciudad + ', ' + pedido.cliente.depto + '\n' +
+      'Total: ' + pedido.total;
+    MailApp.sendEmail(OWNER_EMAIL, '✅ Venta aprobada con Addi — ' + marca + ' (pedido manual al proveedor)', cuerpo);
+  } catch (e) { Logger.log('No se pudo avisar la venta Addi manual: ' + e); }
+}
+
+function avisarClienteConfirmacionManual(pedido, cfg) {
+  try {
+    var marca = (cfg && cfg.brand) || 'CKR Finds';
+    var cuerpo = 'Hola ' + pedido.cliente.nombre + ',\n\n' +
+      '¡Tu crédito con Addi fue aprobado y tu pedido en ' + marca + ' está confirmado! 🎉\n\n' +
+      'Estamos coordinando tu pedido con el proveedor y te contactaremos por WhatsApp con los tiempos de entrega.\n\n' +
+      'Cualquier duda, escríbenos por WhatsApp: https://wa.me/573017604292\n\n' +
+      '¡Gracias por tu compra!\n' + marca;
+    MailApp.sendEmail(pedido.cliente.email, '✅ Pedido confirmado — ' + marca, cuerpo);
+  } catch (e) { Logger.log('No se pudo avisar al cliente (dropship): ' + e); }
 }
 
 // ============================================================
 // GITHUB — helpers genericos de lectura/escritura de JSON
 // ============================================================
-function leerJsonGitHub(archivo) {
+function leerJsonGitHub(archivo, repo) {
   var token = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
-  var apiUrl = 'https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + archivo;
+  var apiUrl = 'https://api.github.com/repos/' + (repo || GITHUB_REPO) + '/contents/' + archivo;
   var headers = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' };
   var res = UrlFetchApp.fetch(apiUrl, { headers: headers });
   var meta = JSON.parse(res.getContentText());
@@ -548,9 +615,9 @@ function leerJsonGitHub(archivo) {
   return { contenido: JSON.parse(raw), sha: meta.sha };
 }
 
-function escribirJsonGitHub(archivo, contenidoObj, mensaje, sha) {
+function escribirJsonGitHub(archivo, contenidoObj, mensaje, sha, repo) {
   var token = PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN');
-  var apiUrl = 'https://api.github.com/repos/' + GITHUB_REPO + '/contents/' + archivo;
+  var apiUrl = 'https://api.github.com/repos/' + (repo || GITHUB_REPO) + '/contents/' + archivo;
   var headers = { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' };
   var newContent = Utilities.base64Encode(JSON.stringify(contenidoObj, null, 2), Utilities.Charset.UTF_8);
   UrlFetchApp.fetch(apiUrl, {
