@@ -231,6 +231,7 @@ var ventaCarrito = [];
 var filtroInv = 'Todos';
 var filtroCliSaldo = false;
 var filtroGasto = 'Todos';
+var filtroTienda = 'Todos';
 var CKR_STOCK_WEBHOOK = 'https://script.google.com/macros/s/AKfycbwg9Exn5g-aEe3hpP3-MCHZz-mAUKXYve_FU1Sha7xwSbhLy7B6eWnvf1XrcrF29bs/exec';
 
 // ---- CATEGORIAS DE GASTOS (negocio vs personal) ----
@@ -238,12 +239,25 @@ var CAT_NEGOCIO = ['Arriendo','Mercancía','Transporte / Envío','Publicidad','E
 var CAT_PERSONAL = ['Verduras','Carnes','Salida a Comer','Cumple Gaby','Zapatos','Arreglo Vestido','Gym','Creatina','Netflix','Anastasia','Drogas','Impuestos Gobierno','Pastillas','Chance','Uñas','Bolsas','Solventa','Inyección','Pelo','Madre','Seguro','Taty','Andreina','Tarjeta Éxito','Mamá','Sandalias','Concierto','Ofrenda'];
 function esGastoNegocio(cat) { return CAT_NEGOCIO.indexOf(cat)>=0; }
 
+// ---- NEGOCIOS (para poder llevar la contabilidad de mas de una tienda) ----
+var TIENDAS_NEGOCIO = ['CKR Boutique','CKR Finds'];
+// Registros guardados antes de que existiera este campo no tienen "tienda" —
+// se tratan como CKR Boutique (el unico negocio que existia hasta ahora).
+function tiendaDe(x) { return x.tienda || 'CKR Boutique'; }
+
+// ---- CATEGORIAS DE OTROS INGRESOS (dinero que entra sin ser una venta) ----
+var CAT_OTRO_INGRESO = ['Reembolso','Préstamo Recibido','Devolución de Proveedor','Interés / Rendimiento','Venta CKR Finds','Otro'];
+
 // ---- DB ----
 var DB = 'ckr_g2';
 function db() {
-  try { return JSON.parse(localStorage.getItem(DB)) || base(); } catch(e){ return base(); }
+  try {
+    var d = JSON.parse(localStorage.getItem(DB)) || base();
+    if (!d.otrosIngresos) d.otrosIngresos = [];
+    return d;
+  } catch(e){ return base(); }
 }
-function base() { return {clientes:[],inventario:[],ventas:[],gastos:[]}; }
+function base() { return {clientes:[],inventario:[],ventas:[],gastos:[],otrosIngresos:[]}; }
 function guardar(d) { localStorage.setItem(DB, JSON.stringify(d)); sincronizarNube(d); }
 
 // ---- RESPALDO EN LA NUBE (Drive, via el mismo backend de Apps Script) ----
@@ -1885,27 +1899,31 @@ function pageContabilidad() {
     if(periodo==='mes') return f.slice(0,7)===hoyStr.slice(0,7);
     return true;
   }
-  var vFil=d.ventas.filter(function(v){return enPeriodo(v.fecha);});
-  var gFil=d.gastos.filter(function(g){return enPeriodo(g.fecha);});
+  function enTienda(x) { return filtroTienda==='Todos' || tiendaDe(x)===filtroTienda; }
+  var vFil=d.ventas.filter(function(v){return enPeriodo(v.fecha)&&enTienda(v);});
+  var gFil=d.gastos.filter(function(g){return enPeriodo(g.fecha)&&enTienda(g);});
   var gFilNegocio=gFil.filter(function(g){return esGastoNegocio(g.categoria);});
   var gFilPersonal=gFil.filter(function(g){return !esGastoNegocio(g.categoria);});
+  var oiFil=d.otrosIngresos.filter(function(o){return enPeriodo(o.fecha)&&enTienda(o);});
   var aFil=[];
   d.clientes.forEach(function(c){
     (c.abonos||[]).forEach(function(a){
-      if(enPeriodo(a.fecha)) aFil.push({id:a.id,fecha:a.fecha,monto:a.monto,clienteId:c.id,clienteNombre:c.nombre});
+      if(enPeriodo(a.fecha)&&(filtroTienda==='Todos'||filtroTienda==='CKR Boutique')) aFil.push({id:a.id,fecha:a.fecha,monto:a.monto,clienteId:c.id,clienteNombre:c.nombre});
     });
   });
   var totV=vFil.reduce(function(s,v){return s+v.total;},0);
   var totA=aFil.reduce(function(s,a){return s+a.monto;},0);
+  var totOI=oiFil.reduce(function(s,o){return s+o.monto;},0);
   // Las ventas a Crédito se cuentan en "totV" (Ventas) por su valor total desde
   // el momento de la venta, pero el dinero real solo entra despues, en abonos
   // (totA). Sumar totV+totA como "Ingresos Totales" contaba esa misma plata
   // dos veces: una al registrar la venta a credito, otra cuando el cliente
   // abonaba. "ingresosReales" resta el valor de las ventas a credito de totV
   // (plata que TODAVIA no ha entrado) y le suma los abonos (plata que SI
-  // entro), asi el KPI de ingresos refleja caja real, no ventas en papel.
+  // entro) y los otros ingresos, asi el KPI de ingresos refleja caja real,
+  // no ventas en papel.
   var totVCredito=vFil.reduce(function(s,v){return s+(v.metodo==='Crédito'?v.total:0);},0);
-  var ingresosReales=(totV-totVCredito)+totA;
+  var ingresosReales=(totV-totVCredito)+totA+totOI;
   var totGNeg=gFilNegocio.reduce(function(s,g){return s+g.monto;},0);
   var totGPer=gFilPersonal.reduce(function(s,g){return s+g.monto;},0);
   var costo=vFil.reduce(function(s,v){
@@ -1914,7 +1932,7 @@ function pageContabilidad() {
       return s2+(p&&p.costo?p.costo*it.qty:0);
     },0);
   },0);
-  var util=totV-totGNeg-costo;
+  var util=totV+totOI-totGNeg-costo;
 
   var tabs=['hoy','semana','mes','todo'].map(function(p){
     var lbl={hoy:'Hoy',semana:'7 días',mes:'Mes',todo:'Total'}[p];
@@ -1923,13 +1941,15 @@ function pageContabilidad() {
 
   var gMovs=filtroGasto==='Negocio'?gFilNegocio:filtroGasto==='Personal'?gFilPersonal:gFil;
   var movs=vFil.map(function(v){return{tipo:'V',id:v.id,f:v.fecha,h:v.hora||'',desc:v.items.map(function(i){return i.nombre;}).join(', '),val:v.total,met:v.metodo};})
-    .concat(gMovs.map(function(g){return{tipo:'G',id:g.id,f:g.fecha,h:g.hora||'',desc:g.descripcion,val:g.monto,met:g.categoria,neg:esGastoNegocio(g.categoria)};}))
+    .concat(gMovs.map(function(g){return{tipo:'G',id:g.id,f:g.fecha,h:g.hora||'',desc:g.descripcion,val:g.monto,met:g.categoria,neg:esGastoNegocio(g.categoria),tienda:tiendaDe(g)};}))
+    .concat(oiFil.map(function(o){return{tipo:'OI',id:o.id,f:o.fecha,h:o.hora||'',desc:o.descripcion,val:o.monto,met:o.categoria,tienda:tiendaDe(o)};}))
     .concat(aFil.map(function(a){return{tipo:'A',id:a.id,clienteId:a.clienteId,f:a.fecha,h:'',desc:'Abono · '+a.clienteNombre,val:a.monto,met:'Abono'};}))
     .sort(function(a,b){return(b.f+b.h).localeCompare(a.f+a.h);}).slice(0,30);
 
   var movHtml=movs.length?movs.map(function(m){
-    var delOnclick=m.tipo==='G'?'eliminarGasto(\''+m.id+'\')':m.tipo==='A'?'eliminarAbono(\''+m.clienteId+'\',\''+m.id+'\',true)':'eliminarVenta(\''+m.id+'\')';
-    return '<div class="mov-row"><div><div>'+m.desc+(m.tipo==='G'?' <span style="font-size:.62rem;color:var(--sub)">'+(m.neg?'· Negocio':'· Personal')+'</span>':'')+'</div>'+
+    var delOnclick=m.tipo==='G'?'eliminarGasto(\''+m.id+'\')':m.tipo==='OI'?'eliminarOtroIngreso(\''+m.id+'\')':m.tipo==='A'?'eliminarAbono(\''+m.clienteId+'\',\''+m.id+'\',true)':'eliminarVenta(\''+m.id+'\')';
+    var etiqueta=m.tipo==='G'?(m.neg?'· Negocio':'· Personal'):m.tipo==='OI'?'· '+m.tienda:'';
+    return '<div class="mov-row"><div><div>'+m.desc+(etiqueta?' <span style="font-size:.62rem;color:var(--sub)">'+etiqueta+'</span>':'')+'</div>'+
       '<div class="mov-lbl">'+(m.h?m.h+' · ':'')+fecStr(m.f)+'</div></div>'+
       '<div style="display:flex;align-items:center;gap:8px">'+
         '<div style="text-align:right"><div class="mov-val '+(m.tipo==='G'?'mv-r':'mv-g')+'">'+(m.tipo==='G'?'-':'')+mon(m.val)+'</div>'+
@@ -1942,6 +1962,10 @@ function pageContabilidad() {
     return '<button class="fil-btn'+(filtroGasto===f?' active':'')+'" onclick="filtroGasto=\''+f+'\';ir(\'contabilidad\')">'+f+'</button>';
   }).join('');
 
+  var filTienda=['Todos'].concat(TIENDAS_NEGOCIO).map(function(t){
+    return '<button class="fil-btn'+(filtroTienda===t?' active':'')+'" onclick="filtroTienda=\''+t+'\';ir(\'contabilidad\')">'+t+'</button>';
+  }).join('');
+
   return '<div class="sec-title">Contabilidad</div>'+
     '<div class="card" id="respaldoNubeWrap" style="margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:10px">'+
       htmlEstadoRespaldo()+
@@ -1951,17 +1975,20 @@ function pageContabilidad() {
       '<p style="color:var(--sub);font-size:.78rem">Cargando...</p>'+
     '</div>'+
     '<div class="period-tabs">'+tabs+'</div>'+
+    '<div class="filtros" style="margin-bottom:10px">'+filTienda+'</div>'+
     '<div class="kpis">'+
       '<div class="kpi"><div class="kpi-l">Ingresos Reales (caja)</div><div class="kpi-v g">'+mon(ingresosReales)+'</div></div>'+
       '<div class="kpi"><div class="kpi-l">Ventas ('+vFil.length+')</div><div class="kpi-v g">'+mon(totV)+'</div></div>'+
       '<div class="kpi"><div class="kpi-l">Abonos cobrados ('+aFil.length+')</div><div class="kpi-v g">'+mon(totA)+'</div></div>'+
+      '<div class="kpi"><div class="kpi-l">Otros Ingresos ('+oiFil.length+')</div><div class="kpi-v g">'+mon(totOI)+'</div></div>'+
       '<div class="kpi"><div class="kpi-l">Utilidad Negocio</div><div class="kpi-v o">'+mon(util)+'</div></div>'+
       '<div class="kpi"><div class="kpi-l">Gastos Negocio</div><div class="kpi-v r">'+mon(totGNeg)+'</div></div>'+
       '<div class="kpi"><div class="kpi-l">Gastos Personales</div><div class="kpi-v r">'+mon(totGPer)+'</div></div>'+
-      '<div class="kpi"><div class="kpi-l">Transacciones</div><div class="kpi-v b">'+(vFil.length+gFil.length+aFil.length)+'</div></div>'+
+      '<div class="kpi"><div class="kpi-l">Transacciones</div><div class="kpi-v b">'+(vFil.length+gFil.length+oiFil.length+aFil.length)+'</div></div>'+
     '</div>'+
-    '<div style="display:flex;gap:8px;margin-bottom:13px">'+
+    '<div style="display:flex;gap:8px;margin-bottom:13px;flex-wrap:wrap">'+
       '<button class="btn btn-p btn-sm" onclick="modalGasto()">+ Registrar Gasto</button>'+
+      '<button class="btn btn-p btn-sm" onclick="modalOtroIngreso()">+ Otro Ingreso</button>'+
       '<button class="btn btn-s btn-sm" onclick="exportar()">⬇ Exportar CSV</button>'+
     '</div>'+
     '<div class="filtros" style="margin-bottom:10px">'+filGasto+'</div>'+
@@ -2085,8 +2112,10 @@ function modalGasto() {
   var catOpts=Object.keys(gruposCat).map(function(g){
     return '<optgroup label="'+g+'">'+gruposCat[g].map(function(c){return '<option>'+c+'</option>';}).join('')+'</optgroup>';
   }).join('');
+  var tiendaOpts=TIENDAS_NEGOCIO.map(function(t){return '<option>'+t+'</option>';}).join('');
   abrirModal(
     '<div class="modal-hd">Registrar Gasto<button class="modal-x" onclick="cerrarModal()">×</button></div>'+
+    '<div class="f"><label>Negocio</label><select id="gTienda">'+tiendaOpts+'</select></div>'+
     '<div class="f"><label>Categoría</label><select id="gCat">'+catOpts+'</select></div>'+
     '<div class="f"><label>Descripción *</label><input id="gDes" placeholder="Ej: Envío DHL 3 prendas"/></div>'+
     '<div class="f"><label>Monto *</label><input id="gMon" type="number" placeholder="50000"/></div>'+
@@ -2100,19 +2129,55 @@ function guardarGasto() {
   var mon2=parseFloat(document.getElementById('gMon').value);
   if(!des||!mon2){toast('Descripción y monto obligatorios',true);return;}
   var d=db();
-  d.gastos.push({id:uid('GAS'),categoria:document.getElementById('gCat').value,
+  d.gastos.push({id:uid('GAS'),tienda:document.getElementById('gTienda').value,categoria:document.getElementById('gCat').value,
     descripcion:des,monto:mon2,fecha:document.getElementById('gFec').value,hora:hora()});
   guardar(d);cerrarModal();toast('✅ Gasto registrado');ir('contabilidad');
 }
 
+function modalOtroIngreso() {
+  var catOpts=CAT_OTRO_INGRESO.map(function(c){return '<option>'+c+'</option>';}).join('');
+  var tiendaOpts=TIENDAS_NEGOCIO.map(function(t){return '<option>'+t+'</option>';}).join('');
+  abrirModal(
+    '<div class="modal-hd">Registrar Otro Ingreso<button class="modal-x" onclick="cerrarModal()">×</button></div>'+
+    '<div class="f"><label>Negocio</label><select id="oiTienda">'+tiendaOpts+'</select></div>'+
+    '<div class="f"><label>Categoría</label><select id="oiCat">'+catOpts+'</select></div>'+
+    '<div class="f"><label>Descripción *</label><input id="oiDes" placeholder="Ej: Reembolso Envia.com"/></div>'+
+    '<div class="f"><label>Monto *</label><input id="oiMon" type="number" placeholder="50000"/></div>'+
+    '<div class="f"><label>Fecha</label><input id="oiFec" type="date" value="'+hoy()+'"/></div>'+
+    '<button class="btn btn-p" onclick="guardarOtroIngreso()">Registrar</button>'
+  );
+}
+
+function guardarOtroIngreso() {
+  var des=(document.getElementById('oiDes').value||'').trim();
+  var mon2=parseFloat(document.getElementById('oiMon').value);
+  if(!des||!mon2){toast('Descripción y monto obligatorios',true);return;}
+  var d=db();
+  d.otrosIngresos.push({id:uid('OIN'),tienda:document.getElementById('oiTienda').value,categoria:document.getElementById('oiCat').value,
+    descripcion:des,monto:mon2,fecha:document.getElementById('oiFec').value,hora:hora()});
+  guardar(d);cerrarModal();toast('✅ Ingreso registrado');ir('contabilidad');
+}
+
+function eliminarOtroIngreso(id) {
+  if(!confirm('¿Eliminar este ingreso?'))return;
+  var d=db();
+  d.otrosIngresos=d.otrosIngresos.filter(function(x){return x.id!==id;});
+  guardar(d);
+  toast('🗑 Ingreso eliminado');
+  ir('contabilidad');
+}
+
 function exportar() {
   var d=db();
-  var csv='﻿Tipo,Fecha,Hora,Descripción,Monto,Método\n';
+  var csv='﻿Tipo,Negocio,Fecha,Hora,Descripción,Monto,Método\n';
   d.ventas.forEach(function(v){
-    csv+='"Venta","'+v.fecha+'","'+v.hora+'","'+v.items.map(function(i){return i.nombre;}).join(' + ')+'",'+v.total+',"'+v.metodo+'"\n';
+    csv+='"Venta","'+tiendaDe(v)+'","'+v.fecha+'","'+v.hora+'","'+v.items.map(function(i){return i.nombre;}).join(' + ')+'",'+v.total+',"'+v.metodo+'"\n';
   });
   d.gastos.forEach(function(g){
-    csv+='"Gasto","'+g.fecha+'","'+(g.hora||'')+'","'+g.descripcion+'",-'+g.monto+',"'+g.categoria+'"\n';
+    csv+='"Gasto","'+tiendaDe(g)+'","'+g.fecha+'","'+(g.hora||'')+'","'+g.descripcion+'",-'+g.monto+',"'+g.categoria+'"\n';
+  });
+  d.otrosIngresos.forEach(function(o){
+    csv+='"Otro Ingreso","'+tiendaDe(o)+'","'+o.fecha+'","'+(o.hora||'')+'","'+o.descripcion+'",'+o.monto+',"'+o.categoria+'"\n';
   });
   var a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
