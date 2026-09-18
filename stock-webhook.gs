@@ -59,6 +59,8 @@ var TIENDAS = {
     repo: 'alvapas75-afk/ckrnow-website',
     pedidosFile: 'pedidos.json',
     redirectBase: 'https://ckrnow.com/addi-resultado.html',
+    sisteRedirectBase: 'https://ckrnow.com/sistecredito-resultado.html',
+    sufijoSiste: 'CKRNOW',
     brand: 'CKR Boutique',
     envioAutomatico: true
   },
@@ -66,6 +68,8 @@ var TIENDAS = {
     repo: 'alvapas75-afk/ckrfinds',
     pedidosFile: 'pedidos.json',
     redirectBase: 'https://ckrfinds.ckrnow.com/addi-resultado.html',
+    sisteRedirectBase: 'https://ckrfinds.ckrnow.com/sistecredito-resultado.html',
+    sufijoSiste: 'CKRFINDS',
     brand: 'CKR Finds',
     envioAutomatico: false
   }
@@ -80,6 +84,9 @@ function doPost(e) {
   // devuelve 'ok').
   if (e.parameter.accion === 'addi_webhook') {
     return addiProcesarWebhook(e);
+  }
+  if (e.parameter.accion === 'sistecredito_webhook') {
+    return sistecreditoProcesarWebhook(e);
   }
   try {
     var accion = e.parameter.accion;
@@ -120,6 +127,13 @@ function doGet(e) {
   }
   if (accion === 'addi_crear_transaccion') {
     return addiCrearTransaccionJsonp(e.parameter);
+  }
+  if (accion === 'sistecredito_crear_transaccion') {
+    return sistecreditoCrearTransaccionJsonp(e.parameter);
+  }
+  if (accion === 'sistecredito_webhook') {
+    // Sistecredito notifica por POST y por GET; solo se procesa el POST.
+    return ContentService.createTextOutput('ok');
   }
   return ContentService.createTextOutput('CKR Backend activo ✓');
 }
@@ -600,6 +614,223 @@ function avisarClienteConfirmacionManual(pedido, cfg) {
       '¡Gracias por tu compra!\n' + marca;
     MailApp.sendEmail(pedido.cliente.email, '✅ Pedido confirmado — ' + marca, cuerpo);
   } catch (e) { Logger.log('No se pudo avisar al cliente (dropship): ' + e); }
+}
+
+// ============================================================
+// SISTECREDITO — checkout por API (pago a credito, Credinet)
+// ============================================================
+// Documentacion: guias G-ALI-08/09/10/12 y G-SCL-21 de Sistecredito.
+// Propiedades del script (Proyecto -> Propiedades del script), las agrega la
+// propietaria a mano — NUNCA escribirlas en este archivo:
+//   SISTE_SUBSCRIPTION_KEY       = Ocp-Apim-Subscription-Key
+//   SISTE_ENV                    = Staging (pruebas) o Production
+//   SISTE_APP_KEY_CKRNOW         = ApplicationKey (storeId) de CKR Boutique
+//   SISTE_APP_TOKEN_CKRNOW       = ApplicationToken (vendorId) de CKR Boutique
+//   SISTE_APP_KEY_CKRFINDS       = ApplicationKey de CKR Finds
+//   SISTE_APP_TOKEN_CKRFINDS     = ApplicationToken de CKR Finds
+// Si solo hay un par de llaves, sirven tambien SISTE_APP_KEY / SISTE_APP_TOKEN.
+// Contrato: en tiendas virtuales NO se despacha hasta pasadas 4 horas o hasta
+// que Sistecredito autorice, y hay que verificar en Credinet que el credito
+// quedo generado — por eso aqui NUNCA se crea guia automatica.
+
+var SISTE_URL = 'https://api.credinet.co/pay';
+var SISTE_ESTADOS_FALLIDOS = ['Rejected', 'Cancelled', 'Expired', 'Abandoned', 'Failed'];
+
+function sisteHeaders(cfg) {
+  var p = PropertiesService.getScriptProperties();
+  var suf = cfg.sufijoSiste;
+  var appKey = p.getProperty('SISTE_APP_KEY_' + suf) || p.getProperty('SISTE_APP_KEY');
+  var appToken = p.getProperty('SISTE_APP_TOKEN_' + suf) || p.getProperty('SISTE_APP_TOKEN');
+  var subKey = p.getProperty('SISTE_SUBSCRIPTION_KEY');
+  if (!appKey || !appToken || !subKey) {
+    throw new Error('Faltan propiedades SISTE_* en el script para ' + cfg.brand);
+  }
+  return {
+    'SCLocation': '0,0',
+    'SCOrigen': p.getProperty('SISTE_ENV') || 'Staging',
+    'country': 'co',
+    'Ocp-Apim-Subscription-Key': subKey,
+    'ApplicationKey': appKey,
+    'ApplicationToken': appToken,
+    'Accept': 'application/json'
+  };
+}
+
+function sisteConsultar(cfg, transactionId) {
+  var res = UrlFetchApp.fetch(SISTE_URL + '/GetTransactionResponse?transactionId=' + encodeURIComponent(transactionId), {
+    method: 'get',
+    headers: sisteHeaders(cfg),
+    muteHttpExceptions: true
+  });
+  var json;
+  try { json = JSON.parse(res.getContentText()); } catch (e) { return null; }
+  return json && json.data ? json.data : null;
+}
+
+function sistecreditoCrearTransaccionJsonp(params) {
+  var cb = params.callback || 'callback';
+  var resultado;
+  try {
+    resultado = sistecreditoCrearTransaccion(params);
+  } catch (err) {
+    Logger.log('Error creando transaccion Sistecredito: ' + err);
+    resultado = { ok: false, error: 'No se pudo iniciar el pago con Sistecredito. Intenta de nuevo o elige otro metodo.' };
+  }
+  return ContentService
+    .createTextOutput(cb + '(' + JSON.stringify(resultado) + ')')
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
+}
+
+function sistecreditoCrearTransaccion(params) {
+  var pedido = JSON.parse(params.pedido);
+  var cliente = pedido.cliente;
+  if (!cliente || !cliente.cedula) {
+    return { ok: false, error: 'Falta el numero de cedula para pagar con Sistecredito.' };
+  }
+  var tienda = pedido.tienda || 'ckrnow';
+  var cfg = tiendaConfig(tienda);
+  var headers = sisteHeaders(cfg);
+
+  var invoice = Utilities.getUuid();
+  var partes = (cliente.nombre || '').trim().split(/\s+/);
+  var nombre = partes[0] || cliente.nombre;
+  var apellido = partes.slice(1).join(' ') || partes[0] || cliente.nombre;
+  var descripcion = (pedido.items || []).map(function (it) { return it.nombre; }).join(', ').slice(0, 120) || 'Compra ' + cfg.brand;
+  var webhookBase = ScriptApp.getService().getUrl();
+
+  var body = {
+    invoice: invoice,
+    description: descripcion,
+    paymentMethod: { paymentMethodId: 2, bankCode: 1, userType: 0 },
+    currency: 'COP',
+    value: Number(pedido.total),
+    sandbox: { isActive: false, status: 'Approved' },
+    urlResponse: cfg.sisteRedirectBase + '?orderId=' + invoice,
+    urlConfirmation: webhookBase + '?accion=sistecredito_webhook&tienda=' + tienda,
+    methodConfirmation: 'POST',
+    client: {
+      docType: 'CC',
+      document: String(cliente.cedula).replace(/\D/g, ''),
+      name: nombre,
+      lastName: apellido,
+      email: cliente.email,
+      indCountry: '57',
+      phone: (cliente.tel || '').replace(/\D/g, ''),
+      country: 'co',
+      city: cliente.ciudad || '',
+      address: cliente.dir || ''
+    }
+  };
+
+  var createHeaders = Object.assign({}, headers);
+  var res = UrlFetchApp.fetch(SISTE_URL + '/create', {
+    method: 'post',
+    contentType: 'application/json',
+    headers: createHeaders,
+    payload: JSON.stringify(body),
+    muteHttpExceptions: true
+  });
+  var json;
+  try { json = JSON.parse(res.getContentText()); } catch (e) { json = null; }
+  if (res.getResponseCode() !== 200 || !json || !json.data || !json.data._id) {
+    Logger.log('Error Sistecredito create (' + res.getResponseCode() + '): ' + res.getContentText().slice(0, 500));
+    var msg = 'No se pudo iniciar el pago con Sistecredito.';
+    if (json && json.message) msg = json.message;
+    return { ok: false, error: msg };
+  }
+
+  var transactionId = json.data._id;
+  var redirectUrl = null;
+  var estadoFinal = null;
+  for (var i = 0; i < 10 && !redirectUrl && !estadoFinal; i++) {
+    var d = i === 0 ? json.data : sisteConsultar(cfg, transactionId);
+    if (d) {
+      var pmr = d.paymentMethodResponse || {};
+      var st = pmr.statusResponse || d.transactionStatus;
+      if (pmr.paymentRedirectUrl) redirectUrl = pmr.paymentRedirectUrl;
+      else if (SISTE_ESTADOS_FALLIDOS.indexOf(st) >= 0) estadoFinal = pmr.description || st;
+    }
+    if (!redirectUrl && !estadoFinal) Utilities.sleep(2000);
+  }
+  if (!redirectUrl) {
+    Logger.log('Sistecredito sin redirectUrl: ' + (estadoFinal || 'timeout'));
+    return { ok: false, error: 'Sistecredito no pudo iniciar tu solicitud' + (estadoFinal ? ' (' + estadoFinal + ')' : '') + '. Intenta de nuevo o elige otro metodo.' };
+  }
+
+  registrarPedido({
+    cliente: cliente,
+    items: pedido.items,
+    total: pedido.total,
+    metodo: 'sistecredito',
+    sisteInvoice: invoice,
+    sisteTransactionId: transactionId
+  }, tienda);
+  return { ok: true, redirectUrl: redirectUrl };
+}
+
+// Sistecredito avisa cada cambio de estado (POST con el mismo cuerpo de
+// GetTransactionResponse). Nunca se confia en el cuerpo: se vuelve a consultar
+// la transaccion por su _id y se usa el estado que devuelve Sistecredito.
+function sistecreditoProcesarWebhook(e) {
+  try {
+    var body = JSON.parse(e.postData.contents);
+    var tienda = (e.parameter && e.parameter.tienda) || 'ckrnow';
+    var cfg = tiendaConfig(tienda);
+    var recibido = body.data || body;
+    var transactionId = recibido._id;
+    var real = transactionId ? sisteConsultar(cfg, transactionId) : null;
+    if (real) {
+      var estado = String(real.transactionStatus || '');
+      var r = leerJsonGitHub(cfg.pedidosFile, cfg.repo);
+      var data = r.contenido;
+      var p = data.pedidos.find(function (x) { return x.sisteTransactionId === transactionId; });
+      if (p) {
+        var nuevo = 'sistecredito_' + estado.toLowerCase();
+        if (p.estado !== nuevo) {
+          p.estado = nuevo;
+          escribirJsonGitHub(cfg.pedidosFile, data, 'Sistecredito ' + estado + ': ' + p.cliente.nombre, r.sha, cfg.repo);
+          if (estado === 'Approved') {
+            avisarVentaSistecredito(p, cfg);
+            avisarClienteSistecredito(p, cfg);
+          }
+        }
+      } else {
+        Logger.log('Webhook Sistecredito con transaccion desconocida: ' + transactionId);
+      }
+    } else {
+      Logger.log('Webhook Sistecredito: no se pudo verificar la transaccion ' + transactionId);
+    }
+  } catch (err) {
+    Logger.log('Error procesando webhook de Sistecredito: ' + err);
+  }
+  return ContentService.createTextOutput('ok');
+}
+
+function avisarVentaSistecredito(pedido, cfg) {
+  try {
+    var detalle = (pedido.items || []).map(function (it) {
+      return '- ' + it.nombre + (it.talla ? ' (talla ' + it.talla + ')' : '') + ' x' + (it.qty || 1) + ' — $' + it.precio;
+    }).join('\n');
+    var cuerpo = '¡Venta APROBADA con Sistecrédito en ' + cfg.brand + '! 🎉\n\n' +
+      '⚠️ NO envíes el pedido todavía: por contrato debes esperar 4 horas o la autorización de Sistecrédito, y verificar en Credinet (siste.credinet.co → Transacciones) que el crédito quedó generado.\n\n' +
+      'Productos:\n' + detalle + '\n\n' +
+      'Cliente: ' + pedido.cliente.nombre + ' · CC ' + pedido.cliente.cedula + ' · ' + pedido.cliente.tel + ' · ' + pedido.cliente.email + '\n' +
+      'Dirección: ' + pedido.cliente.dir + ', ' + pedido.cliente.ciudad + ', ' + pedido.cliente.depto + '\n' +
+      'Total: ' + pedido.total + '\n\n' +
+      (cfg.envioAutomatico ? 'Cuando pase la validación, crea la guía desde gestion.html.' : 'Cuando pase la validación, haz el pedido manual al proveedor.');
+    MailApp.sendEmail(OWNER_EMAIL, '✅ Venta aprobada con Sistecrédito — ' + cfg.brand + ' (esperar validación antes de enviar)', cuerpo);
+  } catch (e) { Logger.log('No se pudo avisar la venta Sistecredito: ' + e); }
+}
+
+function avisarClienteSistecredito(pedido, cfg) {
+  try {
+    var cuerpo = 'Hola ' + pedido.cliente.nombre + ',\n\n' +
+      '¡Tu crédito con Sistecrédito fue aprobado y tu pedido en ' + cfg.brand + ' está confirmado! 🎉\n\n' +
+      'Estamos validando la compra y te escribiremos por WhatsApp cuando salga tu pedido.\n\n' +
+      'Cualquier duda, escríbenos: https://wa.me/573017604292\n\n' +
+      '¡Gracias por tu compra!\n' + cfg.brand;
+    MailApp.sendEmail(pedido.cliente.email, '✅ Pedido confirmado — ' + cfg.brand, cuerpo);
+  } catch (e) { Logger.log('No se pudo avisar al cliente (Sistecredito): ' + e); }
 }
 
 // ============================================================
