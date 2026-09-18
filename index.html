@@ -31,7 +31,7 @@
   <script src="https://s3.amazonaws.com/widgets.addi.com/bundle.min.js" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=shop33"/>
+  <link rel="stylesheet" href="css/style.css?v=shop34"/>
   <style>
     /* ===== BARRA PROMO ===== */
     .promo-bar {
@@ -6166,6 +6166,9 @@
       <button class="btn-checkout-addi" onclick="checkoutAddi()">
         🟠 Pagar en cuotas con Addi
       </button>
+      <button class="btn-checkout-siste" onclick="checkoutSistecredito()">
+        🟢 Pagar a crédito con Sistecrédito
+      </button>
       <button class="btn-checkout" onclick="checkoutWhatsApp()">
         📲 Pedir por WhatsApp
       </button>
@@ -6187,7 +6190,7 @@
         <input id="cf-nombre" type="text" placeholder="Ej: María Gómez">
       </div>
       <div class="cf-field" id="cf-cedula-field" style="display:none">
-        <label>Número de cédula * <span style="font-weight:400">(solo para pagar con Addi)</span></label>
+        <label>Número de cédula * <span style="font-weight:400">(solo para pagar con Addi o Sistecrédito)</span></label>
         <input id="cf-cedula" type="text" inputmode="numeric" placeholder="Ej: 1234567890">
       </div>
       <div class="cf-field">
@@ -6236,7 +6239,7 @@
   </div>
 
   <script src="https://checkout.wompi.co/widget.js"></script>
-  <script src="js/main.js?v=shop33"></script>
+  <script src="js/main.js?v=shop34"></script>
   <script>
   (function () {
     var lb = { scale: 1, x: 0, y: 0, dragging: false, lx: 0, ly: 0, pinchDist: 0, lastTap: 0 };
