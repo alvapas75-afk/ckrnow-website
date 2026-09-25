@@ -228,6 +228,8 @@ var pinActual = '';
 var seccion = 'venta';
 var periodo = 'hoy';
 var ventaCarrito = [];
+var ventaDescPrimera = false;
+var DESC_PRIMERA_COMPRA = 0.10;
 var filtroInv = 'Todos';
 var filtroCliSaldo = false;
 var filtroGasto = 'Todos';
@@ -506,19 +508,45 @@ function pageVenta() {
       ventaCarrito.length===0 ?
         '<div class="empty"><div class="empty-icon">🛍️</div><p>Busca un producto arriba y tócalo para agregarlo a la venta.</p></div>' :
         '<div class="card"><div class="sale-list">'+filas+'</div>'+
-        '<div class="total-bar"><div><div class="total-lbl">Total de la venta</div></div><div class="total-val">'+mon(total)+'</div></div>'+
+        (ventaDescPrimera?
+          '<div style="display:flex;justify-content:space-between;font-size:.82rem;color:var(--sub);padding:4px 2px"><span>Subtotal</span><span>'+mon(total)+'</span></div>'+
+          '<div style="display:flex;justify-content:space-between;font-size:.82rem;color:#2e7d32;padding:4px 2px"><span>🎁 Descuento 10% primera compra</span><span>−'+mon(Math.round(total*DESC_PRIMERA_COMPRA))+'</span></div>':'')+
+        '<div class="total-bar"><div><div class="total-lbl">Total de la venta</div></div><div class="total-val">'+mon(ventaDescPrimera?total-Math.round(total*DESC_PRIMERA_COMPRA):total)+'</div></div>'+
         '<div class="f"><label>Cliente (opcional)</label>'+
-          '<div style="display:flex;gap:8px"><select id="vCli" style="flex:1">'+cliOpts+'</select>'+
+          '<div style="display:flex;gap:8px"><select id="vCli" style="flex:1" onchange="sugerirDescPrimera()">'+cliOpts+'</select>'+
           '<button type="button" class="btn btn-s btn-sm" onclick="modalClienteRapido()" style="white-space:nowrap">+ Nuevo</button></div>'+
         '</div>'+
+        '<label style="display:flex;align-items:flex-start;gap:8px;font-size:.82rem;margin:2px 0 12px;cursor:pointer"><input type="checkbox" id="vDescPrimera" '+(ventaDescPrimera?'checked ':'')+'onchange="toggleDescPrimera(this.checked)" style="margin-top:3px"/><span>🎁 Descuento 10% en la primera compra (cliente nuevo)<br><small style="color:var(--sub)">No aplica sobre prendas en SALE — si hay alguna en la venta, desmárcalo.</small></span></label>'+
         '<div class="f"><label>Método de pago</label><select id="vMet">'+
           '<option>Efectivo</option><option>Transferencia / Nequi</option><option>Tarjeta</option><option>Wompi</option><option>Crédito</option><option>Addi</option>'+
         '</select></div>'+
         '<div class="f"><label>Notas</label><textarea id="vNotas" placeholder="Opcional..."></textarea></div>'+
         '<div class="btn-row">'+
-          '<button class="btn btn-s btn-sm" onclick="ventaCarrito=[];ir(\'venta\')">Cancelar</button>'+
+          '<button class="btn btn-s btn-sm" onclick="ventaCarrito=[];ventaDescPrimera=false;ir(\'venta\')">Cancelar</button>'+
           '<button class="btn btn-p" onclick="registrarVenta()">✅ Registrar Venta</button>'+
         '</div></div>');
+}
+
+// Descuento 10% en la primera compra de un cliente nuevo. Se re-renderiza la
+// pantalla para actualizar el total, conservando cliente, metodo y notas.
+function rerenderVentaConservando() {
+  var cli=document.getElementById('vCli')?document.getElementById('vCli').value:'';
+  var met=document.getElementById('vMet')?document.getElementById('vMet').value:null;
+  var notas=document.getElementById('vNotas')?document.getElementById('vNotas').value:null;
+  ir('venta');
+  if(cli && document.getElementById('vCli')) document.getElementById('vCli').value=cli;
+  if(met && document.getElementById('vMet')) document.getElementById('vMet').value=met;
+  if(notas && document.getElementById('vNotas')) document.getElementById('vNotas').value=notas;
+}
+function toggleDescPrimera(on) {
+  ventaDescPrimera=!!on;
+  rerenderVentaConservando();
+}
+function sugerirDescPrimera() {
+  var id=document.getElementById('vCli').value;
+  var c=id?db().clientes.find(function(x){return x.id===id;}):null;
+  var esNuevo=!!c && !(c.numCompras>0);
+  if(esNuevo!==ventaDescPrimera){ ventaDescPrimera=esNuevo; rerenderVentaConservando(); }
 }
 
 // Cliente nuevo desde la propia pantalla de Venta (2026-09-09): antes solo
@@ -548,6 +576,7 @@ function guardarClienteRapido() {
   cerrarModal();
   var metPrevio=document.getElementById('vMet')?document.getElementById('vMet').value:null;
   var notasPrevias=document.getElementById('vNotas')?document.getElementById('vNotas').value:null;
+  ventaDescPrimera=true;
   ir('venta');
   var sel=document.getElementById('vCli');
   if(sel) sel.value=nuevo.id;
@@ -634,13 +663,16 @@ function cDel(i) { ventaCarrito.splice(i,1); ir('venta'); }
 function registrarVenta() {
   if(!ventaCarrito.length) return;
   var d=db();
-  var total=ventaCarrito.reduce(function(s,it){return s+it.precio*it.qty;},0);
+  var subtotal=ventaCarrito.reduce(function(s,it){return s+it.precio*it.qty;},0);
+  var descuento=ventaDescPrimera?Math.round(subtotal*DESC_PRIMERA_COMPRA):0;
+  var total=subtotal-descuento;
   var v={id:uid('VEN'),fecha:hoy(),hora:hora(),
     items:JSON.parse(JSON.stringify(ventaCarrito)),
     total:total,
     metodo:document.getElementById('vMet').value,
     clienteId:document.getElementById('vCli').value||null,
     notas:(document.getElementById('vNotas').value||'').trim()};
+  if(descuento>0){ v.subtotal=subtotal; v.descuento=descuento; v.descuentoMotivo='10% primera compra'; }
   ventaCarrito.forEach(function(it){
     var p=d.inventario.find(function(x){return x.id===it.prodId;});
     if(p) p.stock=Math.max(0,p.stock-it.qty);
@@ -656,6 +688,7 @@ function registrarVenta() {
   }
   guardar(d);
   ventaCarrito=[];
+  ventaDescPrimera=false;
   toast('✅ Venta '+v.id+' — '+mon(total));
   ir('venta');
 }
