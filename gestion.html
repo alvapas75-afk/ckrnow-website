@@ -748,7 +748,8 @@ function filtrarInv(q) {
 function modalProd(id) {
   var d=db();
   var p=id?d.inventario.find(function(x){return x.id===id;}):null;
-  var cats=['Vestidos','Conjuntos','Blusas','Shorts','Jeans','Pantalones','Jumpers','Faldas','Accesorios','Hombres','Otro'];
+  var cats=['Vestidos','Conjuntos','Blusas','Shorts','Jeans','Pantalones','Jumpers','Faldas','Accesorios','Hombres','Playa'];
+  if(p&&p.categoria&&cats.indexOf(p.categoria)<0) cats.push(p.categoria);
   abrirModal(
     '<div class="modal-hd">'+(p?'Editar Producto':'Nuevo Producto')+'<button class="modal-x" onclick="cerrarModal()">×</button></div>'+
     (p&&imgFor(p.nombre)?'<img src="'+imgFor(p.nombre)+'" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-bottom:14px" loading="lazy"/>':'')+
@@ -1143,9 +1144,9 @@ var CATALOGO = [
   {nombre:'Blusón en Seda Negro',categoria:'Blusas',talla:'S',precio:220000},
   {nombre:'Body en Seda Palo de Rosa',categoria:'Blusas',talla:'S',precio:90000},
   {nombre:'Set Beige en Lino Estampado Floral',categoria:'Conjuntos',talla:'M',precio:350000},
-  {nombre:'Salida de Baño Pantalón Plateado',categoria:'Conjuntos',talla:'Única',precio:90000},
-  {nombre:'Salida de Baño Negra',categoria:'Conjuntos',talla:'Única',precio:90000},
-  {nombre:'Salida de Baño Beige con Perlas',categoria:'Conjuntos',talla:'Única',precio:90000},
+  {nombre:'Salida de Baño Pantalón Plateado',categoria:'Playa',talla:'Única',precio:90000},
+  {nombre:'Salida de Baño Negra',categoria:'Playa',talla:'Única',precio:90000},
+  {nombre:'Salida de Baño Beige con Perlas',categoria:'Playa',talla:'Única',precio:90000},
   {nombre:'Camisa Blanca Flores en Alto Relieve',categoria:'Blusas',talla:'L',precio:220000},
   {nombre:'Vestido Largo Indu Azul Estampado',categoria:'Vestidos',talla:'ÚNICA',precio:320000},
   {nombre:'Vestido Rosa de Flecos y Plumas',categoria:'Vestidos',talla:'L',precio:380000},
