@@ -696,11 +696,19 @@ function registrarVenta() {
 // ============================================================
 // MÓDULO: INVENTARIO
 // ============================================================
+// Categoria efectiva: los sets/conjuntos y salidas de bano se agrupan aunque se hayan
+// guardado en otra categoria (Pantalones, Shorts, Faldas, Sets...). No modifica los datos.
+function catInv(p) {
+  var n=sinTildes(p.nombre||'');
+  if(/^(set|conjunto)\b/.test(n)) return 'Conjuntos';
+  if(/^salida de bano/.test(n)) return 'Playa';
+  return p.categoria;
+}
 function pageInventario() {
   var d=db();
   var cats=['Todos'];
-  d.inventario.forEach(function(p){if(!cats.includes(p.categoria))cats.push(p.categoria);});
-  var prods=d.inventario.filter(function(p){return filtroInv==='Todos'||p.categoria===filtroInv;});
+  d.inventario.forEach(function(p){var c=catInv(p);if(!cats.includes(c))cats.push(c);});
+  var prods=d.inventario.filter(function(p){return filtroInv==='Todos'||catInv(p)===filtroInv;});
   var filHtml=cats.map(function(c){
     return '<button class="fil-btn'+(filtroInv===c?' active':'')+'" onclick="setFil(\''+c+'\')">'+c+'</button>';
   }).join('');
@@ -723,7 +731,7 @@ function renderInvList(prods) {
     var img=imgFor(p.nombre);
     return '<div class="inv-row'+(p.stock<=0?' out':'')+'" onclick="editProd(\''+p.id+'\')">'+
       (img?'<img class="inv-thumb" src="'+img+'" loading="lazy" onerror="this.outerHTML=\'<div class=&quot;inv-thumb-ph&quot;>👗</div>\'"/>':'<div class="inv-thumb-ph">👗</div>')+
-      '<div class="inv-main"><div class="inv-nm">'+p.nombre+'</div><div class="inv-mt">'+p.categoria+' · Talla '+p.talla+'</div></div>'+
+      '<div class="inv-main"><div class="inv-nm">'+p.nombre+'</div><div class="inv-mt">'+catInv(p)+' · Talla '+p.talla+'</div></div>'+
       '<div class="inv-right" style="display:flex;align-items:center;gap:8px;">'+
         '<div><div class="inv-p">'+mon(p.precio)+'</div><span class="badge '+bClass+'">'+bTxt+'</span></div>'+
         '<button class="btn-etq" onclick="event.stopPropagation();abrirEtiqueta(\''+p.id+'\')" title="Imprimir etiqueta">🏷</button>'+
@@ -738,7 +746,7 @@ function setFil(c){filtroInv=c;ir('inventario');}
 function filtrarInv(q) {
   var d=db();
   q=(q||'').trim().toLowerCase();
-  var prods=d.inventario.filter(function(p){return filtroInv==='Todos'||p.categoria===filtroInv;});
+  var prods=d.inventario.filter(function(p){return filtroInv==='Todos'||catInv(p)===filtroInv;});
   if(q){
     prods=prods.filter(function(p){return (p.nombre||'').toLowerCase().includes(q);});
   }
@@ -749,12 +757,12 @@ function modalProd(id) {
   var d=db();
   var p=id?d.inventario.find(function(x){return x.id===id;}):null;
   var cats=['Vestidos','Conjuntos','Blusas','Shorts','Jeans','Pantalones','Jumpers','Faldas','Accesorios','Hombres','Playa'];
-  if(p&&p.categoria&&cats.indexOf(p.categoria)<0) cats.push(p.categoria);
+  if(p&&catInv(p)&&cats.indexOf(catInv(p))<0) cats.push(catInv(p));
   abrirModal(
     '<div class="modal-hd">'+(p?'Editar Producto':'Nuevo Producto')+'<button class="modal-x" onclick="cerrarModal()">×</button></div>'+
     (p&&imgFor(p.nombre)?'<img src="'+imgFor(p.nombre)+'" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-bottom:14px" loading="lazy"/>':'')+
     '<div class="f"><label>Nombre *</label><input id="pNom" value="'+(p?p.nombre:'')+'" placeholder="Ej: Vestido Cloud Dancer"/></div>'+
-    '<div class="f"><label>Categoría</label><select id="pCat">'+cats.map(function(c){return'<option'+(p&&p.categoria===c?' selected':'')+'>'+c+'</option>';}).join('')+'</select></div>'+
+    '<div class="f"><label>Categoría</label><select id="pCat">'+cats.map(function(c){return'<option'+(p&&catInv(p)===c?' selected':'')+'>'+c+'</option>';}).join('')+'</select></div>'+
     '<div class="f"><label>Talla</label><input id="pTal" value="'+(p?p.talla:'')+'" placeholder="S / M / L / Única"/></div>'+
     '<div class="grid2">'+
       '<div class="f"><label>Precio venta *</label><input id="pPre" type="number" value="'+(p?p.precio:'')+'" placeholder="320000"/></div>'+
