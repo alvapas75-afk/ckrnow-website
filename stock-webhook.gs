@@ -356,7 +356,27 @@ function guardarBackupDrive(datosJson) {
     diarios.next().setContent(contenido);
   } else {
     DriveApp.createFile(nombreDiario, contenido, MimeType.PLAIN_TEXT);
+    try { limpiarBackupsViejos(); } catch (err) { Logger.log('Limpieza de respaldos fallo (no afecta el guardado): ' + err); }
   }
+}
+
+// Limpieza (2026-09-27): las copias diarias con mas de DIAS_RETENCION_BACKUP
+// dias se mandan a la papelera de Drive (recuperables ~30 dias mas). Solo toca
+// archivos cuyo nombre es EXACTAMENTE ckr_gestion_backup_AAAA-MM-DD.json; el
+// archivo "vivo" ckr_gestion_backup.json nunca coincide con este patron.
+var DIAS_RETENCION_BACKUP = 30;
+function limpiarBackupsViejos() {
+  var limite = new Date();
+  limite.setDate(limite.getDate() - DIAS_RETENCION_BACKUP);
+  var limiteTxt = Utilities.formatDate(limite, 'America/Bogota', 'yyyy-MM-dd');
+  var archivos = DriveApp.searchFiles("title contains 'ckr_gestion_backup_' and trashed = false");
+  var borrados = 0;
+  while (archivos.hasNext()) {
+    var f = archivos.next();
+    var m = /^ckr_gestion_backup_(\d{4}-\d{2}-\d{2})\.json$/.exec(f.getName());
+    if (m && m[1] < limiteTxt) { f.setTrashed(true); borrados++; }
+  }
+  Logger.log('Respaldos diarios enviados a la papelera: ' + borrados);
 }
 
 // Se responde como JSONP (callback(...)) porque las respuestas de Apps
