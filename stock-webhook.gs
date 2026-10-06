@@ -101,7 +101,7 @@ function doPost(e) {
       if (nombres2.length) marcarAgotados(nombres2);
     } else if (accion === 'crear_guia') {
       var pedido = JSON.parse(e.parameter.pedido);
-      crearGuia(pedido, null);
+      if (pedidoTieneEspecial(pedido)) { avisarPedidoEspecial(pedido, tiendaConfig('ckrnow'), 'Wompi'); } else { crearGuia(pedido, null); }
     } else if (accion === 'registrar_pedido') {
       var pedido2 = JSON.parse(e.parameter.pedido);
       registrarPedido(pedido2);
@@ -575,8 +575,14 @@ function addiProcesarWebhook(e) {
       escribirJsonGitHub(cfg.pedidosFile, data, 'Addi ' + estadoAddi + ': ' + p.cliente.nombre, r.sha, cfg.repo);
       if (estadoAddi === 'APPROVED') {
         if (cfg.envioAutomatico) {
-          crearGuia(p, p.id);
-          avisarPropietariaVentaAddi(p, cfg);
+          if (pedidoTieneEspecial(p)) {
+            // Pedido especial: sin guia automatica, solo se avisa a la propietaria y a la clienta.
+            avisarPedidoEspecial(p, cfg, 'Addi');
+            avisarClienteConfirmacionManual(p, cfg);
+          } else {
+            crearGuia(p, p.id);
+            avisarPropietariaVentaAddi(p, cfg);
+          }
         } else {
           // Dropshipping (CKR Finds): no hay bodega propia, el pedido se hace
           // manualmente al proveedor — no se genera guia automatica de Envia.
@@ -622,6 +628,36 @@ function avisarPropietariaVentaAddiManual(pedido, cfg) {
       'Total: ' + pedido.total;
     MailApp.sendEmail(OWNER_EMAIL, '✅ Venta aprobada con Addi — ' + marca + ' (pedido manual al proveedor)', cuerpo);
   } catch (e) { Logger.log('No se pudo avisar la venta Addi manual: ' + e); }
+}
+
+// ============================================================
+// PEDIDO ESPECIAL — productos que la propietaria pide al proveedor (AliExpress/
+// Shein) con SU direccion y reenvia ella misma. Para estos NO se crea guia de
+// envio automatica (el producto todavia no esta en sus manos): solo se le avisa.
+// ============================================================
+function pedidoTieneEspecial(pedido) {
+  return (pedido.items || []).some(function (it) { return it.especial; });
+}
+
+function avisarPedidoEspecial(pedido, cfg, medio) {
+  try {
+    var marca = (cfg && cfg.brand) || 'CKR Boutique';
+    var detalle = (pedido.items || []).map(function (it) {
+      return '- ' + it.nombre + (it.talla ? ' (talla ' + it.talla + ')' : '') + ' x' + (it.qty || 1) +
+        ' — $' + it.precio + (it.especial ? '  ⏳ PEDIDO ESPECIAL' : '  (en stock)');
+    }).join('\n');
+    var cuerpo = '⏳ Venta con PEDIDO ESPECIAL en ' + marca + (medio ? ' (' + medio + ')' : '') + '\n\n' +
+      'NO se creó guía de envío automática porque el pedido incluye productos que todavía no tienes.\n\n' +
+      'Qué hacer:\n' +
+      '1) Pide el producto al proveedor (AliExpress/Shein) con TU dirección, no la de la clienta.\n' +
+      '2) Cuando te llegue, revísalo y envíaselo a la clienta (crea la guía desde gestion.html).\n' +
+      '3) Si el pedido tiene también productos en stock, puedes enviarlos junto con el especial cuando lo recibas.\n\n' +
+      'Productos:\n' + detalle + '\n\n' +
+      'Clienta: ' + pedido.cliente.nombre + ' · ' + pedido.cliente.tel + ' · ' + pedido.cliente.email + '\n' +
+      'Dirección de entrega: ' + pedido.cliente.dir + ', ' + pedido.cliente.ciudad + ', ' + pedido.cliente.depto + '\n' +
+      'Total: ' + pedido.total;
+    MailApp.sendEmail(OWNER_EMAIL, '⏳ Pedido ESPECIAL pagado — ' + marca + ' (sin guía automática)', cuerpo);
+  } catch (e) { Logger.log('No se pudo avisar el pedido especial: ' + e); }
 }
 
 function avisarClienteConfirmacionManual(pedido, cfg) {

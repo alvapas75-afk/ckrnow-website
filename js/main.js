@@ -357,7 +357,7 @@ function registrarPedidoPendiente(cliente, total) {
   if (!CKR_STOCK_WEBHOOK) return;
   const pedido = {
     cliente,
-    items: cart.map(i => ({ nombre: i.name, talla: i.size, qty: i.qty, precio: i.price })),
+    items: cart.map(itemParaPedido),
     total,
     metodo: cliente.metodo
   };
@@ -412,7 +412,7 @@ function checkoutAddi() {
     }
     const pedido = {
       cliente: { nombre, cedula, email, tel, dir, ciudad, depto, cp },
-      items: cart.map(i => ({ nombre: i.name, talla: i.size, qty: i.qty, precio: i.price })),
+      items: cart.map(itemParaPedido),
       total
     };
     addiIniciarCheckout(pedido);
@@ -476,7 +476,7 @@ function checkoutSistecredito() {
     sistecreditoIniciarCheckout({
       tienda: 'ckrnow',
       cliente: { nombre, cedula, email, tel, dir, ciudad, depto, cp },
-      items: cart.map(i => ({ nombre: i.name, talla: i.size, qty: i.qty, precio: i.price })),
+      items: cart.map(itemParaPedido),
       total
     });
   }, true);
@@ -577,7 +577,7 @@ function checkoutWompi() {
     localStorage.setItem('ckr_pending_total', total.toString());
     localStorage.setItem('ckr_pending_order', JSON.stringify({
       cliente: { nombre, email, tel, dir, ciudad, depto, cp },
-      items: cart.map(i => ({ nombre: i.name, talla: i.size, qty: i.qty, precio: i.price })),
+      items: cart.map(itemParaPedido),
       total,
       metodo: 'wompi'
     }));
@@ -694,3 +694,22 @@ document.addEventListener('DOMContentLoaded', () => {
 // Recalculamos otra vez cuando TODO (imagenes incluidas) ya cargo.
 window.addEventListener('load', () => setTimeout(scrollToProductFromHash, 300));
 window.addEventListener('hashchange', scrollToProductFromHash);
+
+// ---- PEDIDO ESPECIAL: marca cada item del pedido que sea "pedido especial" ----
+// (producto con el aviso "Pedido especial — llega en 15 a 20 días hábiles" en su
+// tarjeta). El backend usa esta marca para NO crear la guia de envio sola, porque
+// el producto aun no esta en manos de la propietaria.
+function itemEsEspecial(item) {
+  const base = String(item.name || '').replace(/\s*\(SALE\)\s*$/, '').trim();
+  return Array.from(document.querySelectorAll('.product-card')).some(card => {
+    const h3 = card.querySelector('h3');
+    if (!h3 || !card.querySelector('.product-shipping-note')) return false;
+    const t = h3.textContent.trim();
+    return base === t || base.startsWith(t + ' - ');
+  });
+}
+function itemParaPedido(i) {
+  const it = { nombre: i.name, talla: i.size, qty: i.qty, precio: i.price };
+  if (itemEsEspecial(i)) it.especial = true;
+  return it;
+}
