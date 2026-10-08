@@ -719,6 +719,7 @@ function pageInventario() {
       '<button class="btn btn-s btn-sm" onclick="imprimirTodas()">🏷 Todas las etiquetas</button>'+
       '<button class="btn btn-s btn-sm" onclick="importarSitio()">⬇ Importar del sitio</button>'+
     '</div>'+
+    '<div id="etqBar" style="display:flex;gap:8px;margin-bottom:13px;flex-wrap:wrap;align-items:center">'+etqBarHTML()+'</div>'+
     '<div class="f"><input type="text" id="buscaInv" placeholder="🔍 Buscar producto por nombre..." oninput="filtrarInv(this.value)" autocomplete="off"/></div>'+
     '<div class="filtros">'+filHtml+'</div>'+
     '<div id="invListWrap">'+renderInvList(prods)+'</div>';
@@ -730,6 +731,7 @@ function renderInvList(prods) {
     var bTxt=p.stock>0?p.stock+' uds.':'Agotado';
     var img=imgFor(p.nombre);
     return '<div class="inv-row'+(p.stock<=0?' out':'')+'" onclick="editProd(\''+p.id+'\')">'+
+      '<input type="checkbox" class="etq-chk" title="Marcar para etiquetas"'+(etqSel[p.id]?' checked':'')+' onclick="event.stopPropagation();toggleEtq(\''+p.id+'\',this.checked)" style="width:20px;height:20px;flex:none;margin-right:8px;accent-color:#1a3a2a"/>'+
       (img?'<img class="inv-thumb" src="'+img+'" loading="lazy" onerror="this.outerHTML=\'<div class=&quot;inv-thumb-ph&quot;>👗</div>\'"/>':'<div class="inv-thumb-ph">👗</div>')+
       '<div class="inv-main"><div class="inv-nm">'+p.nombre+'</div><div class="inv-mt">'+catInv(p)+' · Talla '+p.talla+'</div></div>'+
       '<div class="inv-right" style="display:flex;align-items:center;gap:8px;">'+
@@ -739,6 +741,37 @@ function renderInvList(prods) {
     '</div>';
   }).join('') :
   '<div class="empty"><div class="empty-icon">📦</div><p>No hay productos aquí.</p></div>';
+}
+
+// ---- Etiquetas de productos escogidos (casillas) -> un solo PDF ----
+var etqSel={}; // ids marcados; solo en memoria, no se guarda en los datos
+function etqCount(){return Object.keys(etqSel).length;}
+function etqBarHTML() {
+  var n=etqCount();
+  return '<button class="btn btn-p btn-sm" onclick="imprimirSeleccionadas()"'+(n?'':' style="opacity:.5"')+'>🏷 Etiquetas marcadas ('+n+')</button>'+
+    '<button class="btn btn-s btn-sm" onclick="etqMarcarLista()">☑ Marcar los de la lista</button>'+
+    (n?'<button class="btn btn-s btn-sm" onclick="etqLimpiar()">✖ Quitar marcas</button>':'');
+}
+function etqRefrescarBar(){var el=document.getElementById('etqBar');if(el)el.innerHTML=etqBarHTML();}
+function toggleEtq(id,on){if(on)etqSel[id]=1;else delete etqSel[id];etqRefrescarBar();}
+function invVisibles() {
+  var d=db();
+  var q=((document.getElementById('buscaInv')||{}).value||'').trim().toLowerCase();
+  var prods=d.inventario.filter(function(p){return filtroInv==='Todos'||catInv(p)===filtroInv;});
+  if(q)prods=prods.filter(function(p){return (p.nombre||'').toLowerCase().includes(q);});
+  return prods;
+}
+function etqRepintar(){document.getElementById('invListWrap').innerHTML=renderInvList(invVisibles());etqRefrescarBar();}
+function etqMarcarLista(){invVisibles().forEach(function(p){etqSel[p.id]=1;});etqRepintar();}
+function etqLimpiar(){etqSel={};etqRepintar();}
+function imprimirSeleccionadas() {
+  var d=db();
+  var ps=d.inventario.filter(function(p){return etqSel[p.id];});
+  if(!ps.length){toast('Marca primero los productos con la casilla ☐',true);return;}
+  var w=window.open('','_blank');
+  if(!w){toast('Permite las ventanas emergentes en el navegador',true);return;}
+  w.document.write(etiquetaWindowHTML(ps));
+  w.document.close();
 }
 
 function setFil(c){filtroInv=c;ir('inventario');}
