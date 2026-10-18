@@ -101,25 +101,35 @@ body {
 }
 
 /* ===== HERO ===== */
+/* Portada dividida: texto a la izquierda, foto completa a la derecha
+   (antes era una foto gigante de fondo que se recortaba y no se apreciaba). */
 .hero {
-  position: relative; height: 100vh; min-height: 600px;
-  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  min-height: 560px; height: min(88vh, 720px);
+  padding-top: 122px; /* espacio para la barra de oferta + menu fijo */
+  background: var(--black);
   overflow: hidden;
+}
+.hero-photo {
+  position: relative; min-height: 0; overflow: hidden;
+  background: var(--cream);
 }
 .hero-bg {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; object-position: center top;
-  transform: scale(1.05);
+  object-fit: contain; object-position: center center; z-index: 1;
 }
-.hero-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%);
-  z-index: 1;
+.hero-blur {
+  position: absolute; inset: -24px; width: calc(100% + 48px); height: calc(100% + 48px);
+  object-fit: cover; filter: blur(26px) brightness(0.8) saturate(1.1);
 }
 .hero-content {
-  position: relative; z-index: 2;
-  text-align: center; color: var(--white);
-  padding: 0 24px; max-width: 700px;
+  display: flex; flex-direction: column; justify-content: center;
+  align-items: flex-start;
+  text-align: left; color: var(--white);
+  padding: 40px clamp(24px, 6vw, 88px);
+  border-right: 1px solid rgba(201,169,110,0.25);
 }
 .hero-sub {
   font-size: 0.75rem; letter-spacing: 4px; text-transform: uppercase;
@@ -127,7 +137,7 @@ body {
 }
 .hero-content h1 {
   font-family: var(--font-serif);
-  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-size: clamp(2.4rem, 4.6vw, 4.4rem);
   font-weight: 300; line-height: 1.1;
   margin-bottom: 20px;
 }
@@ -698,7 +708,10 @@ footer p { color: rgba(255,255,255,0.5); font-size: 0.78rem; line-height: 2; }
   .about-img { aspect-ratio: 4/3; }
   .products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
   .value-item { padding: 14px 16px; }
-  .hero-content h1 { font-size: 2.8rem; }
+  .hero { grid-template-columns: 1fr; height: auto; min-height: 0; padding-top: 58px; }
+  .hero-photo { order: -1; height: 56vh; min-height: 300px; max-height: 460px; }
+  .hero-content { align-items: center; text-align: center; padding: 32px 22px 40px; border-right: 0; }
+  .hero-content h1 { font-size: 2.4rem; }
   .collection { padding: 48px 16px; }
   .section-header { margin-bottom: 32px; }
 }
