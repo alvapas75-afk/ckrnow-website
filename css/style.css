@@ -880,3 +880,20 @@ addi-widget.addi-cuotas {
   transition: background 0.2s;
 }
 .cf-submit:hover { background: #b08d57; }
+
+/* ===== PORTADA EN MODO BANNER (imagen horizontal con el texto incluido) ===== */
+.hero.hero-banner {
+  display: block; height: auto; min-height: 0;
+  padding-top: 118px;               /* barra de oferta + menu fijo */
+  background: #f3ede6;              /* mismo tono crema del borde izquierdo del banner */
+}
+.hero-banner-img { display: block; width: 100%; height: auto; }
+.hero-banner-btn {
+  position: absolute; left: 6%; bottom: 14%;
+  background: rgba(10,10,10,0.88); color: var(--gold);
+}
+@media (max-width: 768px) {
+  .hero.hero-banner { padding-top: 118px; }
+  .hero-banner-img { height: 285px; object-fit: cover; object-position: 100% center; }
+  .hero-banner-btn { left: 50%; transform: translateX(-50%); bottom: 18px; white-space: nowrap; }
+}
